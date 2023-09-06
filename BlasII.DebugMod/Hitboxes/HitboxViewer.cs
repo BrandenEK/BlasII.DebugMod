@@ -13,6 +13,8 @@ namespace BlasII.DebugMod.Hitboxes
         private bool _showHitboxes = false;
         private float _currentDelay = 0f;
 
+        public HitboxColors Colors { get; private set; }
+
         public HitboxViewer(HitboxConfig config)
         {
             _config = config;
