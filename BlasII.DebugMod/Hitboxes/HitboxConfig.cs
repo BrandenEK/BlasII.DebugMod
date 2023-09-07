@@ -34,13 +34,13 @@ namespace BlasII.DebugMod.Hitboxes
             showGeometry = false;
             updateDelay = 1;
 
-            inactiveColor = "#000000";
-            geometryColor = "#000000";
-            playerColor = "#000000";
-            enemyColor = "#000000";
-            hazardColor = "#000000";
-            triggerColor = "#000000";
-            otherColor = "#000000";
+            inactiveColor = "#7F7F7F";
+            geometryColor = "#00FF00";
+            playerColor = "#00FFFF";
+            enemyColor = "#FF0000";
+            hazardColor = "#FF00FF";
+            triggerColor = "#7F7FFF";
+            otherColor = "#FFEB04";
         }
     }
 }

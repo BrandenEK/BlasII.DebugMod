@@ -15,12 +15,6 @@ namespace BlasII.DebugMod
         {
             MainConfig config = FileHandler.LoadConfig<MainConfig>();
 
-            Log("Hitbox inactive color: " + config.hitboxViewer.inactiveColor);
-            Log("Hitbox player color: " + config.hitboxViewer.playerColor);
-            Log("Hitbox update delay: " + config.hitboxViewer.updateDelay);
-
-            Log("Camera speed: " + config.freeCamera.movementSpeed);
-
             HitboxViewer = new HitboxViewer(config.hitboxViewer);
             CameraMover = new CameraMover(config.freeCamera);
         }
