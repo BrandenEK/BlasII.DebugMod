@@ -135,7 +135,7 @@ namespace BlasII.DebugMod.Hitboxes
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.Keypad8))
+            if (Input.GetKeyDown(KeyCode.F2))
             {
                 _showHitboxes = !_showHitboxes;
                 if (_showHitboxes)

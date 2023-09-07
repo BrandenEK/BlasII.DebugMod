@@ -48,7 +48,7 @@ namespace BlasII.DebugMod.FreeCam
 
         public void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Keypad9) && Main.DebugMod.LoadStatus.GameSceneLoaded)
+            if (Input.GetKeyDown(KeyCode.F4) && Main.DebugMod.LoadStatus.GameSceneLoaded)
             {
                 _canMoveCamera = !_canMoveCamera;
             }
