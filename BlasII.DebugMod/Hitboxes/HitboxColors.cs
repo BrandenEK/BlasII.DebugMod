@@ -4,7 +4,7 @@ namespace BlasII.DebugMod.Hitboxes
 {
     public class HitboxColors
     {
-        private static readonly Color defaultColor = Color.green;
+        private static readonly Color defaultColor = Color.white;
 
         public readonly Color inactive;
         public readonly Color geometry;

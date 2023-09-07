@@ -18,6 +18,7 @@ namespace BlasII.DebugMod.Hitboxes
         public HitboxViewer(HitboxConfig config)
         {
             _config = config;
+            Colors = new HitboxColors(config.inactiveColor, config.geometryColor, config.playerColor, config.enemyColor, config.hazardColor, config.triggerColor, config.otherColor);
         }
 
         private void AddHitboxes()
@@ -53,6 +54,7 @@ namespace BlasII.DebugMod.Hitboxes
 
                     line = obj.AddComponent<LineRenderer>();
                     line.material = HitboxMaterial;
+                    line.sortingLayerName = "Before Player";
                     line.useWorldSpace = false;
                     line.SetWidth(LINE_WIDTH, LINE_WIDTH);
 
