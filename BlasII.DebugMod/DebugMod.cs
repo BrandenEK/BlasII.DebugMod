@@ -13,8 +13,16 @@ namespace BlasII.DebugMod
 
         protected override void OnInitialize()
         {
-            HitboxViewer = new HitboxViewer(new HitboxConfig(true, false, 1f));
-            CameraMover = new CameraMover(new CameraConfig(0.1f, 2.5f));
+            MainConfig config = FileHandler.LoadConfig<MainConfig>();
+
+            Log("Hitbox inactive color: " + config.hitboxViewer.inactiveColor);
+            Log("Hitbox player color: " + config.hitboxViewer.playerColor);
+            Log("Hitbox update delay: " + config.hitboxViewer.updateDelay);
+
+            Log("Camera speed: " + config.freeCamera.movementSpeed);
+
+            HitboxViewer = new HitboxViewer(config.hitboxViewer);
+            CameraMover = new CameraMover(config.freeCamera);
         }
 
         protected override void OnSceneLoaded(string sceneName)
