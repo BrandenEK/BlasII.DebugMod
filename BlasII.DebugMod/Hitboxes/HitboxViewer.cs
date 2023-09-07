@@ -54,6 +54,7 @@ namespace BlasII.DebugMod.Hitboxes
 
                     line = obj.AddComponent<LineRenderer>();
                     line.material = HitboxMaterial;
+                    line.sortingLayerName = "Before Player";
                     line.useWorldSpace = false;
                     line.SetWidth(LINE_WIDTH, LINE_WIDTH);
 

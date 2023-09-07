@@ -31,7 +31,7 @@ namespace BlasII.DebugMod.Hitboxes
 
         public HitboxConfig()
         {
-            showGeometry = false;
+            showGeometry = true;
             updateDelay = 1;
 
             inactiveColor = "#7F7F7F";
