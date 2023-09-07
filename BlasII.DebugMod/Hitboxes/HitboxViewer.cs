@@ -18,6 +18,7 @@ namespace BlasII.DebugMod.Hitboxes
         public HitboxViewer(HitboxConfig config)
         {
             _config = config;
+            Colors = new HitboxColors(config.inactiveColor, config.geometryColor, config.playerColor, config.enemyColor, config.hazardColor, config.triggerColor, config.otherColor);
         }
 
         private void AddHitboxes()
