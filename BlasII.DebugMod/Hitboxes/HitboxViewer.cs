@@ -13,6 +13,8 @@ namespace BlasII.DebugMod.Hitboxes
         private bool _showHitboxes = false;
         private float _currentDelay = 0f;
 
+        public HitboxColors Colors { get; private set; }
+
         public HitboxViewer(HitboxConfig config)
         {
             _config = config;
@@ -124,11 +126,13 @@ namespace BlasII.DebugMod.Hitboxes
 
         public void Update()
         {
-            if (_showHitboxes && Main.DebugMod.InGame)
+            if (_showHitboxes && Main.DebugMod.LoadStatus.GameSceneLoaded)
             {
                 _currentDelay += Time.deltaTime;
                 if (_currentDelay >= _config.updateDelay)
+                {
                     AddHitboxes();
+                }
             }
 
             if (Input.GetKeyDown(KeyCode.Keypad8))
