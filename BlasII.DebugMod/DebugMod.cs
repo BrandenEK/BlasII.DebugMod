@@ -1,4 +1,5 @@
-﻿using BlasII.DebugMod.FreeCam;
+﻿using BlasII.DebugMod.DebugInfo;
+using BlasII.DebugMod.FreeCam;
 using BlasII.DebugMod.Hitboxes;
 using BlasII.DebugMod.NoClip;
 using BlasII.ModdingAPI;
@@ -9,6 +10,7 @@ namespace BlasII.DebugMod
     {
         public DebugMod() : base(ModInfo.MOD_ID, ModInfo.MOD_NAME, ModInfo.MOD_AUTHOR, ModInfo.MOD_VERSION) { }
 
+        public InfoDisplay InfoDisplay { get; private set; }
         public HitboxViewer HitboxViewer { get; private set; }
         public NoClipper NoClipper { get; private set; }
         public CameraMover CameraMover { get; private set; }
@@ -17,6 +19,7 @@ namespace BlasII.DebugMod
         {
             MainConfig config = FileHandler.LoadConfig<MainConfig>();
 
+            InfoDisplay = new InfoDisplay();
             HitboxViewer = new HitboxViewer(config.hitboxViewer);
             NoClipper = new NoClipper(config.noClip);
             CameraMover = new CameraMover(config.freeCamera);
@@ -24,6 +27,7 @@ namespace BlasII.DebugMod
 
         protected override void OnSceneLoaded(string sceneName)
         {
+            InfoDisplay.SceneLoaded();
             HitboxViewer.SceneLoaded();
             NoClipper.SceneLoaded();
             CameraMover.SceneLoaded();
@@ -31,6 +35,7 @@ namespace BlasII.DebugMod
 
         protected override void OnSceneUnloaded(string sceneName)
         {
+            InfoDisplay.SceneUnloaded();
             HitboxViewer.SceneUnloaded();
             NoClipper.SceneUnloaded();
             CameraMover.SceneUnloaded();
@@ -38,6 +43,7 @@ namespace BlasII.DebugMod
 
         protected override void OnUpdate()
         {
+            InfoDisplay.Update();
             HitboxViewer.Update();
             NoClipper.Update();
             CameraMover.Update();
