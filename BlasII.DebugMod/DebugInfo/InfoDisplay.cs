@@ -14,13 +14,13 @@ namespace BlasII.DebugMod.DebugInfo
 
         public void SceneLoaded()
         {
-            if (_showInfo)
+            if (_showInfo && Main.DebugMod.LoadStatus.GameSceneLoaded)
                 SetTextVisibility(true);
         }
 
         public void SceneUnloaded()
         {
-            if (_showInfo)
+            if (_showInfo && Main.DebugMod.LoadStatus.GameSceneLoaded)
                 SetTextVisibility(false);
         }
 
@@ -40,6 +40,9 @@ namespace BlasII.DebugMod.DebugInfo
 
         private void UpdateText()
         {
+            if (!Main.DebugMod.LoadStatus.GameSceneLoaded)
+                return;
+
             string currentScene = Main.DebugMod.LoadStatus.CurrentScene;
             Vector2 playerPosition = CoreCache.PlayerSpawn.PlayerInstance.transform.position;
 
@@ -60,6 +63,10 @@ namespace BlasII.DebugMod.DebugInfo
             _infoText = UIModder.CreateRect("Info Display", UIModder.Parents.GameLogic)
                 .SetXRange(0, 0).SetYRange(1, 1).SetPivot(0, 1).SetPosition(20, -235).SetSize(400, 200).AddText()
                 .SetFontSize(40).SetAlignment(TextAlignmentOptions.TopLeft);
+
+            _infoText.enableWordWrapping = false;
+            //_infoText.outlineColor = new Color32(255, 255, 255, 255);
+            //_infoText.outlineWidth = 0.06f;
         }
     }
 }
