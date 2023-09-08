@@ -5,12 +5,15 @@ namespace BlasII.DebugMod.NoClip
 {
     public class NoClipper
     {
-        // temp
-        private const float PLAYER_SPEED = 0.1f;
-        private const float PLAYER_MULTIPLIER = 1.5f;
+        private readonly NoclipConfig _config;
 
         private bool _canMovePlayer;
         private Vector3 _playerPosition;
+
+        public NoClipper(NoclipConfig config)
+        {
+            _config = config;
+        }
 
         public void SceneLoaded()
         {
@@ -39,9 +42,9 @@ namespace BlasII.DebugMod.NoClip
 
             if (_canMovePlayer)
             {
-                float playerSpeed = PLAYER_SPEED;// _config.movementSpeed;
+                float playerSpeed = _config.movementSpeed;
                 if (Input.GetKey(KeyCode.RightControl))
-                    playerSpeed *= PLAYER_MULTIPLIER;// _config.movementModifier;
+                    playerSpeed *= _config.movementModifier;
 
                 if (Input.GetKey(KeyCode.A)) _playerPosition += Vector3.left * playerSpeed;
                 if (Input.GetKey(KeyCode.D)) _playerPosition += Vector3.right * playerSpeed;

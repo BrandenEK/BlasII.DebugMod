@@ -18,7 +18,7 @@ namespace BlasII.DebugMod
             MainConfig config = FileHandler.LoadConfig<MainConfig>();
 
             HitboxViewer = new HitboxViewer(config.hitboxViewer);
-            NoClipper = new NoClipper();
+            NoClipper = new NoClipper(config.noClip);
             CameraMover = new CameraMover(config.freeCamera);
         }
 
