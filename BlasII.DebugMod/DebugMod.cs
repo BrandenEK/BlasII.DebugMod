@@ -3,6 +3,7 @@ using BlasII.DebugMod.FreeCam;
 using BlasII.DebugMod.Hitboxes;
 using BlasII.DebugMod.NoClip;
 using BlasII.ModdingAPI;
+using System.Collections.Generic;
 
 namespace BlasII.DebugMod
 {
@@ -17,6 +18,13 @@ namespace BlasII.DebugMod
 
         protected override void OnInitialize()
         {
+            InputHandler.RegisterDefaultKeybindings(new Dictionary<string, UnityEngine.KeyCode>()
+            {
+                { "InfoDisplay", UnityEngine.KeyCode.F1 },
+                { "HitboxViewer", UnityEngine.KeyCode.F2 },
+                { "NoClip", UnityEngine.KeyCode.F3 },
+                { "FreeCam", UnityEngine.KeyCode.F4 },
+            });
             MainConfig config = FileHandler.LoadConfig<MainConfig>();
 
             InfoDisplay = new InfoDisplay();

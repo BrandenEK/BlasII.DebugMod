@@ -33,7 +33,7 @@ namespace BlasII.DebugMod.NoClip
 
         public void Update()
         {
-            if (Input.GetKeyDown(KeyCode.F3) && Main.DebugMod.LoadStatus.GameSceneLoaded)
+            if (Main.DebugMod.InputHandler.GetKeyDown("NoClip") && Main.DebugMod.LoadStatus.GameSceneLoaded)
             {
                 _canMovePlayer = !_canMovePlayer;
                 SetComponentStatus(!_canMovePlayer);

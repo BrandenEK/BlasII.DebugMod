@@ -26,7 +26,7 @@ namespace BlasII.DebugMod.DebugInfo
 
         public void Update()
         {
-            if (Input.GetKeyDown(KeyCode.F1) && Main.DebugMod.LoadStatus.GameSceneLoaded)
+            if (Main.DebugMod.InputHandler.GetKeyDown("InfoDisplay") && Main.DebugMod.LoadStatus.GameSceneLoaded)
             {
                 _showInfo = !_showInfo;
                 SetTextVisibility(_showInfo);
