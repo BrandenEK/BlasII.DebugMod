@@ -48,22 +48,20 @@ namespace BlasII.DebugMod.NoClip
             if (CoreCache.PlayerSpawn.PlayerInstance == null)
                 return;
 
-            if (_canMovePlayer)
-            {
-                float playerSpeed = _config.movementSpeed * 120f;
-
-                _playerPosition += Vector3.right * playerSpeed * Time.deltaTime
-                    * Main.DebugMod.InputHandler.GetAxis(AxisType.MoveHorizontal);
-                _playerPosition += Vector3.up * playerSpeed * Time.deltaTime
-                    * Main.DebugMod.InputHandler.GetAxis(AxisType.MoveVertical);
-
-                Body.bodyTransform = new BodyTransform { position = _playerPosition };
-                CoreCache.PlayerSpawn.PlayerInstance.transform.position = _playerPosition;
-            }
-            else
+            if (!_canMovePlayer)
             {
                 _playerPosition = CoreCache.PlayerSpawn.PlayerInstance.transform.position;
+                return;
             }
+
+            float h = Main.DebugMod.InputHandler.GetAxis(AxisType.MoveHorizontal);
+            float v = Main.DebugMod.InputHandler.GetAxis(AxisType.MoveVertical);
+            var direction = new Vector3(h, v).normalized;
+
+            _playerPosition += direction * _config.movementSpeed * 120f * Time.deltaTime;
+
+            Body.bodyTransform = new BodyTransform { position = _playerPosition };
+            CoreCache.PlayerSpawn.PlayerInstance.transform.position = _playerPosition;
         }
 
         private void SetComponentStatus(bool enabled)

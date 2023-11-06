@@ -62,21 +62,19 @@ namespace BlasII.DebugMod.FreeCam
             if (CameraObject == null)
                 return;
 
-            if (_canMoveCamera)
-            {
-                float camSpeed = _config.movementSpeed * 120;
-
-                _cameraPosition += Vector3.right * camSpeed * Time.deltaTime
-                    * Main.DebugMod.InputHandler.GetAxis(AxisType.MoveRHorizontal);
-                _cameraPosition += Vector3.up * camSpeed * Time.deltaTime
-                    * Main.DebugMod.InputHandler.GetAxis(AxisType.MoveRVertical);
-
-                CameraObject.position = _cameraPosition;
-            }
-            else
+            if (!_canMoveCamera)
             {
                 _cameraPosition = CameraObject.position;
+                return;
             }
+
+            float h = Main.DebugMod.InputHandler.GetAxis(AxisType.MoveRHorizontal);
+            float v = Main.DebugMod.InputHandler.GetAxis(AxisType.MoveRVertical);
+            var direction = new Vector3(h, v).normalized;
+
+            _cameraPosition += direction * _config.movementSpeed * 120f * Time.deltaTime;
+
+            CameraObject.position = _cameraPosition;
         }
     }
 }
