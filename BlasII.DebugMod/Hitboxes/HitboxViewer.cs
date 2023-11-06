@@ -8,15 +8,9 @@ namespace BlasII.DebugMod.Hitboxes
         private const float LINE_WIDTH = 0.04f;
 
         private readonly Dictionary<int, LineRenderer> _activeHitboxes = new();
-        private readonly HitboxConfig _config;
 
         private bool _showHitboxes = false;
         private float _currentDelay = 0f;
-
-        public HitboxViewer(HitboxConfig config)
-        {
-            _config = config;
-        }
 
         private void AddHitboxes()
         {
@@ -27,7 +21,7 @@ namespace BlasII.DebugMod.Hitboxes
             foreach (Collider2D collider in Object.FindObjectsOfType<Collider2D>(true))
             {
                 // If not showing geometry, skip
-                if (!_config.showGeometry && collider.name.StartsWith("GEO_"))
+                if (!Main.DebugMod.DebugSettings.geometryShow && collider.name.StartsWith("GEO_"))
                     continue;
 
                 // If collider type is not valid, skip
@@ -128,7 +122,7 @@ namespace BlasII.DebugMod.Hitboxes
             if (_showHitboxes && Main.DebugMod.LoadStatus.GameSceneLoaded)
             {
                 _currentDelay += Time.deltaTime;
-                if (_currentDelay >= _config.updateDelay)
+                if (_currentDelay >= Main.DebugMod.DebugSettings.hitboxUpdateDelay)
                 {
                     AddHitboxes();
                 }
