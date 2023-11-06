@@ -1,4 +1,5 @@
-﻿using Il2CppLightbug.Kinematic2D.Core;
+﻿using BlasII.ModdingAPI.Input;
+using Il2CppLightbug.Kinematic2D.Core;
 using Il2CppTGK.Game;
 using Il2CppTGK.Game.Components;
 using UnityEngine;
@@ -49,14 +50,12 @@ namespace BlasII.DebugMod.NoClip
 
             if (_canMovePlayer)
             {
-                float playerSpeed = _config.movementSpeed;
-                if (Input.GetKey(KeyCode.RightControl))
-                    playerSpeed *= _config.movementModifier;
+                float playerSpeed = _config.movementSpeed * 120f;
 
-                if (Input.GetKey(KeyCode.A)) _playerPosition += Vector3.left * playerSpeed;
-                if (Input.GetKey(KeyCode.D)) _playerPosition += Vector3.right * playerSpeed;
-                if (Input.GetKey(KeyCode.S)) _playerPosition += Vector3.down * playerSpeed;
-                if (Input.GetKey(KeyCode.W)) _playerPosition += Vector3.up * playerSpeed;
+                _playerPosition += Vector3.right * playerSpeed * Time.deltaTime
+                    * Main.DebugMod.InputHandler.GetAxis(AxisType.MoveHorizontal);
+                _playerPosition += Vector3.up * playerSpeed * Time.deltaTime
+                    * Main.DebugMod.InputHandler.GetAxis(AxisType.MoveVertical);
 
                 Body.bodyTransform = new BodyTransform { position = _playerPosition };
                 CoreCache.PlayerSpawn.PlayerInstance.transform.position = _playerPosition;

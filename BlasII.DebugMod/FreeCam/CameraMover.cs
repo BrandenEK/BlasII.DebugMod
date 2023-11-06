@@ -1,4 +1,5 @@
-﻿using Il2CppTGK.Game.Components;
+﻿using BlasII.ModdingAPI.Input;
+using Il2CppTGK.Game.Components;
 using UnityEngine;
 
 namespace BlasII.DebugMod.FreeCam
@@ -63,14 +64,12 @@ namespace BlasII.DebugMod.FreeCam
 
             if (_canMoveCamera)
             {
-                float camSpeed = _config.movementSpeed;
-                if (Input.GetKey(KeyCode.LeftControl))
-                    camSpeed *= _config.movementModifier;
+                float camSpeed = _config.movementSpeed * 120;
 
-                if (Input.GetKey(KeyCode.LeftArrow)) _cameraPosition += Vector3.left * camSpeed;
-                if (Input.GetKey(KeyCode.RightArrow)) _cameraPosition += Vector3.right * camSpeed;
-                if (Input.GetKey(KeyCode.DownArrow)) _cameraPosition += Vector3.down * camSpeed;
-                if (Input.GetKey(KeyCode.UpArrow)) _cameraPosition += Vector3.up * camSpeed;
+                _cameraPosition += Vector3.right * camSpeed * Time.deltaTime
+                    * Main.DebugMod.InputHandler.GetAxis(AxisType.MoveRHorizontal);
+                _cameraPosition += Vector3.up * camSpeed * Time.deltaTime
+                    * Main.DebugMod.InputHandler.GetAxis(AxisType.MoveRVertical);
 
                 CameraObject.position = _cameraPosition;
             }
