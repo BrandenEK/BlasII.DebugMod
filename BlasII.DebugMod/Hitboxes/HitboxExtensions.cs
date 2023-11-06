@@ -107,48 +107,44 @@ namespace BlasII.DebugMod.Hitboxes
             }
         }
 
-        public static void UpdateColors(this LineRenderer renderer, Collider2D collider)
+        public static HitboxType GetHitboxType(this Collider2D collider)
         {
-            Color color;
-            int order;
-            if (!collider.isActiveAndEnabled)
+            if (collider.name.StartsWith("GEO_"))
             {
-                color = Main.DebugMod.DebugSettings.inactiveColor;
-                order = 20;
-            }
-            else if (collider.name.StartsWith("GEO_"))
-            {
-                color = Main.DebugMod.DebugSettings.geometryColor;
-                order = 30;
+                return HitboxType.Geometry;
             }
             else if (collider.transform.HasComponentInParent<PlayerPersistentComponent>())
             {
-                color = Main.DebugMod.DebugSettings.playerColor;
-                order = 100;
+                return HitboxType.Player;
             }
             else if (collider.transform.HasComponentInParent<AliveEntity>())
             {
-                color = Main.DebugMod.DebugSettings.enemyColor;
-                order = 80;
+                return HitboxType.Enemy;
             }
             else if (collider.transform.GetComponent<AttackHit>() != null)
             {
-                color = Main.DebugMod.DebugSettings.hazardColor;
-                order = 50;
+                return HitboxType.Hazard;
             }
             else if (collider.isTrigger)
             {
-                color = Main.DebugMod.DebugSettings.triggerColor;
-                order = 60;
+                return HitboxType.Trigger;
             }
             else
             {
-                color = Main.DebugMod.DebugSettings.otherColor;
-                order = 40;
+                return HitboxType.Other;
             }
+        }
 
-            renderer.SetColors(color, color);
-            renderer.sortingOrder = order;
+        public static ColliderType GetColliderType(this Collider2D collider)
+        {
+            return collider.GetIl2CppType().Name switch
+            {
+                "BoxCollider2D" => ColliderType.Box,
+                "CircleCollider2D" => ColliderType.Circle,
+                "CapsuleCollider2D" => ColliderType.Capsule,
+                "PolygonCollider2D" => ColliderType.Polygon,
+                _ => ColliderType.Invalid,
+            };
         }
     }
 }
