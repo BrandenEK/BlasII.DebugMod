@@ -13,12 +13,9 @@ namespace BlasII.DebugMod.Hitboxes
         private bool _showHitboxes = false;
         private float _currentDelay = 0f;
 
-        public HitboxColors Colors { get; private set; }
-
         public HitboxViewer(HitboxConfig config)
         {
             _config = config;
-            Colors = new HitboxColors(config.inactiveColor, config.geometryColor, config.playerColor, config.enemyColor, config.hazardColor, config.triggerColor, config.otherColor);
         }
 
         private void AddHitboxes()

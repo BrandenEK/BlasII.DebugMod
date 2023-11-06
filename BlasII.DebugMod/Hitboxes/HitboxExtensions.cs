@@ -113,37 +113,37 @@ namespace BlasII.DebugMod.Hitboxes
             int order;
             if (!collider.isActiveAndEnabled)
             {
-                color = Main.DebugMod.HitboxViewer.Colors.inactive;
+                color = Main.DebugMod.DebugSettings.inactiveColor;
                 order = 20;
             }
             else if (collider.name.StartsWith("GEO_"))
             {
-                color = Main.DebugMod.HitboxViewer.Colors.geometry;
+                color = Main.DebugMod.DebugSettings.geometryColor;
                 order = 30;
             }
             else if (collider.transform.HasComponentInParent<PlayerPersistentComponent>())
             {
-                color = Main.DebugMod.HitboxViewer.Colors.player;
+                color = Main.DebugMod.DebugSettings.playerColor;
                 order = 100;
             }
             else if (collider.transform.HasComponentInParent<AliveEntity>())
             {
-                color = Main.DebugMod.HitboxViewer.Colors.enemy;
+                color = Main.DebugMod.DebugSettings.enemyColor;
                 order = 80;
             }
             else if (collider.transform.GetComponent<AttackHit>() != null)
             {
-                color = Main.DebugMod.HitboxViewer.Colors.hazard;
+                color = Main.DebugMod.DebugSettings.hazardColor;
                 order = 50;
             }
             else if (collider.isTrigger)
             {
-                color = Main.DebugMod.HitboxViewer.Colors.trigger;
+                color = Main.DebugMod.DebugSettings.triggerColor;
                 order = 60;
             }
             else
             {
-                color = Main.DebugMod.HitboxViewer.Colors.other;
+                color = Main.DebugMod.DebugSettings.otherColor;
                 order = 40;
             }
 

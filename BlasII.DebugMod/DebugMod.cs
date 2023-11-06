@@ -31,6 +31,13 @@ namespace BlasII.DebugMod
             {
                 { "No_Clip_Speed", 0.1f },
                 { "Free_Cam_Speed", 0.1f },
+                { "Color_Inactive", "#7F7F7F" },
+                { "Color_Geometry", "#00FF00" },
+                { "Color_Player", "#00FFFF" },
+                { "Color_Enemy", "#FF0000" },
+                { "Color_Hazard", "#FF00FF" },
+                { "Color_Trigger", "#7F7FFF" },
+                { "Color_Other", "#FFEB04" },
             });
             DebugSettings = new DebugSettings(ConfigHandler);
 
