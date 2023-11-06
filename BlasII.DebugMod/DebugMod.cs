@@ -16,6 +16,8 @@ namespace BlasII.DebugMod
         public NoClipper NoClipper { get; private set; }
         public CameraMover CameraMover { get; private set; }
 
+        internal DebugSettings DebugSettings { get; private set; }
+
         protected override void OnInitialize()
         {
             InputHandler.RegisterDefaultKeybindings(new Dictionary<string, UnityEngine.KeyCode>()
@@ -25,12 +27,17 @@ namespace BlasII.DebugMod
                 { "NoClip", UnityEngine.KeyCode.F3 },
                 { "FreeCam", UnityEngine.KeyCode.F4 },
             });
-            MainConfig config = FileHandler.LoadConfig<MainConfig>();
+            ConfigHandler.RegisterDefaultProperties(new Dictionary<string, object>()
+            {
+                { "No_Clip_Speed", 0.1f },
+                { "Free_Cam_Speed", 0.1f },
+            });
+            DebugSettings = new DebugSettings(ConfigHandler);
 
             InfoDisplay = new InfoDisplay();
-            HitboxViewer = new HitboxViewer(config.hitboxViewer);
-            NoClipper = new NoClipper(config.noClip);
-            CameraMover = new CameraMover(config.freeCamera);
+            HitboxViewer = new HitboxViewer(new HitboxConfig());
+            NoClipper = new NoClipper();
+            CameraMover = new CameraMover();
         }
 
         protected override void OnSceneLoaded(string sceneName)

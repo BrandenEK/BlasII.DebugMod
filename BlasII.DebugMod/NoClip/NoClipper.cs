@@ -8,15 +8,8 @@ namespace BlasII.DebugMod.NoClip
 {
     public class NoClipper
     {
-        private readonly NoclipConfig _config;
-
         private bool _canMovePlayer;
         private Vector3 _playerPosition;
-
-        public NoClipper(NoclipConfig config)
-        {
-            _config = config;
-        }
 
         public void SceneLoaded()
         {
@@ -54,11 +47,12 @@ namespace BlasII.DebugMod.NoClip
                 return;
             }
 
+            float speed = Main.DebugMod.DebugSettings.noClipSpeed * 120f;
             float h = Main.DebugMod.InputHandler.GetAxis(AxisType.MoveHorizontal);
             float v = Main.DebugMod.InputHandler.GetAxis(AxisType.MoveVertical);
             var direction = new Vector3(h, v).normalized;
 
-            _playerPosition += direction * _config.movementSpeed * 120f * Time.deltaTime;
+            _playerPosition += direction * speed * Time.deltaTime;
 
             Body.bodyTransform = new BodyTransform { position = _playerPosition };
             CoreCache.PlayerSpawn.PlayerInstance.transform.position = _playerPosition;
