@@ -31,7 +31,7 @@ namespace BlasII.DebugMod
             {
                 { "No_Clip_Speed", 0.1f },
                 { "Free_Cam_Speed", 0.1f },
-                { "Hitbox_Update_Delay", 1f },
+                { "Hitbox_Update_Delay", 0.2f },
                 { "Show_Inactive", true },
                 { "Color_Inactive", "#7F7F7F" },
                 { "Show_Geometry", true },

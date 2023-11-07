@@ -32,7 +32,7 @@ namespace BlasII.DebugMod.Hitboxes
             // Add line renderer component
             _line = obj.AddComponent<LineRenderer>();
             _line.material = Main.DebugMod.HitboxViewer.HitboxMaterial;
-            _line.sortingLayerName = "Before Player";
+            _line.sortingLayerName = "Foreground Parallax 2";
             _line.useWorldSpace = false;
             _line.SetWidth(LINE_WIDTH, LINE_WIDTH);
 
@@ -60,29 +60,41 @@ namespace BlasII.DebugMod.Hitboxes
             int order;
             switch (hitboxType)
             {
-                case HitboxType.Geometry:
-                    color = Main.DebugMod.DebugSettings.geometryColor;
-                    order = 30;
+                case HitboxType.Hazard:
+                    color = ColorUtility.TryParseHtmlString("#FF007F", out Color c8) ? c8 : Color.white;
+                    order = 420;
+                    break;
+                case HitboxType.Damageable:
+                    color = ColorUtility.TryParseHtmlString("#FFA500", out Color c1) ? c1 : Color.white;
+                    order = 400;
                     break;
                 case HitboxType.Player:
-                    color = Main.DebugMod.DebugSettings.playerColor;
-                    order = 100;
+                    color = ColorUtility.TryParseHtmlString("#00CCCC", out Color c9) ? c9 : Color.white;
+                    order = 380;
+                    break;
+                case HitboxType.Sensor:
+                    color = ColorUtility.TryParseHtmlString("#660066", out Color c2) ? c2 : Color.white;
+                    order = 365;
                     break;
                 case HitboxType.Enemy:
-                    color = Main.DebugMod.DebugSettings.enemyColor;
-                    order = 80;
+                    color = ColorUtility.TryParseHtmlString("#DD0000", out Color c7) ? c7 : Color.white;
+                    order = 360;
                     break;
-                case HitboxType.Hazard:
-                    color = Main.DebugMod.DebugSettings.hazardColor;
-                    order = 50;
+                case HitboxType.Interactable:
+                    color = ColorUtility.TryParseHtmlString("#FFFF33", out Color c6) ? c6 : Color.white;
+                    order = 340;
                     break;
                 case HitboxType.Trigger:
-                    color = Main.DebugMod.DebugSettings.triggerColor;
-                    order = 60;
+                    color = ColorUtility.TryParseHtmlString("#0066CC", out Color c4) ? c4 : Color.white;
+                    order = 300;
+                    break;
+                case HitboxType.Geometry:
+                    color = ColorUtility.TryParseHtmlString("#00CC00", out Color c5) ? c5 : Color.white;
+                    order = 280;
                     break;
                 case HitboxType.Other:
-                    color = Main.DebugMod.DebugSettings.otherColor;
-                    order = 40;
+                    color = ColorUtility.TryParseHtmlString("#000099", out Color c3) ? c3 : Color.white;
+                    order = 260;
                     break;
                 default:
                     throw new System.Exception("A valid type should be calculated before now!");

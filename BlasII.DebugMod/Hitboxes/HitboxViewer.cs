@@ -12,8 +12,6 @@ namespace BlasII.DebugMod.Hitboxes
 
         private void AddHitboxes()
         {
-            float newColliders = 0;
-
             // Foreach collider in the scene, add a HitboxData if it doesnt already have one
             var foundColliders = new List<int>();
             foreach (Collider2D collider in Object.FindObjectsOfType<Collider2D>())
@@ -24,7 +22,6 @@ namespace BlasII.DebugMod.Hitboxes
                 if (!_activeHitboxes.ContainsKey(id))
                 {
                     _activeHitboxes.Add(id, new HitboxData(collider));
-                    newColliders++;
                 }
             }
 
@@ -40,11 +37,7 @@ namespace BlasII.DebugMod.Hitboxes
                 _activeHitboxes.Remove(colliderId);
             }
 
-            // Log amounts and reset timer
-            if (destroyedColliders.Count > 0)
-                Main.DebugMod.Log($"Removing {destroyedColliders.Count} old colliders");
-            if (newColliders > 0)
-                Main.DebugMod.Log($"Adding {newColliders} new colliders");
+            // Reset timer
             _currentDelay = 0;
         }
 

@@ -1,6 +1,8 @@
-﻿using Il2CppTGK.Game.Components.Attack;
+﻿using Il2CppTGK.Game.Components;
+using Il2CppTGK.Game.Components.Attack;
+using Il2CppTGK.Game.Components.Collisions;
+using Il2CppTGK.Game.Components.Interactables;
 using Il2CppTGK.Game.Components.Persistence;
-using Il2CppTGK.Game.Components;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -109,30 +111,40 @@ namespace BlasII.DebugMod.Hitboxes
 
         public static HitboxType GetHitboxType(this Collider2D collider)
         {
+            if (collider.transform.GetComponent<AttackHit>() != null)
+            {
+                return HitboxType.Hazard;
+            }
+            if (collider.transform.HasComponentInParent<CollisionsCallback>())
+            {
+                return HitboxType.Damageable;
+            }
+            if (collider.transform.HasComponentInParent<PlayerPersistentComponent>())
+            {
+                return HitboxType.Player;
+            }
+            if (collider.transform.HasComponentInParent<TriggersCallback>())
+            {
+                return HitboxType.Sensor;
+            }
+            if (collider.transform.HasComponentInParent<AliveEntity>())
+            {
+                return HitboxType.Enemy;
+            }
+            if (collider.transform.HasComponentInParent<IInteractable>())
+            {
+                return HitboxType.Interactable;
+            }
+            if (collider.isTrigger)
+            {
+                return HitboxType.Trigger;
+            }
             if (collider.name.StartsWith("GEO_"))
             {
                 return HitboxType.Geometry;
             }
-            else if (collider.transform.HasComponentInParent<PlayerPersistentComponent>())
-            {
-                return HitboxType.Player;
-            }
-            else if (collider.transform.HasComponentInParent<AliveEntity>())
-            {
-                return HitboxType.Enemy;
-            }
-            else if (collider.transform.GetComponent<AttackHit>() != null)
-            {
-                return HitboxType.Hazard;
-            }
-            else if (collider.isTrigger)
-            {
-                return HitboxType.Trigger;
-            }
-            else
-            {
-                return HitboxType.Other;
-            }
+
+            return HitboxType.Other;
         }
 
         public static ColliderType GetColliderType(this Collider2D collider)
