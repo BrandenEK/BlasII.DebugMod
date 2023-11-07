@@ -12,24 +12,24 @@ Press F1 to toggle info display
 
 ## Hitbox Viewer
 Press F2 to toggle hitbox viewer
-- Grey - Inactive
-- Green - Geometry
+- Pink - Hazard
+- Orange - Damageable
 - Cyan - Player
+- Purple - Sensor
 - Red - Enemy
-- Magenta - Damageable
-- Blue - Trigger
-- Yellow - Other
+- Yellow - Interactable
+- Green - Geometry
+- Light blue - Trigger
+- Dark blue - Other
 
 ---
 
 ## No Clip
 Press F3 to toggle noclip mode
-- WASD can be used to move the player around
-- Hold right control to increase the speed
+- WASD or left stick can be used to move the player around
 
 ---
 
 ## Free Cam
 Press F4 to toggle free cam mode
-- Arrow keys can be used to move the camera around
-- Hold left control to increase the speed
+- Arrow keys or right stick can be used to move the camera around
