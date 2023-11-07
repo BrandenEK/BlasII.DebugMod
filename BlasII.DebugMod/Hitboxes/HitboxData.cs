@@ -16,14 +16,9 @@ namespace BlasII.DebugMod.Hitboxes
                 return;
 
             // Verify that the hitbox type should be shown
-            //if (hitboxType == HitboxType.Geometry && !Main.DebugMod.DebugSettings.geometryShow ||
-            //    hitboxType == HitboxType.Player && !Main.DebugMod.DebugSettings.playerShow ||
-            //    hitboxType == HitboxType.Enemy && !Main.DebugMod.DebugSettings.enemyShow ||
-            //    hitboxType == HitboxType.Hazard && !Main.DebugMod.DebugSettings.hazardShow ||
-            //    hitboxType == HitboxType.Trigger && !Main.DebugMod.DebugSettings.triggerShow ||
-            //    hitboxType == HitboxType.Other && !Main.DebugMod.DebugSettings.otherShow)
-            //    return;
-
+            if (!Main.DebugMod.HitboxViewer.ToggledHitboxes[hitboxType])
+                return;
+            
             // Create object as child of collider
             var obj = new GameObject("Hitbox");
             obj.transform.parent = collider.transform;
@@ -90,7 +85,7 @@ namespace BlasII.DebugMod.Hitboxes
                     break;
                 case HitboxType.Geometry:
                     color = Main.DebugMod.DebugSettings.geometryColor;
-                    order = 280;
+                    order = 100;
                     break;
                 case HitboxType.Other:
                     color = Main.DebugMod.DebugSettings.otherColor;

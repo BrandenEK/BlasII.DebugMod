@@ -7,6 +7,9 @@ namespace BlasII.DebugMod.Hitboxes
     {
         private readonly Dictionary<int, HitboxData> _activeHitboxes = new();
 
+        private readonly HitboxToggler _toggler = new();
+        internal HitboxToggler ToggledHitboxes => _toggler;
+
         private bool _showHitboxes = false;
         private float _currentDelay = 0f;
 
@@ -69,6 +72,12 @@ namespace BlasII.DebugMod.Hitboxes
         {
             if (_showHitboxes)
             {
+                if (_toggler.ProcessToggles())
+                {
+                    RemoveHitboxes();
+                    AddHitboxes();
+                }
+
                 _currentDelay += Time.deltaTime;
                 if (_currentDelay >= Main.DebugMod.DebugSettings.hitboxUpdateDelay)
                 {

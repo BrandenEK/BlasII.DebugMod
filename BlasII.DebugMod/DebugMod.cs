@@ -27,6 +27,15 @@ namespace BlasII.DebugMod
                 { "HitboxViewer", KeyCode.F2 },
                 { "NoClip", KeyCode.F3 },
                 { "FreeCam", KeyCode.F4 },
+                { "Hitbox_Hazard", KeyCode.Keypad1 },
+                { "Hitbox_Damageable", KeyCode.Keypad2 },
+                { "Hitbox_Player", KeyCode.Keypad3 },
+                { "Hitbox_Sensor", KeyCode.Keypad4 },
+                { "Hitbox_Enemy", KeyCode.Keypad5 },
+                { "Hitbox_Interactable", KeyCode.Keypad6 },
+                { "Hitbox_Trigger", KeyCode.Keypad7 },
+                { "Hitbox_Geometry", KeyCode.Keypad8 },
+                { "Hitbox_Other", KeyCode.Keypad9 },
             });
             ConfigHandler.RegisterDefaultProperties(new Dictionary<string, object>()
             {

@@ -12,6 +12,8 @@ namespace BlasII.DebugMod.Hitboxes
         Trigger,
         Geometry,
         Other,
+
+        Invalid
     }
 
     public enum ColliderType
@@ -20,6 +22,7 @@ namespace BlasII.DebugMod.Hitboxes
         Circle,
         Capsule,
         Polygon,
+
         Invalid
     }
 }
