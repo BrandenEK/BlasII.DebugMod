@@ -67,7 +67,7 @@ namespace BlasII.DebugMod.Hitboxes
 
         public void Update()
         {
-            if (_showHitboxes && Main.DebugMod.LoadStatus.GameSceneLoaded)
+            if (_showHitboxes)
             {
                 _currentDelay += Time.deltaTime;
                 if (_currentDelay >= Main.DebugMod.DebugSettings.hitboxUpdateDelay)

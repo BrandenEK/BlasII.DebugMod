@@ -21,7 +21,7 @@ namespace BlasII.DebugMod.FreeCam
 
         public void Update()
         {
-            if (Main.DebugMod.InputHandler.GetKeyDown("FreeCam") && Main.DebugMod.LoadStatus.GameSceneLoaded)
+            if (Main.DebugMod.InputHandler.GetKeyDown("FreeCam"))
             {
                 _canMoveCamera = !_canMoveCamera;
             }

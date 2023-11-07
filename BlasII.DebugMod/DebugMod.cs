@@ -69,6 +69,9 @@ namespace BlasII.DebugMod
 
         protected override void OnUpdate()
         {
+            if (!LoadStatus.GameSceneLoaded)
+                return;
+
             InfoDisplay.Update();
             HitboxViewer.Update();
             NoClipper.Update();
