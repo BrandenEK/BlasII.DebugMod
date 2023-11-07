@@ -8,7 +8,7 @@
     <Authors>Damocles</Authors>
     <Company>Damocles</Company>
     <Description>Provides various debug utilities such as hitbox viewer and free cam</Description>
-    <Version>1.0.1</Version>
+    <Version>1.1.0</Version>
 
     <TargetName>DebugMod</TargetName>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
