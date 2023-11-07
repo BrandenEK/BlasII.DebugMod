@@ -26,7 +26,7 @@ namespace BlasII.DebugMod.DebugInfo
 
         public void Update()
         {
-            if (Input.GetKeyDown(KeyCode.F1) && Main.DebugMod.LoadStatus.GameSceneLoaded)
+            if (Main.DebugMod.InputHandler.GetKeyDown("InfoDisplay"))
             {
                 _showInfo = !_showInfo;
                 SetTextVisibility(_showInfo);
@@ -40,9 +40,6 @@ namespace BlasII.DebugMod.DebugInfo
 
         private void UpdateText()
         {
-            if (!Main.DebugMod.LoadStatus.GameSceneLoaded)
-                return;
-
             string currentScene = Main.DebugMod.LoadStatus.CurrentScene;
             Vector2 playerPosition = CoreCache.PlayerSpawn.PlayerInstance.transform.position;
 

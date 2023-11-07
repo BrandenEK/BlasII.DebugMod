@@ -5,81 +5,27 @@ namespace BlasII.DebugMod.Hitboxes
 {
     public class HitboxViewer
     {
-        private const float LINE_WIDTH = 0.04f;
+        private readonly Dictionary<int, HitboxData> _activeHitboxes = new();
 
-        private readonly Dictionary<int, LineRenderer> _activeHitboxes = new();
-        private readonly HitboxConfig _config;
+        private readonly HitboxToggler _toggler = new();
+        internal HitboxToggler ToggledHitboxes => _toggler;
 
         private bool _showHitboxes = false;
         private float _currentDelay = 0f;
 
-        public HitboxColors Colors { get; private set; }
-
-        public HitboxViewer(HitboxConfig config)
-        {
-            _config = config;
-            Colors = new HitboxColors(config.inactiveColor, config.geometryColor, config.playerColor, config.enemyColor, config.hazardColor, config.triggerColor, config.otherColor);
-        }
-
         private void AddHitboxes()
         {
-            float newColliders = 0;
-
-            // Foreach collider in the scene, either add it or update it
+            // Foreach collider in the scene, add a HitboxData if it doesnt already have one
             var foundColliders = new List<int>();
-            foreach (Collider2D collider in Object.FindObjectsOfType<Collider2D>(true))
+            foreach (Collider2D collider in Object.FindObjectsOfType<Collider2D>())
             {
-                // If not showing geometry, skip
-                if (!_config.showGeometry && collider.name.StartsWith("GEO_"))
-                    continue;
+                int id = collider.gameObject.GetInstanceID();
+                foundColliders.Add(id);
 
-                // If collider type is not valid, skip
-                string colliderType = collider.GetIl2CppType().Name;
-                if (!validColliders.Contains(colliderType))
-                    continue;
-
-                // If collider is too large, skip
-
-                if (_activeHitboxes.TryGetValue(collider.gameObject.GetInstanceID(), out LineRenderer line))
+                if (!_activeHitboxes.ContainsKey(id))
                 {
-                    // If the collider is already stored, just update the colors
-                    line.UpdateColors(collider);
+                    _activeHitboxes.Add(id, new HitboxData(collider));
                 }
-                else
-                {
-                    // Move this out into helper function
-                    var obj = new GameObject("Hitbox");
-                    obj.transform.parent = collider.transform;
-                    obj.transform.localPosition = Vector3.zero;
-
-                    line = obj.AddComponent<LineRenderer>();
-                    line.material = HitboxMaterial;
-                    line.sortingLayerName = "Before Player";
-                    line.useWorldSpace = false;
-                    line.SetWidth(LINE_WIDTH, LINE_WIDTH);
-
-                    switch (colliderType)
-                    {
-                        case "BoxCollider2D":
-                            line.DisplayBox(collider.Cast<BoxCollider2D>());
-                            break;
-                        case "CircleCollider2D":
-                            line.DisplayCircle(collider.Cast<CircleCollider2D>());
-                            break;
-                        case "CapsuleCollider2D":
-                            line.DisplayCapsule(collider.Cast<CapsuleCollider2D>());
-                            break;
-                        case "PolygonCollider2D":
-                            line.DisplayPolygon(collider.Cast<PolygonCollider2D>());
-                            break;
-                    }
-                    line.UpdateColors(collider);
-
-                    _activeHitboxes.Add(collider.gameObject.GetInstanceID(), line);
-                    newColliders++;
-                }
-
-                foundColliders.Add(collider.gameObject.GetInstanceID());
             }
 
             // Foreach collider in the list that wasn't found, remove it
@@ -91,23 +37,19 @@ namespace BlasII.DebugMod.Hitboxes
             }
             foreach (int colliderId in destroyedColliders)
             {
+                _activeHitboxes[colliderId].DestroyHitbox();
                 _activeHitboxes.Remove(colliderId);
             }
 
-            // Log amounts and reset timer
-            if (destroyedColliders.Count > 0)
-                Main.DebugMod.Log($"Removing {destroyedColliders.Count} old colliders");
-            if (newColliders > 0)
-                Main.DebugMod.Log($"Adding {newColliders} new colliders");
+            // Reset timer
             _currentDelay = 0;
         }
 
         private void RemoveHitboxes()
         {
-            foreach (LineRenderer hitbox in _activeHitboxes.Values)
+            foreach (HitboxData hitbox in _activeHitboxes.Values)
             {
-                if (hitbox != null && hitbox.gameObject != null)
-                    Object.Destroy(hitbox.gameObject);
+                hitbox.DestroyHitbox();
             }
 
             _activeHitboxes.Clear();
@@ -128,16 +70,22 @@ namespace BlasII.DebugMod.Hitboxes
 
         public void Update()
         {
-            if (_showHitboxes && Main.DebugMod.LoadStatus.GameSceneLoaded)
+            if (_showHitboxes)
             {
+                if (_toggler.ProcessToggles())
+                {
+                    RemoveHitboxes();
+                    AddHitboxes();
+                }
+
                 _currentDelay += Time.deltaTime;
-                if (_currentDelay >= _config.updateDelay)
+                if (_currentDelay >= Main.DebugMod.DebugSettings.hitboxUpdateDelay)
                 {
                     AddHitboxes();
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.F2))
+            if (Main.DebugMod.InputHandler.GetKeyDown("HitboxViewer"))
             {
                 _showHitboxes = !_showHitboxes;
                 if (_showHitboxes)
@@ -172,13 +120,5 @@ namespace BlasII.DebugMod.Hitboxes
                 return _hitboxMaterial;
             }
         }
-
-        private readonly List<string> validColliders = new()
-        {
-            "BoxCollider2D",
-            "CircleCollider2D",
-            "CapsuleCollider2D",
-            "PolygonCollider2D",
-        };
     }
 }

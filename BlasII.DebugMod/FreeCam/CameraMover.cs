@@ -1,14 +1,54 @@
-﻿using Il2CppTGK.Game.Components;
+﻿using BlasII.ModdingAPI.Input;
+using Il2CppTGK.Game.Components;
 using UnityEngine;
 
 namespace BlasII.DebugMod.FreeCam
 {
     public class CameraMover
     {
-        private readonly CameraConfig _config;
-
         private bool _canMoveCamera;
         private Vector3 _cameraPosition;
+
+        public void SceneLoaded()
+        {
+
+        }
+
+        public void SceneUnloaded()
+        {
+            _canMoveCamera = false;
+        }
+
+        public void Update()
+        {
+            if (Main.DebugMod.InputHandler.GetKeyDown("FreeCam"))
+            {
+                _canMoveCamera = !_canMoveCamera;
+            }
+            
+            UpdateCameraPosition();
+        }
+
+        private void UpdateCameraPosition()
+        {
+            if (CameraObject == null)
+                return;
+
+            if (!_canMoveCamera)
+            {
+                _cameraPosition = CameraObject.position;
+                return;
+            }
+
+            float speed = Main.DebugMod.DebugSettings.freeCamSpeed * 120f;
+            float h = Main.DebugMod.InputHandler.GetAxis(AxisType.MoveRHorizontal);
+            float v = Main.DebugMod.InputHandler.GetAxis(AxisType.MoveRVertical);
+            var direction = new Vector3(h, v).normalized;
+
+            _cameraPosition += direction * speed * Time.deltaTime;
+
+            CameraObject.position = _cameraPosition;
+        }
 
         private Transform _cameraObjectRef;
         private Transform CameraObject
@@ -28,55 +68,6 @@ namespace BlasII.DebugMod.FreeCam
                     }
                 }
                 return _cameraObjectRef;
-            }
-        }
-
-        public CameraMover(CameraConfig config)
-        {
-            _config = config;
-        }
-
-        public void SceneLoaded()
-        {
-
-        }
-
-        public void SceneUnloaded()
-        {
-            _canMoveCamera = false;
-        }
-
-        public void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.F4) && Main.DebugMod.LoadStatus.GameSceneLoaded)
-            {
-                _canMoveCamera = !_canMoveCamera;
-            }
-            
-            UpdateCameraPosition();
-        }
-
-        private void UpdateCameraPosition()
-        {
-            if (CameraObject == null)
-                return;
-
-            if (_canMoveCamera)
-            {
-                float camSpeed = _config.movementSpeed;
-                if (Input.GetKey(KeyCode.LeftControl))
-                    camSpeed *= _config.movementModifier;
-
-                if (Input.GetKey(KeyCode.LeftArrow)) _cameraPosition += Vector3.left * camSpeed;
-                if (Input.GetKey(KeyCode.RightArrow)) _cameraPosition += Vector3.right * camSpeed;
-                if (Input.GetKey(KeyCode.DownArrow)) _cameraPosition += Vector3.down * camSpeed;
-                if (Input.GetKey(KeyCode.UpArrow)) _cameraPosition += Vector3.up * camSpeed;
-
-                CameraObject.position = _cameraPosition;
-            }
-            else
-            {
-                _cameraPosition = CameraObject.position;
             }
         }
     }

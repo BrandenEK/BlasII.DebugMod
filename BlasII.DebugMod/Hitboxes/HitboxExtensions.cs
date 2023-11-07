@@ -1,6 +1,8 @@
-﻿using Il2CppTGK.Game.Components.Attack;
+﻿using Il2CppTGK.Game.Components;
+using Il2CppTGK.Game.Components.Attack;
+using Il2CppTGK.Game.Components.Collisions;
+using Il2CppTGK.Game.Components.Interactables;
 using Il2CppTGK.Game.Components.Persistence;
-using Il2CppTGK.Game.Components;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -107,48 +109,54 @@ namespace BlasII.DebugMod.Hitboxes
             }
         }
 
-        public static void UpdateColors(this LineRenderer renderer, Collider2D collider)
+        public static HitboxType GetHitboxType(this Collider2D collider)
         {
-            Color color;
-            int order;
-            if (!collider.isActiveAndEnabled)
+            if (collider.transform.GetComponent<AttackHit>() != null)
             {
-                color = Main.DebugMod.HitboxViewer.Colors.inactive;
-                order = 20;
+                return HitboxType.Hazard;
             }
-            else if (collider.name.StartsWith("GEO_"))
+            if (collider.transform.HasComponentInParent<CollisionsCallback>())
             {
-                color = Main.DebugMod.HitboxViewer.Colors.geometry;
-                order = 30;
+                return HitboxType.Damageable;
             }
-            else if (collider.transform.HasComponentInParent<PlayerPersistentComponent>())
+            if (collider.transform.HasComponentInParent<PlayerPersistentComponent>())
             {
-                color = Main.DebugMod.HitboxViewer.Colors.player;
-                order = 100;
+                return HitboxType.Player;
             }
-            else if (collider.transform.HasComponentInParent<AliveEntity>())
+            if (collider.transform.HasComponentInParent<TriggersCallback>())
             {
-                color = Main.DebugMod.HitboxViewer.Colors.enemy;
-                order = 80;
+                return HitboxType.Sensor;
             }
-            else if (collider.transform.GetComponent<AttackHit>() != null)
+            if (collider.transform.HasComponentInParent<AliveEntity>())
             {
-                color = Main.DebugMod.HitboxViewer.Colors.hazard;
-                order = 50;
+                return HitboxType.Enemy;
             }
-            else if (collider.isTrigger)
+            if (collider.transform.HasComponentInParent<IInteractable>())
             {
-                color = Main.DebugMod.HitboxViewer.Colors.trigger;
-                order = 60;
+                return HitboxType.Interactable;
             }
-            else
+            if (collider.isTrigger)
             {
-                color = Main.DebugMod.HitboxViewer.Colors.other;
-                order = 40;
+                return HitboxType.Trigger;
+            }
+            if (collider.name.StartsWith("GEO_"))
+            {
+                return HitboxType.Geometry;
             }
 
-            renderer.SetColors(color, color);
-            renderer.sortingOrder = order;
+            return HitboxType.Other;
+        }
+
+        public static ColliderType GetColliderType(this Collider2D collider)
+        {
+            return collider.GetIl2CppType().Name switch
+            {
+                "BoxCollider2D" => ColliderType.Box,
+                "CircleCollider2D" => ColliderType.Circle,
+                "CapsuleCollider2D" => ColliderType.Capsule,
+                "PolygonCollider2D" => ColliderType.Polygon,
+                _ => ColliderType.Invalid,
+            };
         }
     }
 }

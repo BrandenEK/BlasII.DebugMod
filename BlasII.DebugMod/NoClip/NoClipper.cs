@@ -1,4 +1,5 @@
-﻿using Il2CppLightbug.Kinematic2D.Core;
+﻿using BlasII.ModdingAPI.Input;
+using Il2CppLightbug.Kinematic2D.Core;
 using Il2CppTGK.Game;
 using Il2CppTGK.Game.Components;
 using UnityEngine;
@@ -7,15 +8,8 @@ namespace BlasII.DebugMod.NoClip
 {
     public class NoClipper
     {
-        private readonly NoclipConfig _config;
-
         private bool _canMovePlayer;
         private Vector3 _playerPosition;
-
-        public NoClipper(NoclipConfig config)
-        {
-            _config = config;
-        }
 
         public void SceneLoaded()
         {
@@ -33,7 +27,7 @@ namespace BlasII.DebugMod.NoClip
 
         public void Update()
         {
-            if (Input.GetKeyDown(KeyCode.F3) && Main.DebugMod.LoadStatus.GameSceneLoaded)
+            if (Main.DebugMod.InputHandler.GetKeyDown("NoClip"))
             {
                 _canMovePlayer = !_canMovePlayer;
                 SetComponentStatus(!_canMovePlayer);
@@ -47,24 +41,21 @@ namespace BlasII.DebugMod.NoClip
             if (CoreCache.PlayerSpawn.PlayerInstance == null)
                 return;
 
-            if (_canMovePlayer)
-            {
-                float playerSpeed = _config.movementSpeed;
-                if (Input.GetKey(KeyCode.RightControl))
-                    playerSpeed *= _config.movementModifier;
-
-                if (Input.GetKey(KeyCode.A)) _playerPosition += Vector3.left * playerSpeed;
-                if (Input.GetKey(KeyCode.D)) _playerPosition += Vector3.right * playerSpeed;
-                if (Input.GetKey(KeyCode.S)) _playerPosition += Vector3.down * playerSpeed;
-                if (Input.GetKey(KeyCode.W)) _playerPosition += Vector3.up * playerSpeed;
-
-                Body.bodyTransform = new BodyTransform { position = _playerPosition };
-                CoreCache.PlayerSpawn.PlayerInstance.transform.position = _playerPosition;
-            }
-            else
+            if (!_canMovePlayer)
             {
                 _playerPosition = CoreCache.PlayerSpawn.PlayerInstance.transform.position;
+                return;
             }
+
+            float speed = Main.DebugMod.DebugSettings.noClipSpeed * 120f;
+            float h = Main.DebugMod.InputHandler.GetAxis(AxisType.MoveHorizontal);
+            float v = Main.DebugMod.InputHandler.GetAxis(AxisType.MoveVertical);
+            var direction = new Vector3(h, v).normalized;
+
+            _playerPosition += direction * speed * Time.deltaTime;
+
+            Body.bodyTransform = new BodyTransform { position = _playerPosition };
+            CoreCache.PlayerSpawn.PlayerInstance.transform.position = _playerPosition;
         }
 
         private void SetComponentStatus(bool enabled)

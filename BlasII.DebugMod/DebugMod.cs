@@ -3,6 +3,8 @@ using BlasII.DebugMod.FreeCam;
 using BlasII.DebugMod.Hitboxes;
 using BlasII.DebugMod.NoClip;
 using BlasII.ModdingAPI;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace BlasII.DebugMod
 {
@@ -15,14 +17,47 @@ namespace BlasII.DebugMod
         public NoClipper NoClipper { get; private set; }
         public CameraMover CameraMover { get; private set; }
 
+        internal DebugSettings DebugSettings { get; private set; }
+
         protected override void OnInitialize()
         {
-            MainConfig config = FileHandler.LoadConfig<MainConfig>();
+            InputHandler.RegisterDefaultKeybindings(new Dictionary<string, KeyCode>()
+            {
+                { "InfoDisplay", KeyCode.F1 },
+                { "HitboxViewer", KeyCode.F2 },
+                { "NoClip", KeyCode.F3 },
+                { "FreeCam", KeyCode.F4 },
+                { "Hitbox_Hazard", KeyCode.Keypad1 },
+                { "Hitbox_Damageable", KeyCode.Keypad2 },
+                { "Hitbox_Player", KeyCode.Keypad3 },
+                { "Hitbox_Sensor", KeyCode.Keypad4 },
+                { "Hitbox_Enemy", KeyCode.Keypad5 },
+                { "Hitbox_Interactable", KeyCode.Keypad6 },
+                { "Hitbox_Trigger", KeyCode.Keypad7 },
+                { "Hitbox_Geometry", KeyCode.Keypad8 },
+                { "Hitbox_Other", KeyCode.Keypad9 },
+            });
+            ConfigHandler.RegisterDefaultProperties(new Dictionary<string, object>()
+            {
+                { "No_Clip_Speed", 0.1f },
+                { "Free_Cam_Speed", 0.1f },
+                { "Hitbox_Update_Delay", 0.2f },
+                { "Color_Hazard", "#FF007F" },
+                { "Color_Damageable", "#FFA500" },
+                { "Color_Player", "#00CCCC" },
+                { "Color_Sensor", "#660066" },
+                { "Color_Enemy", "#DD0000" },
+                { "Color_Interactable", "#FFFF33" },
+                { "Color_Trigger", "#0066CC" },
+                { "Color_Geometry", "#00CC00" },
+                { "Color_Other", "#000099" },
+            });
+            DebugSettings = new DebugSettings(ConfigHandler);
 
             InfoDisplay = new InfoDisplay();
-            HitboxViewer = new HitboxViewer(config.hitboxViewer);
-            NoClipper = new NoClipper(config.noClip);
-            CameraMover = new CameraMover(config.freeCamera);
+            HitboxViewer = new HitboxViewer();
+            NoClipper = new NoClipper();
+            CameraMover = new CameraMover();
         }
 
         protected override void OnSceneLoaded(string sceneName)
@@ -43,6 +78,9 @@ namespace BlasII.DebugMod
 
         protected override void OnUpdate()
         {
+            if (!LoadStatus.GameSceneLoaded)
+                return;
+
             InfoDisplay.Update();
             HitboxViewer.Update();
             NoClipper.Update();
