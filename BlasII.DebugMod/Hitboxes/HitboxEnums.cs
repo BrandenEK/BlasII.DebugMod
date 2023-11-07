@@ -3,14 +3,14 @@ namespace BlasII.DebugMod.Hitboxes
 {
     public enum HitboxType
     {
-        Geometry,
+        Hazard,
         Damageable,
         Player,
-        Enemy,
-        Hazard,
-        Interactable,
         Sensor,
+        Enemy,
+        Interactable,
         Trigger,
+        Geometry,
         Other,
     }
 

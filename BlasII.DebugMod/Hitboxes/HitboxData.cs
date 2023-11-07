@@ -16,13 +16,13 @@ namespace BlasII.DebugMod.Hitboxes
                 return;
 
             // Verify that the hitbox type should be shown
-            if (hitboxType == HitboxType.Geometry && !Main.DebugMod.DebugSettings.geometryShow ||
-                hitboxType == HitboxType.Player && !Main.DebugMod.DebugSettings.playerShow ||
-                hitboxType == HitboxType.Enemy && !Main.DebugMod.DebugSettings.enemyShow ||
-                hitboxType == HitboxType.Hazard && !Main.DebugMod.DebugSettings.hazardShow ||
-                hitboxType == HitboxType.Trigger && !Main.DebugMod.DebugSettings.triggerShow ||
-                hitboxType == HitboxType.Other && !Main.DebugMod.DebugSettings.otherShow)
-                return;
+            //if (hitboxType == HitboxType.Geometry && !Main.DebugMod.DebugSettings.geometryShow ||
+            //    hitboxType == HitboxType.Player && !Main.DebugMod.DebugSettings.playerShow ||
+            //    hitboxType == HitboxType.Enemy && !Main.DebugMod.DebugSettings.enemyShow ||
+            //    hitboxType == HitboxType.Hazard && !Main.DebugMod.DebugSettings.hazardShow ||
+            //    hitboxType == HitboxType.Trigger && !Main.DebugMod.DebugSettings.triggerShow ||
+            //    hitboxType == HitboxType.Other && !Main.DebugMod.DebugSettings.otherShow)
+            //    return;
 
             // Create object as child of collider
             var obj = new GameObject("Hitbox");
@@ -61,39 +61,39 @@ namespace BlasII.DebugMod.Hitboxes
             switch (hitboxType)
             {
                 case HitboxType.Hazard:
-                    color = ColorUtility.TryParseHtmlString("#FF007F", out Color c8) ? c8 : Color.white;
+                    color = Main.DebugMod.DebugSettings.hazardColor;
                     order = 420;
                     break;
                 case HitboxType.Damageable:
-                    color = ColorUtility.TryParseHtmlString("#FFA500", out Color c1) ? c1 : Color.white;
+                    color = Main.DebugMod.DebugSettings.damageableColor;
                     order = 400;
                     break;
                 case HitboxType.Player:
-                    color = ColorUtility.TryParseHtmlString("#00CCCC", out Color c9) ? c9 : Color.white;
+                    color = Main.DebugMod.DebugSettings.playerColor;
                     order = 380;
                     break;
                 case HitboxType.Sensor:
-                    color = ColorUtility.TryParseHtmlString("#660066", out Color c2) ? c2 : Color.white;
-                    order = 365;
-                    break;
-                case HitboxType.Enemy:
-                    color = ColorUtility.TryParseHtmlString("#DD0000", out Color c7) ? c7 : Color.white;
+                    color = Main.DebugMod.DebugSettings.sensorColor;
                     order = 360;
                     break;
-                case HitboxType.Interactable:
-                    color = ColorUtility.TryParseHtmlString("#FFFF33", out Color c6) ? c6 : Color.white;
+                case HitboxType.Enemy:
+                    color = Main.DebugMod.DebugSettings.enemyColor;
                     order = 340;
                     break;
+                case HitboxType.Interactable:
+                    color = Main.DebugMod.DebugSettings.interactableColor;
+                    order = 320;
+                    break;
                 case HitboxType.Trigger:
-                    color = ColorUtility.TryParseHtmlString("#0066CC", out Color c4) ? c4 : Color.white;
+                    color = Main.DebugMod.DebugSettings.triggerColor;
                     order = 300;
                     break;
                 case HitboxType.Geometry:
-                    color = ColorUtility.TryParseHtmlString("#00CC00", out Color c5) ? c5 : Color.white;
+                    color = Main.DebugMod.DebugSettings.geometryColor;
                     order = 280;
                     break;
                 case HitboxType.Other:
-                    color = ColorUtility.TryParseHtmlString("#000099", out Color c3) ? c3 : Color.white;
+                    color = Main.DebugMod.DebugSettings.otherColor;
                     order = 260;
                     break;
                 default:

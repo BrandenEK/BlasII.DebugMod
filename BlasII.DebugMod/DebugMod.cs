@@ -4,6 +4,7 @@ using BlasII.DebugMod.Hitboxes;
 using BlasII.DebugMod.NoClip;
 using BlasII.ModdingAPI;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace BlasII.DebugMod
 {
@@ -20,32 +21,27 @@ namespace BlasII.DebugMod
 
         protected override void OnInitialize()
         {
-            InputHandler.RegisterDefaultKeybindings(new Dictionary<string, UnityEngine.KeyCode>()
+            InputHandler.RegisterDefaultKeybindings(new Dictionary<string, KeyCode>()
             {
-                { "InfoDisplay", UnityEngine.KeyCode.F1 },
-                { "HitboxViewer", UnityEngine.KeyCode.F2 },
-                { "NoClip", UnityEngine.KeyCode.F3 },
-                { "FreeCam", UnityEngine.KeyCode.F4 },
+                { "InfoDisplay", KeyCode.F1 },
+                { "HitboxViewer", KeyCode.F2 },
+                { "NoClip", KeyCode.F3 },
+                { "FreeCam", KeyCode.F4 },
             });
             ConfigHandler.RegisterDefaultProperties(new Dictionary<string, object>()
             {
                 { "No_Clip_Speed", 0.1f },
                 { "Free_Cam_Speed", 0.1f },
                 { "Hitbox_Update_Delay", 0.2f },
-                { "Show_Inactive", true },
-                { "Color_Inactive", "#7F7F7F" },
-                { "Show_Geometry", true },
-                { "Color_Geometry", "#00FF00" },
-                { "Show_Player", true },
-                { "Color_Player", "#00FFFF" },
-                { "Show_Enemy", true },
-                { "Color_Enemy", "#FF0000" },
-                { "Show_Hazard", true },
-                { "Color_Hazard", "#FF00FF" },
-                { "Show_Trigger", true },
-                { "Color_Trigger", "#7F7FFF" },
-                { "Show_Other", true },
-                { "Color_Other", "#FFEB04" },
+                { "Color_Hazard", "#FF007F" },
+                { "Color_Damageable", "#FFA500" },
+                { "Color_Player", "#00CCCC" },
+                { "Color_Sensor", "#660066" },
+                { "Color_Enemy", "#DD0000" },
+                { "Color_Interactable", "#FFFF33" },
+                { "Color_Trigger", "#0066CC" },
+                { "Color_Geometry", "#00CC00" },
+                { "Color_Other", "#000099" },
             });
             DebugSettings = new DebugSettings(ConfigHandler);
 
