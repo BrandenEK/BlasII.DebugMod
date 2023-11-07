@@ -34,6 +34,7 @@ namespace BlasII.DebugMod.Hitboxes
             }
             foreach (int colliderId in destroyedColliders)
             {
+                _activeHitboxes[colliderId].DestroyHitbox();
                 _activeHitboxes.Remove(colliderId);
             }
 
