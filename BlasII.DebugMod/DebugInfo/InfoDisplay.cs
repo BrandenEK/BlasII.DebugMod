@@ -2,6 +2,7 @@
 using Il2CppTGK.Game;
 using Il2CppTMPro;
 using System;
+using System.Text;
 using UnityEngine;
 
 namespace BlasII.DebugMod.DebugInfo
@@ -40,10 +41,17 @@ namespace BlasII.DebugMod.DebugInfo
 
         private void UpdateText()
         {
-            string currentScene = Main.DebugMod.LoadStatus.CurrentScene;
-            Vector2 playerPosition = CoreCache.PlayerSpawn.PlayerInstance.transform.position;
+            var sb = new StringBuilder();
 
-            _infoText.text = $"Scene: {currentScene}\nPosition: {Math.Round(playerPosition.x, 1)}, {Math.Round(playerPosition.y, 1)}";
+            // Scene
+            string currentScene = Main.DebugMod.LoadStatus.CurrentScene;
+            sb.AppendLine($"Scene: {currentScene}");
+
+            // Position
+            Vector2 playerPosition = CoreCache.PlayerSpawn.PlayerInstance.transform.position;
+            sb.AppendLine($"Position: {playerPosition.x.RoundToPrecision()}, {playerPosition.y.RoundToPrecision()}");
+
+            _infoText.text = sb.ToString();
         }
 
         private void SetTextVisibility(bool visible)
