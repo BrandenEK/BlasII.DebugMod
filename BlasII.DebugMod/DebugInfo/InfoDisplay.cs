@@ -1,4 +1,5 @@
-﻿using BlasII.ModdingAPI.UI;
+﻿using BlasII.ModdingAPI.Assets;
+using BlasII.ModdingAPI.UI;
 using Il2CppTGK.Game;
 using Il2CppTMPro;
 using System;
@@ -50,6 +51,16 @@ namespace BlasII.DebugMod.DebugInfo
             // Position
             Vector2 playerPosition = CoreCache.PlayerSpawn.PlayerInstance.transform.position;
             sb.AppendLine($"Position: {playerPosition.x.RoundToPrecision()}, {playerPosition.y.RoundToPrecision()}");
+
+            // Health
+            int currentHealth = AssetStorage.PlayerStats.GetCurrentValue(AssetStorage.RangeStats["Health"]);
+            int maxHealth = AssetStorage.PlayerStats.GetMaxValue(AssetStorage.RangeStats["Health"]);
+            sb.AppendLine($"Health: {currentHealth}/{maxHealth}");
+
+            // Fervour
+            int currentFervour = AssetStorage.PlayerStats.GetCurrentValue(AssetStorage.RangeStats["Fervour"]);
+            int maxFervour = AssetStorage.PlayerStats.GetMaxValue(AssetStorage.RangeStats["Fervour"]);
+            sb.AppendLine($"Fervour: {currentFervour}/{maxFervour}");
 
             _infoText.text = sb.ToString();
         }
