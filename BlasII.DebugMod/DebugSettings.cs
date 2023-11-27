@@ -5,6 +5,7 @@ namespace BlasII.DebugMod
 {
     internal class DebugSettings
     {
+        public readonly int infoDisplayPrecision;
         public readonly float noClipSpeed;
         public readonly float freeCamSpeed;
         public readonly float hitboxUpdateDelay;
@@ -21,6 +22,7 @@ namespace BlasII.DebugMod
 
         public DebugSettings(ConfigHandler config)
         {
+            infoDisplayPrecision = config.GetProperty<int>("Info_Display_Precision");
             noClipSpeed = config.GetProperty<float>("No_Clip_Speed");
             freeCamSpeed = config.GetProperty<float>("Free_Cam_Speed");
             hitboxUpdateDelay = config.GetProperty<float>("Hitbox_Update_Delay");

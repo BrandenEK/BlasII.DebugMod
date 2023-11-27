@@ -39,6 +39,7 @@ namespace BlasII.DebugMod
             });
             ConfigHandler.RegisterDefaultProperties(new Dictionary<string, object>()
             {
+                { "Info_Display_Precision", 2 },
                 { "No_Clip_Speed", 0.1f },
                 { "Free_Cam_Speed", 0.1f },
                 { "Hitbox_Update_Delay", 0.2f },
