@@ -16,16 +16,12 @@ public class DebugMod : BlasIIMod
 {
     internal DebugMod() : base(ModInfo.MOD_ID, ModInfo.MOD_NAME, ModInfo.MOD_AUTHOR, ModInfo.MOD_VERSION) { }
 
-    public InfoDisplay InfoDisplay { get; private set; }
+    internal InfoDisplay InfoDisplay { get; private set; }
     public HitboxViewer HitboxViewer { get; private set; }
     public NoClipper NoClipper { get; private set; }
     public CameraMover CameraMover { get; private set; }
 
-    /// <summary>
-    /// The current settings for all modules
-    /// </summary>
-    public DebugSettings DebugSettings { get; private set; }
-
+    internal DebugSettings DebugSettings { get; private set; }
     internal DebugSettingsLegacy DebugSettingsLegacy { get; private set; }
 
     /// <summary>

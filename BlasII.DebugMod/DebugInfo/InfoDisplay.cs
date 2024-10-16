@@ -1,4 +1,6 @@
-﻿using BlasII.ModdingAPI.Assets;
+﻿using BlasII.Framework.UI;
+using BlasII.ModdingAPI.Assets;
+using BlasII.ModdingAPI.Helpers;
 using Il2CppTGK.Game;
 using Il2CppTMPro;
 using System.Text;
@@ -6,7 +8,7 @@ using UnityEngine;
 
 namespace BlasII.DebugMod.DebugInfo;
 
-public class InfoDisplay
+internal class InfoDisplay
 {
     private bool _showInfo = false;
 
@@ -14,13 +16,13 @@ public class InfoDisplay
 
     public void SceneLoaded()
     {
-        if (_showInfo && Main.DebugMod.LoadStatus.GameSceneLoaded)
+        if (_showInfo && SceneHelper.GameSceneLoaded)
             SetTextVisibility(true);
     }
 
     public void SceneUnloaded()
     {
-        if (_showInfo && Main.DebugMod.LoadStatus.GameSceneLoaded)
+        if (_showInfo && SceneHelper.GameSceneLoaded)
             SetTextVisibility(false);
     }
 
@@ -43,7 +45,7 @@ public class InfoDisplay
         var sb = new StringBuilder();
 
         // Scene
-        string currentScene = Main.DebugMod.LoadStatus.CurrentScene;
+        string currentScene = SceneHelper.CurrentScene;
         sb.AppendLine($"Scene: {currentScene}");
 
         // Position
@@ -71,15 +73,22 @@ public class InfoDisplay
         _infoText.gameObject.SetActive(visible);
     }
 
-
     private void CreateText()
     {
-        _infoText = UIModder.CreateRect("Info Display", UIModder.Parents.GameLogic)
-            .SetXRange(0, 0).SetYRange(1, 1).SetPivot(0, 1).SetPosition(20, -235).SetSize(400, 200).AddText()
-            .SetFontSize(40).SetAlignment(TextAlignmentOptions.TopLeft);
-
-        _infoText.enableWordWrapping = false;
-        //_infoText.outlineColor = new Color32(255, 255, 255, 255);
-        //_infoText.outlineWidth = 0.06f;
+        _infoText = UIModder.Create(new RectCreationOptions()
+        {
+            Name = "Info Display",
+            Parent = UIModder.Parents.GameLogic,
+            Size = new Vector2(400, 200),
+            Pivot = new Vector2(0, 1),
+            Position = new Vector2(20, -235),
+            XRange = Vector2.zero,
+            YRange = Vector2.one,
+        }).AddText(new TextCreationOptions()
+        {
+            Alignment = TextAlignmentOptions.TopLeft,
+            FontSize = 40,
+            WordWrap = false,
+        });
     }
 }
