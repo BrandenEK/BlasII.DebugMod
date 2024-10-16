@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace BlasII.DebugMod.NoClip;
 
-public class NoClipper
+internal class NoClipper
 {
     private bool _canMovePlayer;
     private Vector3 _playerPosition;
@@ -47,7 +47,7 @@ public class NoClipper
             return;
         }
 
-        float speed = Main.DebugMod.DebugSettings.noClipSpeed * 120f;
+        float speed = Main.DebugMod.DebugSettings.NoClip.Speed * 120f;
         float h = Main.DebugMod.InputHandler.GetAxis(AxisType.MoveHorizontal);
         float v = Main.DebugMod.InputHandler.GetAxis(AxisType.MoveVertical);
         var direction = new Vector3(h, v).normalized;

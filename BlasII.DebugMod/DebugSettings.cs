@@ -57,6 +57,9 @@ public class DebugSettings
 {
     /// <inheritdoc cref="InfoDisplaySettings" />
     public InfoDisplaySettings InfoDisplay { get; set; } = new();
+
+    /// <inheritdoc cref="NoClipSettings" />
+    public NoClipSettings NoClip { get; set; } = new();
 }
 
 /// <summary>
@@ -66,4 +69,13 @@ public class InfoDisplaySettings
 {
     /// <summary> How many decimal digits to display </summary>
     public int Precision { get; set; } = 2;
+}
+
+/// <summary>
+/// Settings for the NoClip module
+/// </summary>
+public class NoClipSettings
+{
+    /// <summary> How fast the player movement will be </summary>
+    public float Speed { get; set; } = 0.1f;
 }
