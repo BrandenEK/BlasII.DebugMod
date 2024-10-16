@@ -20,7 +20,7 @@ public class DebugMod : BlasIIMod
     internal InfoDisplay InfoDisplay { get; private set; }
     internal HitboxViewer HitboxViewer { get; private set; }
     internal NoClipper NoClipper { get; private set; }
-    internal CameraMover CameraMover { get; private set; }
+    internal CameraModule CameraModule { get; private set; }
     internal LoggerModule LoggerModule { get; private set; }
 
     internal DebugSettings DebugSettings { get; private set; }
@@ -54,7 +54,7 @@ public class DebugMod : BlasIIMod
         InfoDisplay = new InfoDisplay();
         HitboxViewer = new HitboxViewer();
         NoClipper = new NoClipper();
-        CameraMover = new CameraMover();
+        CameraModule = new CameraModule(DebugSettings.FreeCam);
         LoggerModule = new LoggerModule(DebugSettings.EventLogger);
     }
 
@@ -66,7 +66,7 @@ public class DebugMod : BlasIIMod
         InfoDisplay.SceneLoaded();
         HitboxViewer.SceneLoaded();
         NoClipper.SceneLoaded();
-        CameraMover.SceneLoaded();
+        CameraModule.SceneLoaded();
     }
 
     /// <summary>
@@ -77,7 +77,7 @@ public class DebugMod : BlasIIMod
         InfoDisplay.SceneUnloaded();
         HitboxViewer.SceneUnloaded();
         NoClipper.SceneUnloaded();
-        CameraMover.SceneUnloaded();
+        CameraModule.SceneUnloaded();
     }
 
     /// <summary>
@@ -91,6 +91,6 @@ public class DebugMod : BlasIIMod
         InfoDisplay.Update();
         HitboxViewer.Update();
         NoClipper.Update();
-        CameraMover.Update();
+        CameraModule.Update();
     }
 }
