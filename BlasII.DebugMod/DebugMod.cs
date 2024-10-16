@@ -1,4 +1,5 @@
 ﻿using BlasII.DebugMod.DebugInfo;
+using BlasII.DebugMod.EventLogger;
 using BlasII.DebugMod.FreeCam;
 using BlasII.DebugMod.Hitboxes;
 using BlasII.DebugMod.NoClip;
@@ -20,6 +21,7 @@ public class DebugMod : BlasIIMod
     internal HitboxViewer HitboxViewer { get; private set; }
     internal NoClipper NoClipper { get; private set; }
     internal CameraMover CameraMover { get; private set; }
+    internal LoggerModule LoggerModule { get; private set; }
 
     internal DebugSettings DebugSettings { get; private set; }
 
@@ -51,6 +53,7 @@ public class DebugMod : BlasIIMod
         HitboxViewer = new HitboxViewer();
         NoClipper = new NoClipper();
         CameraMover = new CameraMover();
+        LoggerModule = new LoggerModule();
     }
 
     /// <summary>
