@@ -3,12 +3,11 @@ using UnityEngine;
 
 namespace BlasII.DebugMod.Hitboxes;
 
-public class HitboxViewer
+internal class HitboxViewer
 {
     private readonly Dictionary<int, HitboxData> _activeHitboxes = new();
 
-    private readonly HitboxToggler _toggler = new();
-    internal HitboxToggler ToggledHitboxes => _toggler;
+    internal HitboxToggler ToggledHitboxes { get; } = new();
 
     private bool _showHitboxes = false;
     private float _currentDelay = 0f;
@@ -72,14 +71,14 @@ public class HitboxViewer
     {
         if (_showHitboxes)
         {
-            if (_toggler.ProcessToggles())
+            if (ToggledHitboxes.ProcessToggles())
             {
                 RemoveHitboxes();
                 AddHitboxes();
             }
 
             _currentDelay += Time.deltaTime;
-            if (_currentDelay >= Main.DebugMod.DebugSettings.hitboxUpdateDelay)
+            if (_currentDelay >= Main.DebugMod.DebugSettings.HitboxViewer.UpdateDelay)
             {
                 AddHitboxes();
             }

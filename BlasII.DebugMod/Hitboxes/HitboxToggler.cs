@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlasII.ModdingAPI;
+using System;
 using System.Collections.Generic;
 
 namespace BlasII.DebugMod.Hitboxes;
@@ -32,7 +33,7 @@ internal class HitboxToggler
             return false;
 
         // If one of the toggle keys was pressed, toggle its status and tell the viewer to refresh
-        Main.DebugMod.Log($"Toggling '{input}' hitboxes");
+        ModLog.Info($"Toggling '{input}' hitboxes");
         _shownHitboxes[input] = !_shownHitboxes[input];
         return true;
     }
