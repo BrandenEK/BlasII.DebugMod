@@ -1,10 +1,11 @@
-﻿using BlasII.ModdingAPI.Input;
+﻿using BlasII.ModdingAPI;
+using BlasII.ModdingAPI.Input;
 using Il2CppTGK.Game.Components;
 using UnityEngine;
 
 namespace BlasII.DebugMod.FreeCam;
 
-public class CameraMover
+internal class CameraMover
 {
     private bool _canMoveCamera;
     private Vector3 _cameraPosition;
@@ -40,7 +41,7 @@ public class CameraMover
             return;
         }
 
-        float speed = Main.DebugMod.DebugSettings.freeCamSpeed * 120f;
+        float speed = Main.DebugMod.DebugSettings.FreeCam.Speed * 120f;
         float h = Main.DebugMod.InputHandler.GetAxis(AxisType.MoveRHorizontal);
         float v = Main.DebugMod.InputHandler.GetAxis(AxisType.MoveRVertical);
         var direction = new Vector3(h, v).normalized;
@@ -61,7 +62,7 @@ public class CameraMover
                 {
                     if (cam.name == "Main Camera")
                     {
-                        Main.DebugMod.Log("Found camera object");
+                        ModLog.Info("Found camera object");
                         _cameraObjectRef = cam.transform;
                         break;
                     }

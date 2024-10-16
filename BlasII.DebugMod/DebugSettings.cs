@@ -60,6 +60,9 @@ public class DebugSettings
 
     /// <inheritdoc cref="NoClipSettings" />
     public NoClipSettings NoClip { get; set; } = new();
+
+    /// <inheritdoc cref="FreeCamSettings" />
+    public FreeCamSettings FreeCam { get; set; } = new();
 }
 
 /// <summary>
@@ -77,5 +80,14 @@ public class InfoDisplaySettings
 public class NoClipSettings
 {
     /// <summary> How fast the player movement will be </summary>
+    public float Speed { get; set; } = 0.1f;
+}
+
+/// <summary>
+/// Settings for the FreeCam module
+/// </summary>
+public class FreeCamSettings
+{
+    /// <summary> How fast the camera movement will be </summary>
     public float Speed { get; set; } = 0.1f;
 }

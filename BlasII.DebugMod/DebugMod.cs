@@ -19,7 +19,7 @@ public class DebugMod : BlasIIMod
     internal InfoDisplay InfoDisplay { get; private set; }
     public HitboxViewer HitboxViewer { get; private set; }
     internal NoClipper NoClipper { get; private set; }
-    public CameraMover CameraMover { get; private set; }
+    internal CameraMover CameraMover { get; private set; }
 
     internal DebugSettings DebugSettings { get; private set; }
     internal DebugSettingsLegacy DebugSettingsLegacy { get; private set; }
