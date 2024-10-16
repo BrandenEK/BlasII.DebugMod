@@ -1,88 +1,94 @@
-﻿using BlasII.ModdingAPI.Assets;
-using BlasII.ModdingAPI.UI;
+﻿using BlasII.Framework.UI;
+using BlasII.ModdingAPI.Assets;
+using BlasII.ModdingAPI.Helpers;
 using Il2CppTGK.Game;
 using Il2CppTMPro;
-using System;
 using System.Text;
 using UnityEngine;
 
-namespace BlasII.DebugMod.DebugInfo
+namespace BlasII.DebugMod.DebugInfo;
+
+internal class InfoDisplay
 {
-    public class InfoDisplay
+    private bool _showInfo = false;
+
+    private TextMeshProUGUI _infoText;
+
+    public void SceneLoaded()
     {
-        private bool _showInfo = false;
+        if (_showInfo && SceneHelper.GameSceneLoaded)
+            SetTextVisibility(true);
+    }
 
-        private TextMeshProUGUI _infoText;
+    public void SceneUnloaded()
+    {
+        if (_showInfo && SceneHelper.GameSceneLoaded)
+            SetTextVisibility(false);
+    }
 
-        public void SceneLoaded()
+    public void Update()
+    {
+        if (Main.DebugMod.InputHandler.GetKeyDown("InfoDisplay"))
         {
-            if (_showInfo && Main.DebugMod.LoadStatus.GameSceneLoaded)
-                SetTextVisibility(true);
+            _showInfo = !_showInfo;
+            SetTextVisibility(_showInfo);
         }
 
-        public void SceneUnloaded()
+        if (_showInfo)
         {
-            if (_showInfo && Main.DebugMod.LoadStatus.GameSceneLoaded)
-                SetTextVisibility(false);
+            UpdateText();
         }
+    }
 
-        public void Update()
+    private void UpdateText()
+    {
+        var sb = new StringBuilder();
+
+        // Scene
+        string currentScene = SceneHelper.CurrentScene;
+        sb.AppendLine($"Scene: {currentScene}");
+
+        // Position
+        Vector2 playerPosition = CoreCache.PlayerSpawn.PlayerInstance.transform.position;
+        sb.AppendLine($"Position: {playerPosition.x.RoundToPrecision()}, {playerPosition.y.RoundToPrecision()}");
+
+        // Health
+        int currentHealth = AssetStorage.PlayerStats.GetCurrentValue(AssetStorage.RangeStats["Health"]);
+        int maxHealth = AssetStorage.PlayerStats.GetMaxValue(AssetStorage.RangeStats["Health"]);
+        sb.AppendLine($"Health: {currentHealth}/{maxHealth}");
+
+        // Fervour
+        int currentFervour = AssetStorage.PlayerStats.GetCurrentValue(AssetStorage.RangeStats["Fervour"]);
+        int maxFervour = AssetStorage.PlayerStats.GetMaxValue(AssetStorage.RangeStats["Fervour"]);
+        sb.AppendLine($"Fervour: {currentFervour}/{maxFervour}");
+
+        _infoText.text = sb.ToString();
+    }
+
+    private void SetTextVisibility(bool visible)
+    {
+        if (_infoText == null)
+            CreateText();
+
+        _infoText.gameObject.SetActive(visible);
+    }
+
+    private void CreateText()
+    {
+        _infoText = UIModder.Create(new RectCreationOptions()
         {
-            if (Main.DebugMod.InputHandler.GetKeyDown("InfoDisplay"))
-            {
-                _showInfo = !_showInfo;
-                SetTextVisibility(_showInfo);
-            }
-
-            if (_showInfo)
-            {
-                UpdateText();
-            }
-        }
-
-        private void UpdateText()
+            Name = "Info Display",
+            Parent = UIModder.Parents.GameLogic,
+            Size = new Vector2(400, 200),
+            Pivot = new Vector2(0, 1),
+            Position = new Vector2(20, -235),
+            XRange = Vector2.zero,
+            YRange = Vector2.one,
+        }).AddText(new TextCreationOptions()
         {
-            var sb = new StringBuilder();
-
-            // Scene
-            string currentScene = Main.DebugMod.LoadStatus.CurrentScene;
-            sb.AppendLine($"Scene: {currentScene}");
-
-            // Position
-            Vector2 playerPosition = CoreCache.PlayerSpawn.PlayerInstance.transform.position;
-            sb.AppendLine($"Position: {playerPosition.x.RoundToPrecision()}, {playerPosition.y.RoundToPrecision()}");
-
-            // Health
-            int currentHealth = AssetStorage.PlayerStats.GetCurrentValue(AssetStorage.RangeStats["Health"]);
-            int maxHealth = AssetStorage.PlayerStats.GetMaxValue(AssetStorage.RangeStats["Health"]);
-            sb.AppendLine($"Health: {currentHealth}/{maxHealth}");
-
-            // Fervour
-            int currentFervour = AssetStorage.PlayerStats.GetCurrentValue(AssetStorage.RangeStats["Fervour"]);
-            int maxFervour = AssetStorage.PlayerStats.GetMaxValue(AssetStorage.RangeStats["Fervour"]);
-            sb.AppendLine($"Fervour: {currentFervour}/{maxFervour}");
-
-            _infoText.text = sb.ToString();
-        }
-
-        private void SetTextVisibility(bool visible)
-        {
-            if (_infoText == null)
-                CreateText();
-
-            _infoText.gameObject.SetActive(visible);
-        }
-
-
-        private void CreateText()
-        {
-            _infoText = UIModder.CreateRect("Info Display", UIModder.Parents.GameLogic)
-                .SetXRange(0, 0).SetYRange(1, 1).SetPivot(0, 1).SetPosition(20, -235).SetSize(400, 200).AddText()
-                .SetFontSize(40).SetAlignment(TextAlignmentOptions.TopLeft);
-
-            _infoText.enableWordWrapping = false;
-            //_infoText.outlineColor = new Color32(255, 255, 255, 255);
-            //_infoText.outlineWidth = 0.06f;
-        }
+            Alignment = TextAlignmentOptions.TopLeft,
+            FontSize = 40,
+            WordWrap = false,
+        });
     }
 }
