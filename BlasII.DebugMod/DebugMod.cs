@@ -1,4 +1,4 @@
-﻿using BlasII.DebugMod.DebugInfo;
+﻿using BlasII.DebugMod.InfoDisplay;
 using BlasII.DebugMod.EventLogger;
 using BlasII.DebugMod.FreeCam;
 using BlasII.DebugMod.Hitboxes;
@@ -17,7 +17,7 @@ public class DebugMod : BlasIIMod
 {
     internal DebugMod() : base(ModInfo.MOD_ID, ModInfo.MOD_NAME, ModInfo.MOD_AUTHOR, ModInfo.MOD_VERSION) { }
 
-    internal InfoDisplay InfoDisplay { get; private set; }
+    internal InfoModule InfoModule { get; private set; }
     internal HitboxViewer HitboxViewer { get; private set; }
     internal ClipModule ClipModule { get; private set; }
     internal CameraModule CameraModule { get; private set; }
@@ -51,7 +51,7 @@ public class DebugMod : BlasIIMod
 
         // The other modules should be moved to this system where settings are passed in ctor
         // They should also be named similarly and their namespace should be the official name
-        InfoDisplay = new InfoDisplay();
+        InfoModule = new InfoModule(DebugSettings.InfoDisplay);
         HitboxViewer = new HitboxViewer();
         ClipModule = new ClipModule(DebugSettings.NoClip);
         CameraModule = new CameraModule(DebugSettings.FreeCam);
@@ -63,7 +63,7 @@ public class DebugMod : BlasIIMod
     /// </summary>
     protected override void OnSceneLoaded(string sceneName)
     {
-        InfoDisplay.SceneLoaded();
+        InfoModule.SceneLoaded();
         HitboxViewer.SceneLoaded();
         ClipModule.SceneLoaded();
         CameraModule.SceneLoaded();
@@ -74,7 +74,7 @@ public class DebugMod : BlasIIMod
     /// </summary>
     protected override void OnSceneUnloaded(string sceneName)
     {
-        InfoDisplay.SceneUnloaded();
+        InfoModule.SceneUnloaded();
         HitboxViewer.SceneUnloaded();
         ClipModule.SceneUnloaded();
         CameraModule.SceneUnloaded();
@@ -88,7 +88,7 @@ public class DebugMod : BlasIIMod
         if (!SceneHelper.GameSceneLoaded)
             return;
 
-        InfoDisplay.Update();
+        InfoModule.Update();
         HitboxViewer.Update();
         ClipModule.Update();
         CameraModule.Update();
