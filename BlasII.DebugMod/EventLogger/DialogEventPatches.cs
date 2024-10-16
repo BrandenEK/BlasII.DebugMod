@@ -7,11 +7,12 @@ namespace BlasII.DebugMod.EventLogger;
 /// <summary>
 /// Logs the id whenever a dialog is started
 /// </summary>
-//[HarmonyPatch(typeof(DialogManager), nameof(DialogManager.ShowDialogWithObject))]
-//class Dialog_Show_Patch
-//{
-//    public static void Prefix(Dialog dialog)
-//    {
-//        Main.Randomizer.Log("Starting dialog: " + dialog.name);
-//    }
-//}
+[HarmonyPatch(typeof(DialogManager), nameof(DialogManager.ShowDialogWithObject))]
+class Dialog_Show_Patch
+{
+    public static void Postfix(Dialog dialog)
+    {
+        Main.DebugMod.LoggerModule.LogEvent(nameof(DialogManager), nameof(DialogManager.ShowDialogWithObject), EventType.Dialog,
+            new EventParameter(nameof(Dialog.name), dialog.name));
+    }
+}
