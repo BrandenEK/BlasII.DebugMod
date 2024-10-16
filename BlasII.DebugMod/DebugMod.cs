@@ -19,7 +19,7 @@ public class DebugMod : BlasIIMod
 
     internal InfoDisplay InfoDisplay { get; private set; }
     internal HitboxViewer HitboxViewer { get; private set; }
-    internal NoClipper NoClipper { get; private set; }
+    internal ClipModule ClipModule { get; private set; }
     internal CameraModule CameraModule { get; private set; }
     internal LoggerModule LoggerModule { get; private set; }
 
@@ -53,7 +53,7 @@ public class DebugMod : BlasIIMod
         // They should also be named similarly and their namespace should be the official name
         InfoDisplay = new InfoDisplay();
         HitboxViewer = new HitboxViewer();
-        NoClipper = new NoClipper();
+        ClipModule = new ClipModule(DebugSettings.NoClip);
         CameraModule = new CameraModule(DebugSettings.FreeCam);
         LoggerModule = new LoggerModule(DebugSettings.EventLogger);
     }
@@ -65,7 +65,7 @@ public class DebugMod : BlasIIMod
     {
         InfoDisplay.SceneLoaded();
         HitboxViewer.SceneLoaded();
-        NoClipper.SceneLoaded();
+        ClipModule.SceneLoaded();
         CameraModule.SceneLoaded();
     }
 
@@ -76,7 +76,7 @@ public class DebugMod : BlasIIMod
     {
         InfoDisplay.SceneUnloaded();
         HitboxViewer.SceneUnloaded();
-        NoClipper.SceneUnloaded();
+        ClipModule.SceneUnloaded();
         CameraModule.SceneUnloaded();
     }
 
@@ -90,7 +90,7 @@ public class DebugMod : BlasIIMod
 
         InfoDisplay.Update();
         HitboxViewer.Update();
-        NoClipper.Update();
+        ClipModule.Update();
         CameraModule.Update();
     }
 }
