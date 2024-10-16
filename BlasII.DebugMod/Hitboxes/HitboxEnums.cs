@@ -1,28 +1,27 @@
 ﻿
-namespace BlasII.DebugMod.Hitboxes
+namespace BlasII.DebugMod.Hitboxes;
+
+public enum HitboxType
 {
-    public enum HitboxType
-    {
-        Hazard,
-        Damageable,
-        Player,
-        Sensor,
-        Enemy,
-        Interactable,
-        Trigger,
-        Geometry,
-        Other,
+    Hazard,
+    Damageable,
+    Player,
+    Sensor,
+    Enemy,
+    Interactable,
+    Trigger,
+    Geometry,
+    Other,
 
-        Invalid
-    }
+    Invalid
+}
 
-    public enum ColliderType
-    {
-        Box,
-        Circle,
-        Capsule,
-        Polygon,
+public enum ColliderType
+{
+    Box,
+    Circle,
+    Capsule,
+    Polygon,
 
-        Invalid
-    }
+    Invalid
 }

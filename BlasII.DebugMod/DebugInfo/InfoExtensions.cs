@@ -1,13 +1,12 @@
 ﻿using System;
 
-namespace BlasII.DebugMod.DebugInfo
+namespace BlasII.DebugMod.DebugInfo;
+
+public static class InfoExtensions
 {
-    public static class InfoExtensions
+    public static string RoundToPrecision(this float num)
     {
-        public static string RoundToPrecision(this float num)
-        {
-            int precision = Math.Max(Main.DebugMod.DebugSettings.infoDisplayPrecision, 1);
-            return num.ToString("F" + precision);
-        }
+        int precision = Math.Max(Main.DebugMod.DebugSettings.infoDisplayPrecision, 1);
+        return num.ToString("F" + precision);
     }
 }
