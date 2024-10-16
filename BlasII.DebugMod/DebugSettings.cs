@@ -49,3 +49,21 @@ internal class DebugSettingsLegacy
 
     private static readonly Color DEFAULT_COLOR = Color.white;
 }
+
+/// <summary>
+/// General settings
+/// </summary>
+public class DebugSettings
+{
+    /// <inheritdoc cref="InfoDisplaySettings" />
+    public InfoDisplaySettings InfoDisplay { get; set; } = new();
+}
+
+/// <summary>
+/// Settings for the InfoDisplay module
+/// </summary>
+public class InfoDisplaySettings
+{
+    /// <summary> How many decimal digits to display </summary>
+    public int Precision { get; set; } = 2;
+}
