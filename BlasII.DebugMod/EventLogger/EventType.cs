@@ -4,6 +4,7 @@ namespace BlasII.DebugMod.EventLogger;
 internal enum EventType
 {
     Dialog,
-    Quest,
+    Interactable,
     Inventory,
+    Quest,
 }

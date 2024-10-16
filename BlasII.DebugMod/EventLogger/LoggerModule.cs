@@ -22,6 +22,7 @@ internal class LoggerModule(EventLoggerSettings settings)
         return type switch
         {
             EventType.Dialog => _settings.LogDialogEvents,
+            EventType.Interactable => _settings.LogInteractableEvents,
             EventType.Inventory => _settings.LogInventoryEvents,
             EventType.Quest => _settings.LogQuestEvents,
             _ => throw new System.ArgumentException("Invalid event type", nameof(type))

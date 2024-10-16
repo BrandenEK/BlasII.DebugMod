@@ -84,6 +84,9 @@ public class EventLoggerSettings
     /// <summary> Should <see cref="EventLogger.EventType.Dialog"/> events be logged </summary>
     public bool LogDialogEvents { get; set; } = true;
 
+    /// <summary> Should <see cref="EventLogger.EventType.Interactable"/> events be logged </summary>
+    public bool LogInteractableEvents { get; set; } = true;
+
     /// <summary> Should <see cref="EventLogger.EventType.Inventory"/> events be logged </summary>
     public bool LogInventoryEvents { get; set; } = true;
 
