@@ -8,8 +8,14 @@ using UnityEngine;
 
 namespace BlasII.DebugMod.Hitboxes;
 
+/// <summary>
+/// Useful methods for working with the hitboxes
+/// </summary>
 public static class HitboxExtensions
 {
+    /// <summary>
+    /// Recursively checks if the component is in any of its parents
+    /// </summary>
     public static bool HasComponentInParent<T>(this Transform transform)
     {
         Transform parent = transform;
@@ -23,7 +29,9 @@ public static class HitboxExtensions
         return false;
     }
 
-    // BoxCollider2D
+    /// <summary>
+    /// Renders a <see cref="BoxCollider2D"/>
+    /// </summary>
     public static void DisplayBox(this LineRenderer renderer, BoxCollider2D collider)
     {
         // Skip colliders that are too large
@@ -47,7 +55,9 @@ public static class HitboxExtensions
         }
     }
 
-    // CircleCollider2D
+    /// <summary>
+    /// Renders a <see cref="CircleCollider2D"/>
+    /// </summary>
     public static void DisplayCircle(this LineRenderer renderer, CircleCollider2D collider)
     {
         // Skip colliders that are too large
@@ -72,7 +82,9 @@ public static class HitboxExtensions
         }
     }
 
-    // CapsuleCollider2D
+    /// <summary>
+    /// Renders a <see cref="CapsuleCollider2D"/>
+    /// </summary>
     public static void DisplayCapsule(this LineRenderer renderer, CapsuleCollider2D collider)
     {
         int segments = 80;
@@ -91,7 +103,9 @@ public static class HitboxExtensions
         }
     }
 
-    // PolygonCollider2D
+    /// <summary>
+    /// Renders a <see cref="PolygonCollider2D"/>
+    /// </summary>
     public static void DisplayPolygon(this LineRenderer renderer, PolygonCollider2D collider)
     {
         // Skip empty polygons
@@ -109,6 +123,9 @@ public static class HitboxExtensions
         }
     }
 
+    /// <summary>
+    /// Determines the hitbox type from the components
+    /// </summary>
     public static HitboxType GetHitboxType(this Collider2D collider)
     {
         if (collider.transform.GetComponent<AttackHit>() != null)
@@ -147,6 +164,9 @@ public static class HitboxExtensions
         return HitboxType.Other;
     }
 
+    /// <summary>
+    /// Determines the collider type from the component type
+    /// </summary>
     public static ColliderType GetColliderType(this Collider2D collider)
     {
         return collider.GetIl2CppType().Name switch

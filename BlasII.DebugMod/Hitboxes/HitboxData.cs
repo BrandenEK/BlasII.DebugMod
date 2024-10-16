@@ -51,50 +51,52 @@ internal class HitboxData
         }
 
         // Change color and order based on hitbox type
-        Color color;
+        string color;
         int order;
         switch (hitboxType)
         {
             case HitboxType.Hazard:
-                color = Main.DebugMod.DebugSettings.hazardColor;
+                color = Main.DebugMod.DebugSettings.HitboxViewer.HazardColor;
                 order = 420;
                 break;
             case HitboxType.Damageable:
-                color = Main.DebugMod.DebugSettings.damageableColor;
+                color = Main.DebugMod.DebugSettings.HitboxViewer.DamageableColor;
                 order = 400;
                 break;
             case HitboxType.Player:
-                color = Main.DebugMod.DebugSettings.playerColor;
+                color = Main.DebugMod.DebugSettings.HitboxViewer.PlayerColor;
                 order = 380;
                 break;
             case HitboxType.Sensor:
-                color = Main.DebugMod.DebugSettings.sensorColor;
+                color = Main.DebugMod.DebugSettings.HitboxViewer.SensorColor;
                 order = 360;
                 break;
             case HitboxType.Enemy:
-                color = Main.DebugMod.DebugSettings.enemyColor;
+                color = Main.DebugMod.DebugSettings.HitboxViewer.EnemyColor;
                 order = 340;
                 break;
             case HitboxType.Interactable:
-                color = Main.DebugMod.DebugSettings.interactableColor;
+                color = Main.DebugMod.DebugSettings.HitboxViewer.InteractableColor;
                 order = 320;
                 break;
             case HitboxType.Trigger:
-                color = Main.DebugMod.DebugSettings.triggerColor;
+                color = Main.DebugMod.DebugSettings.HitboxViewer.TriggerColor;
                 order = 300;
                 break;
             case HitboxType.Geometry:
-                color = Main.DebugMod.DebugSettings.geometryColor;
+                color = Main.DebugMod.DebugSettings.HitboxViewer.GeometryColor;
                 order = 100;
                 break;
             case HitboxType.Other:
-                color = Main.DebugMod.DebugSettings.otherColor;
+                color = Main.DebugMod.DebugSettings.HitboxViewer.OtherColor;
                 order = 260;
                 break;
             default:
                 throw new System.Exception("A valid type should be calculated before now!");
         }
-        _line.SetColors(color, color);
+
+        ColorUtility.TryParseHtmlString(color, out Color c);
+        _line.SetColors(c, c);
         _line.sortingOrder = order;
     }
 
