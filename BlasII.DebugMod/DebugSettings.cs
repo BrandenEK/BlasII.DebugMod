@@ -45,6 +45,19 @@ internal class DebugSettingsLegacy
             ? color : DEFAULT_COLOR;
         otherColor = ColorUtility.TryParseHtmlString(config.GetProperty<string>("Color_Other"), out color)
             ? color : DEFAULT_COLOR;
+
+        //ConfigHandler.RegisterDefaultProperties(new Dictionary<string, object>()
+        //{
+        //    { "Color_Hazard", "#FF007F" },
+        //    { "Color_Damageable", "#FFA500" },
+        //    { "Color_Player", "#00CCCC" },
+        //    { "Color_Sensor", "#660066" },
+        //    { "Color_Enemy", "#DD0000" },
+        //    { "Color_Interactable", "#FFFF33" },
+        //    { "Color_Trigger", "#0066CC" },
+        //    { "Color_Geometry", "#00CC00" },
+        //    { "Color_Other", "#000099" },
+        //});
     }
 
     private static readonly Color DEFAULT_COLOR = Color.white;
@@ -57,6 +70,9 @@ public class DebugSettings
 {
     /// <inheritdoc cref="InfoDisplaySettings" />
     public InfoDisplaySettings InfoDisplay { get; set; } = new();
+
+    /// <inheritdoc cref="HitboxViewerSettings" />
+    public HitboxViewerSettings HitboxViewer { get; set; } = new();
 
     /// <inheritdoc cref="NoClipSettings" />
     public NoClipSettings NoClip { get; set; } = new();
@@ -72,6 +88,15 @@ public class InfoDisplaySettings
 {
     /// <summary> How many decimal digits to display </summary>
     public int Precision { get; set; } = 2;
+}
+
+/// <summary>
+/// Settings for the HitboxViewer module
+/// </summary>
+public class HitboxViewerSettings
+{
+    /// <summary> How many seconds between each hitbox update </summary>
+    public float UpdateDelay { get; set; } = 0.2f;
 }
 
 /// <summary>

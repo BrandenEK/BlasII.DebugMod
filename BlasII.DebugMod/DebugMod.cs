@@ -17,12 +17,11 @@ public class DebugMod : BlasIIMod
     internal DebugMod() : base(ModInfo.MOD_ID, ModInfo.MOD_NAME, ModInfo.MOD_AUTHOR, ModInfo.MOD_VERSION) { }
 
     internal InfoDisplay InfoDisplay { get; private set; }
-    public HitboxViewer HitboxViewer { get; private set; }
+    internal HitboxViewer HitboxViewer { get; private set; }
     internal NoClipper NoClipper { get; private set; }
     internal CameraMover CameraMover { get; private set; }
 
     internal DebugSettings DebugSettings { get; private set; }
-    internal DebugSettingsLegacy DebugSettingsLegacy { get; private set; }
 
     /// <summary>
     /// Register handlers and initialize modules
@@ -45,24 +44,8 @@ public class DebugMod : BlasIIMod
             { "Hitbox_Geometry", KeyCode.Keypad8 },
             { "Hitbox_Other", KeyCode.Keypad9 },
         });
-        //ConfigHandler.RegisterDefaultProperties(new Dictionary<string, object>()
-        //{
-        //    { "Info_Display_Precision", 2 },
-        //    { "No_Clip_Speed", 0.1f },
-        //    { "Free_Cam_Speed", 0.1f },
-        //    { "Hitbox_Update_Delay", 0.2f },
-        //    { "Color_Hazard", "#FF007F" },
-        //    { "Color_Damageable", "#FFA500" },
-        //    { "Color_Player", "#00CCCC" },
-        //    { "Color_Sensor", "#660066" },
-        //    { "Color_Enemy", "#DD0000" },
-        //    { "Color_Interactable", "#FFFF33" },
-        //    { "Color_Trigger", "#0066CC" },
-        //    { "Color_Geometry", "#00CC00" },
-        //    { "Color_Other", "#000099" },
-        //});
+        
         DebugSettings = ConfigHandler.Load<DebugSettings>();
-        DebugSettingsLegacy = new DebugSettingsLegacy(ConfigHandler);
 
         InfoDisplay = new InfoDisplay();
         HitboxViewer = new HitboxViewer();
