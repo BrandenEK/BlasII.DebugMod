@@ -1,7 +1,7 @@
 ﻿using BlasII.DebugMod.InfoDisplay;
 using BlasII.DebugMod.EventLogger;
 using BlasII.DebugMod.FreeCam;
-using BlasII.DebugMod.Hitboxes;
+using BlasII.DebugMod.HitboxViewer;
 using BlasII.DebugMod.NoClip;
 using BlasII.ModdingAPI;
 using BlasII.ModdingAPI.Helpers;
@@ -18,7 +18,7 @@ public class DebugMod : BlasIIMod
     internal DebugMod() : base(ModInfo.MOD_ID, ModInfo.MOD_NAME, ModInfo.MOD_AUTHOR, ModInfo.MOD_VERSION) { }
 
     internal InfoModule InfoModule { get; private set; }
-    internal HitboxViewer HitboxViewer { get; private set; }
+    internal HitboxModule HitboxModule { get; private set; }
     internal ClipModule ClipModule { get; private set; }
     internal CameraModule CameraModule { get; private set; }
     internal LoggerModule LoggerModule { get; private set; }
@@ -52,7 +52,7 @@ public class DebugMod : BlasIIMod
         // The other modules should be moved to this system where settings are passed in ctor
         // They should also be named similarly and their namespace should be the official name
         InfoModule = new InfoModule(DebugSettings.InfoDisplay);
-        HitboxViewer = new HitboxViewer();
+        HitboxModule = new HitboxModule(DebugSettings.HitboxViewer);
         ClipModule = new ClipModule(DebugSettings.NoClip);
         CameraModule = new CameraModule(DebugSettings.FreeCam);
         LoggerModule = new LoggerModule(DebugSettings.EventLogger);
@@ -64,7 +64,7 @@ public class DebugMod : BlasIIMod
     protected override void OnSceneLoaded(string sceneName)
     {
         InfoModule.SceneLoaded();
-        HitboxViewer.SceneLoaded();
+        HitboxModule.SceneLoaded();
         ClipModule.SceneLoaded();
         CameraModule.SceneLoaded();
     }
@@ -75,7 +75,7 @@ public class DebugMod : BlasIIMod
     protected override void OnSceneUnloaded(string sceneName)
     {
         InfoModule.SceneUnloaded();
-        HitboxViewer.SceneUnloaded();
+        HitboxModule.SceneUnloaded();
         ClipModule.SceneUnloaded();
         CameraModule.SceneUnloaded();
     }
@@ -89,7 +89,7 @@ public class DebugMod : BlasIIMod
             return;
 
         InfoModule.Update();
-        HitboxViewer.Update();
+        HitboxModule.Update();
         ClipModule.Update();
         CameraModule.Update();
     }

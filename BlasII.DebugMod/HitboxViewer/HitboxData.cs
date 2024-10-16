@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 
-namespace BlasII.DebugMod.Hitboxes;
+namespace BlasII.DebugMod.HitboxViewer;
 
 internal class HitboxData
 {
     private readonly LineRenderer _line;
 
-    public HitboxData(Collider2D collider)
+    public HitboxData(Collider2D collider, HitboxViewerSettings settings)
     {
         ColliderType colliderType = collider.GetColliderType();
         HitboxType hitboxType = collider.GetHitboxType();
@@ -16,7 +16,7 @@ internal class HitboxData
             return;
 
         // Verify that the hitbox type should be shown
-        if (!Main.DebugMod.HitboxViewer.ToggledHitboxes[hitboxType])
+        if (!Main.DebugMod.HitboxModule.ToggledHitboxes[hitboxType])
             return;
 
         // Create object as child of collider
@@ -26,7 +26,7 @@ internal class HitboxData
 
         // Add line renderer component
         _line = obj.AddComponent<LineRenderer>();
-        _line.material = Main.DebugMod.HitboxViewer.HitboxMaterial;
+        _line.material = Main.DebugMod.HitboxModule.HitboxMaterial;
         _line.sortingLayerName = "Foreground Parallax 2";
         _line.useWorldSpace = false;
         _line.SetWidth(LINE_WIDTH, LINE_WIDTH);
@@ -56,47 +56,47 @@ internal class HitboxData
         switch (hitboxType)
         {
             case HitboxType.Hazard:
-                color = Main.DebugMod.DebugSettings.HitboxViewer.HazardColor;
+                color = settings.HazardColor;
                 order = 420;
                 break;
             case HitboxType.Damageable:
-                color = Main.DebugMod.DebugSettings.HitboxViewer.DamageableColor;
+                color = settings.DamageableColor;
                 order = 400;
                 break;
             case HitboxType.Player:
-                color = Main.DebugMod.DebugSettings.HitboxViewer.PlayerColor;
+                color = settings.PlayerColor;
                 order = 380;
                 break;
             case HitboxType.Sensor:
-                color = Main.DebugMod.DebugSettings.HitboxViewer.SensorColor;
+                color = settings.SensorColor;
                 order = 360;
                 break;
             case HitboxType.Enemy:
-                color = Main.DebugMod.DebugSettings.HitboxViewer.EnemyColor;
+                color = settings.EnemyColor;
                 order = 340;
                 break;
             case HitboxType.Interactable:
-                color = Main.DebugMod.DebugSettings.HitboxViewer.InteractableColor;
+                color = settings.InteractableColor;
                 order = 320;
                 break;
             case HitboxType.Trigger:
-                color = Main.DebugMod.DebugSettings.HitboxViewer.TriggerColor;
+                color = settings.TriggerColor;
                 order = 300;
                 break;
             case HitboxType.Geometry:
-                color = Main.DebugMod.DebugSettings.HitboxViewer.GeometryColor;
+                color = settings.GeometryColor;
                 order = 100;
                 break;
             case HitboxType.Other:
-                color = Main.DebugMod.DebugSettings.HitboxViewer.OtherColor;
+                color = settings.OtherColor;
                 order = 260;
                 break;
             default:
                 throw new System.Exception("A valid type should be calculated before now!");
         }
 
-        ColorUtility.TryParseHtmlString(color, out Color c);
-        _line.SetColors(c, c);
+        if (ColorUtility.TryParseHtmlString(color, out Color c))
+            _line.SetColors(c, c);
         _line.sortingOrder = order;
     }
 

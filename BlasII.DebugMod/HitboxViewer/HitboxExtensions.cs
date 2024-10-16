@@ -6,7 +6,7 @@ using Il2CppTGK.Game.Components.Persistence;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BlasII.DebugMod.Hitboxes;
+namespace BlasII.DebugMod.HitboxViewer;
 
 /// <summary>
 /// Useful methods for working with the hitboxes
