@@ -49,11 +49,13 @@ public class DebugMod : BlasIIMod
         
         DebugSettings = ConfigHandler.Load<DebugSettings>();
 
+        // The other modules should be moved to this system where settings are passed in ctor
+        // They should also be named similarly and their namespace should be the official name
         InfoDisplay = new InfoDisplay();
         HitboxViewer = new HitboxViewer();
         NoClipper = new NoClipper();
         CameraMover = new CameraMover();
-        LoggerModule = new LoggerModule();
+        LoggerModule = new LoggerModule(DebugSettings.EventLogger);
     }
 
     /// <summary>
