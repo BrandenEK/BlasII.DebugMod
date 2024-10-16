@@ -119,7 +119,8 @@ public static class HitboxExtensions
         renderer.positionCount = points.Count;
         for (int i = 0; i < points.Count; i++)
         {
-            renderer.SetPosition(i, collider.offset + points[i]);
+            Vector2 point = Vector2.Scale(points[i], collider.transform.localScale);
+            renderer.SetPosition(i, collider.offset + point);
         }
     }
 
