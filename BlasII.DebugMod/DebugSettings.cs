@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BlasII.DebugMod;
 
-internal class DebugSettings
+internal class DebugSettingsLegacy
 {
     public readonly int infoDisplayPrecision;
     public readonly float noClipSpeed;
@@ -20,7 +20,7 @@ internal class DebugSettings
     public readonly Color geometryColor;
     public readonly Color otherColor;
 
-    public DebugSettings(ConfigHandler config)
+    public DebugSettingsLegacy(ConfigHandler config)
     {
         infoDisplayPrecision = config.GetProperty<int>("Info_Display_Precision");
         noClipSpeed = config.GetProperty<float>("No_Clip_Speed");

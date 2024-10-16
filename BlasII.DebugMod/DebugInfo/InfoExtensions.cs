@@ -2,7 +2,7 @@
 
 namespace BlasII.DebugMod.DebugInfo;
 
-public static class InfoExtensions
+internal static class InfoExtensions
 {
     public static string RoundToPrecision(this float num)
     {

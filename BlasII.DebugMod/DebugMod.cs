@@ -21,7 +21,7 @@ public class DebugMod : BlasIIMod
     public NoClipper NoClipper { get; private set; }
     public CameraMover CameraMover { get; private set; }
 
-    internal DebugSettings DebugSettings { get; private set; }
+    internal DebugSettingsLegacy DebugSettings { get; private set; }
 
     /// <summary>
     /// Register handlers and initialize modules
@@ -60,7 +60,7 @@ public class DebugMod : BlasIIMod
         //    { "Color_Geometry", "#00CC00" },
         //    { "Color_Other", "#000099" },
         //});
-        DebugSettings = new DebugSettings(ConfigHandler);
+        DebugSettings = new DebugSettingsLegacy(ConfigHandler);
 
         InfoDisplay = new InfoDisplay();
         HitboxViewer = new HitboxViewer();
