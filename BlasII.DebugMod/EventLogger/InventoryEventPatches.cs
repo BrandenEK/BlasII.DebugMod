@@ -16,35 +16,35 @@ class InventoryComponent_AddItemAsync_Patch
     }
 }
 
-[HarmonyPatch(typeof(InventoryComponent), nameof(InventoryComponent.AddFigureAsync))]
-class InventoryComponent_AddFigureAsync_Patch
-{
-    public static void Postfix(FigureItemID itemId)
-    {
-        Main.DebugMod.LoggerModule.LogEvent(nameof(InventoryComponent), nameof(InventoryComponent.AddFigureAsync), EventType.Inventory,
-            new EventParameter(nameof(ItemID.name), itemId.name));
-    }
-}
+//[HarmonyPatch(typeof(InventoryComponent), nameof(InventoryComponent.AddFigureAsync))]
+//class InventoryComponent_AddFigureAsync_Patch
+//{
+//    public static void Postfix(FigureItemID itemId)
+//    {
+//        Main.DebugMod.LoggerModule.LogEvent(nameof(InventoryComponent), nameof(InventoryComponent.AddFigureAsync), EventType.Inventory,
+//            new EventParameter(nameof(ItemID.name), itemId.name));
+//    }
+//}
 
-[HarmonyPatch(typeof(InventoryComponent), nameof(InventoryComponent.AddPrayerAsync))]
-class InventoryComponent_AddPrayerAsync_Patch
-{
-    public static void Postfix(PrayerItemID itemId)
-    {
-        Main.DebugMod.LoggerModule.LogEvent(nameof(InventoryComponent), nameof(InventoryComponent.AddPrayerAsync), EventType.Inventory,
-            new EventParameter(nameof(ItemID.name), itemId.name));
-    }
-}
+//[HarmonyPatch(typeof(InventoryComponent), nameof(InventoryComponent.AddPrayerAsync))]
+//class InventoryComponent_AddPrayerAsync_Patch
+//{
+//    public static void Postfix(PrayerItemID itemId)
+//    {
+//        Main.DebugMod.LoggerModule.LogEvent(nameof(InventoryComponent), nameof(InventoryComponent.AddPrayerAsync), EventType.Inventory,
+//            new EventParameter(nameof(ItemID.name), itemId.name));
+//    }
+//}
 
-[HarmonyPatch(typeof(InventoryComponent), nameof(InventoryComponent.AddRosaryBeadAsync))]
-class InventoryComponent_AddRosaryBeadAsync_Patch
-{
-    public static void Postfix(RosaryBeadItemID itemId)
-    {
-        Main.DebugMod.LoggerModule.LogEvent(nameof(InventoryComponent), nameof(InventoryComponent.AddRosaryBeadAsync), EventType.Inventory,
-            new EventParameter(nameof(ItemID.name), itemId.name));
-    }
-}
+//[HarmonyPatch(typeof(InventoryComponent), nameof(InventoryComponent.AddRosaryBeadAsync))]
+//class InventoryComponent_AddRosaryBeadAsync_Patch
+//{
+//    public static void Postfix(RosaryBeadItemID itemId)
+//    {
+//        Main.DebugMod.LoggerModule.LogEvent(nameof(InventoryComponent), nameof(InventoryComponent.AddRosaryBeadAsync), EventType.Inventory,
+//            new EventParameter(nameof(ItemID.name), itemId.name));
+//    }
+//}
 
 // Removing items
 
