@@ -17,6 +17,9 @@ public class DebugSettings
 
     /// <inheritdoc cref="FreeCamSettings" />
     public FreeCamSettings FreeCam { get; set; } = new();
+
+    /// <inheritdoc cref="EventLoggerSettings" />
+    public EventLoggerSettings EventLogger { get; set; } = new();
 }
 
 /// <summary>
@@ -71,4 +74,22 @@ public class FreeCamSettings
 {
     /// <summary> How fast the camera movement will be </summary>
     public float Speed { get; set; } = 0.1f;
+}
+
+/// <summary>
+/// Settings for the EventLogger module
+/// </summary>
+public class EventLoggerSettings
+{
+    /// <summary> Should <see cref="EventLogger.EventType.Dialog"/> events be logged </summary>
+    public bool LogDialogEvents { get; set; } = true;
+
+    /// <summary> Should <see cref="EventLogger.EventType.Interactable"/> events be logged </summary>
+    public bool LogInteractableEvents { get; set; } = true;
+
+    /// <summary> Should <see cref="EventLogger.EventType.Inventory"/> events be logged </summary>
+    public bool LogInventoryEvents { get; set; } = true;
+
+    /// <summary> Should <see cref="EventLogger.EventType.Quest"/> events be logged </summary>
+    public bool LogQuestEvents { get; set; } = true;
 }
