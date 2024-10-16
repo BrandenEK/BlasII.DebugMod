@@ -79,7 +79,7 @@ internal class HitboxModule(HitboxViewerSettings settings)
             }
 
             _currentDelay += Time.deltaTime;
-            if (_currentDelay >= Main.DebugMod.DebugSettings.HitboxViewer.UpdateDelay)
+            if (_currentDelay >= _settings.UpdateDelay)
             {
                 AddHitboxes();
             }

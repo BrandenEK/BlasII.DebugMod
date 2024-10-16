@@ -23,8 +23,6 @@ public class DebugMod : BlasIIMod
     internal CameraModule CameraModule { get; private set; }
     internal LoggerModule LoggerModule { get; private set; }
 
-    internal DebugSettings DebugSettings { get; private set; }
-
     /// <summary>
     /// Register handlers and initialize modules
     /// </summary>
@@ -46,16 +44,13 @@ public class DebugMod : BlasIIMod
             { "Hitbox_Geometry", KeyCode.Keypad8 },
             { "Hitbox_Other", KeyCode.Keypad9 },
         });
+        DebugSettings settings = ConfigHandler.Load<DebugSettings>();
         
-        DebugSettings = ConfigHandler.Load<DebugSettings>();
-
-        // The other modules should be moved to this system where settings are passed in ctor
-        // They should also be named similarly and their namespace should be the official name
-        InfoModule = new InfoModule(DebugSettings.InfoDisplay);
-        HitboxModule = new HitboxModule(DebugSettings.HitboxViewer);
-        ClipModule = new ClipModule(DebugSettings.NoClip);
-        CameraModule = new CameraModule(DebugSettings.FreeCam);
-        LoggerModule = new LoggerModule(DebugSettings.EventLogger);
+        InfoModule = new InfoModule(settings.InfoDisplay);
+        HitboxModule = new HitboxModule(settings.HitboxViewer);
+        ClipModule = new ClipModule(settings.NoClip);
+        CameraModule = new CameraModule(settings.FreeCam);
+        LoggerModule = new LoggerModule(settings.EventLogger);
     }
 
     /// <summary>
