@@ -4,15 +4,15 @@ namespace BlasII.DebugMod.EventLogger;
 /// <summary>
 /// Represents a parameter or result to a logging event
 /// </summary>
-public class EventParameter
+public class EventParameter(string name, object value)
 {
     /// <summary>
     /// The name of the parameter
     /// </summary>
-    public string Name { get; init; }
+    public string Name { get; } = name;
 
     /// <summary>
     /// The value of the parameter
     /// </summary>
-    public string Value { get; init; }
+    public object Value { get; } = value;
 }

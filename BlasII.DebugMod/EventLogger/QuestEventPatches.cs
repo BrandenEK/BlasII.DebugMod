@@ -1,5 +1,4 @@
-﻿using BlasII.ModdingAPI;
-using HarmonyLib;
+﻿using HarmonyLib;
 using Il2CppTGK.Game;
 using Il2CppTGK.Game.Managers;
 using System.Reflection;
@@ -27,9 +26,13 @@ class QuestManager_SetQuestBool_Patch
         return typeof(QuestManager).GetMethod("SetQuestVarValue").MakeGenericMethod(typeof(bool));
     }
 
-    public static void Postfix(int questId, int varId, bool value)
+    public static void Prefix(int questId, int varId, bool value)
     {
-        ModLog.Debug($"Setting quest: {QuestHelper.GetQuestName(questId, varId)} ({value})");
+        string quest = QuestHelper.GetQuestName(questId, varId);
+
+        Main.DebugMod.LoggerModule.LogEvent(nameof(QuestManager), nameof(QuestManager.SetQuestVarValue), EventType.Quest,
+            new EventParameter(nameof(quest), quest),
+            new EventParameter(nameof(value), value));
     }
 }
 
@@ -41,8 +44,52 @@ class QuestManager_SetQuestInt_Patch
         return typeof(QuestManager).GetMethod("SetQuestVarValue").MakeGenericMethod(typeof(int));
     }
 
-    public static void Postfix(int questId, int varId, int value)
+    public static void Prefix(int questId, int varId, int value)
     {
-        Main.Randomizer.LogWarning($"Setting quest: {Main.Randomizer.GetQuestName(questId, varId)} ({value})");
+        string quest = QuestHelper.GetQuestName(questId, varId);
+
+        Main.DebugMod.LoggerModule.LogEvent(nameof(QuestManager), nameof(QuestManager.SetQuestVarValue), EventType.Quest,
+            new EventParameter(nameof(quest), quest),
+            new EventParameter(nameof(value), value));
     }
 }
+
+[HarmonyPatch]
+class QuestManager_SetQuestFloat_Patch
+{
+    public static MethodInfo TargetMethod()
+    {
+        return typeof(QuestManager).GetMethod("SetQuestVarValue").MakeGenericMethod(typeof(float));
+    }
+
+    public static void Prefix(int questId, int varId, float value)
+    {
+        string quest = QuestHelper.GetQuestName(questId, varId);
+
+        Main.DebugMod.LoggerModule.LogEvent(nameof(QuestManager), nameof(QuestManager.SetQuestVarValue), EventType.Quest,
+            new EventParameter(nameof(quest), quest),
+            new EventParameter(nameof(value), value));
+    }
+}
+
+[HarmonyPatch]
+class QuestManager_SetQuestVar_Patch
+{
+    public static MethodInfo TargetMethod()
+    {
+        return typeof(QuestManager).GetMethod("SetQuestVarValue").MakeGenericMethod(typeof(string));
+    }
+
+    public static void Prefix(int questId, int varId, string value)
+    {
+        string quest = QuestHelper.GetQuestName(questId, varId);
+
+        Main.DebugMod.LoggerModule.LogEvent(nameof(QuestManager), nameof(QuestManager.SetQuestVarValue), EventType.Quest,
+            new EventParameter(nameof(quest), quest),
+            new EventParameter(nameof(value), value));
+    }
+}
+
+// Getting quest variables
+
+
