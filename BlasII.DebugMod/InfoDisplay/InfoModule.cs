@@ -6,12 +6,13 @@ using Il2CppTMPro;
 using System.Text;
 using UnityEngine;
 
-namespace BlasII.DebugMod.DebugInfo;
+namespace BlasII.DebugMod.InfoDisplay;
 
-internal class InfoDisplay
+internal class InfoModule(InfoDisplaySettings settings)
 {
-    private bool _showInfo = false;
+    private readonly InfoDisplaySettings _settings = settings;
 
+    private bool _showInfo = false;
     private TextMeshProUGUI _infoText;
 
     public void SceneLoaded()
@@ -50,7 +51,7 @@ internal class InfoDisplay
 
         // Position
         Vector2 playerPosition = CoreCache.PlayerSpawn.PlayerInstance.transform.position;
-        sb.AppendLine($"Position: {playerPosition.x.RoundToPrecision()}, {playerPosition.y.RoundToPrecision()}");
+        sb.AppendLine($"Position: {RoundToPrecision(playerPosition.x)}, {RoundToPrecision(playerPosition.y)}");
 
         // Health
         int currentHealth = AssetStorage.PlayerStats.GetCurrentValue(AssetStorage.RangeStats["Health"]);
@@ -90,5 +91,11 @@ internal class InfoDisplay
             FontSize = 40,
             WordWrap = false,
         });
+    }
+
+    private string RoundToPrecision(float num)
+    {
+        int precision = System.Math.Max(_settings.Precision, 1);
+        return num.ToString("F" + precision);
     }
 }

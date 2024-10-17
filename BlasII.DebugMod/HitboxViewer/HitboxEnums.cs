@@ -1,5 +1,5 @@
 ﻿
-namespace BlasII.DebugMod.Hitboxes;
+namespace BlasII.DebugMod.HitboxViewer;
 
 /// <summary>
 /// Types of hitboxes

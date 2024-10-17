@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace BlasII.DebugMod.Hitboxes;
+namespace BlasII.DebugMod.HitboxViewer;
 
-internal class HitboxViewer
+internal class HitboxModule(HitboxViewerSettings settings)
 {
+    private readonly HitboxViewerSettings _settings = settings;
     private readonly Dictionary<int, HitboxData> _activeHitboxes = new();
 
     internal HitboxToggler ToggledHitboxes { get; } = new();
@@ -23,7 +24,7 @@ internal class HitboxViewer
 
             if (!_activeHitboxes.ContainsKey(id))
             {
-                _activeHitboxes.Add(id, new HitboxData(collider));
+                _activeHitboxes.Add(id, new HitboxData(collider, _settings));
             }
         }
 
@@ -78,7 +79,7 @@ internal class HitboxViewer
             }
 
             _currentDelay += Time.deltaTime;
-            if (_currentDelay >= Main.DebugMod.DebugSettings.HitboxViewer.UpdateDelay)
+            if (_currentDelay >= _settings.UpdateDelay)
             {
                 AddHitboxes();
             }

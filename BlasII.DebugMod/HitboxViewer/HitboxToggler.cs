@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace BlasII.DebugMod.Hitboxes;
+namespace BlasII.DebugMod.HitboxViewer;
 
 internal class HitboxToggler
 {

@@ -5,8 +5,10 @@ using UnityEngine;
 
 namespace BlasII.DebugMod.FreeCam;
 
-internal class CameraMover
+internal class CameraModule(FreeCamSettings settings)
 {
+    private readonly FreeCamSettings _settings = settings;
+
     private bool _canMoveCamera;
     private Vector3 _cameraPosition;
 
@@ -41,7 +43,7 @@ internal class CameraMover
             return;
         }
 
-        float speed = Main.DebugMod.DebugSettings.FreeCam.Speed * 120f;
+        float speed = _settings.Speed * 120f;
         float h = Main.DebugMod.InputHandler.GetAxis(AxisType.MoveRHorizontal);
         float v = Main.DebugMod.InputHandler.GetAxis(AxisType.MoveRVertical);
         var direction = new Vector3(h, v).normalized;

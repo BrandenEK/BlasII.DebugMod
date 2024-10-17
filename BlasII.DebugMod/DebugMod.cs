@@ -1,7 +1,7 @@
-﻿using BlasII.DebugMod.DebugInfo;
-using BlasII.DebugMod.EventLogger;
+﻿using BlasII.DebugMod.EventLogger;
 using BlasII.DebugMod.FreeCam;
-using BlasII.DebugMod.Hitboxes;
+using BlasII.DebugMod.HitboxViewer;
+using BlasII.DebugMod.InfoDisplay;
 using BlasII.DebugMod.NoClip;
 using BlasII.ModdingAPI;
 using BlasII.ModdingAPI.Helpers;
@@ -17,13 +17,11 @@ public class DebugMod : BlasIIMod
 {
     internal DebugMod() : base(ModInfo.MOD_ID, ModInfo.MOD_NAME, ModInfo.MOD_AUTHOR, ModInfo.MOD_VERSION) { }
 
-    internal InfoDisplay InfoDisplay { get; private set; }
-    internal HitboxViewer HitboxViewer { get; private set; }
-    internal NoClipper NoClipper { get; private set; }
-    internal CameraMover CameraMover { get; private set; }
+    internal InfoModule InfoModule { get; private set; }
+    internal HitboxModule HitboxModule { get; private set; }
+    internal ClipModule ClipModule { get; private set; }
+    internal CameraModule CameraModule { get; private set; }
     internal LoggerModule LoggerModule { get; private set; }
-
-    internal DebugSettings DebugSettings { get; private set; }
 
     /// <summary>
     /// Register handlers and initialize modules
@@ -46,16 +44,13 @@ public class DebugMod : BlasIIMod
             { "Hitbox_Geometry", KeyCode.Keypad8 },
             { "Hitbox_Other", KeyCode.Keypad9 },
         });
+        DebugSettings settings = ConfigHandler.Load<DebugSettings>();
         
-        DebugSettings = ConfigHandler.Load<DebugSettings>();
-
-        // The other modules should be moved to this system where settings are passed in ctor
-        // They should also be named similarly and their namespace should be the official name
-        InfoDisplay = new InfoDisplay();
-        HitboxViewer = new HitboxViewer();
-        NoClipper = new NoClipper();
-        CameraMover = new CameraMover();
-        LoggerModule = new LoggerModule(DebugSettings.EventLogger);
+        InfoModule = new InfoModule(settings.InfoDisplay);
+        HitboxModule = new HitboxModule(settings.HitboxViewer);
+        ClipModule = new ClipModule(settings.NoClip);
+        CameraModule = new CameraModule(settings.FreeCam);
+        LoggerModule = new LoggerModule(settings.EventLogger);
     }
 
     /// <summary>
@@ -63,10 +58,10 @@ public class DebugMod : BlasIIMod
     /// </summary>
     protected override void OnSceneLoaded(string sceneName)
     {
-        InfoDisplay.SceneLoaded();
-        HitboxViewer.SceneLoaded();
-        NoClipper.SceneLoaded();
-        CameraMover.SceneLoaded();
+        InfoModule.SceneLoaded();
+        HitboxModule.SceneLoaded();
+        ClipModule.SceneLoaded();
+        CameraModule.SceneLoaded();
     }
 
     /// <summary>
@@ -74,10 +69,10 @@ public class DebugMod : BlasIIMod
     /// </summary>
     protected override void OnSceneUnloaded(string sceneName)
     {
-        InfoDisplay.SceneUnloaded();
-        HitboxViewer.SceneUnloaded();
-        NoClipper.SceneUnloaded();
-        CameraMover.SceneUnloaded();
+        InfoModule.SceneUnloaded();
+        HitboxModule.SceneUnloaded();
+        ClipModule.SceneUnloaded();
+        CameraModule.SceneUnloaded();
     }
 
     /// <summary>
@@ -88,9 +83,9 @@ public class DebugMod : BlasIIMod
         if (!SceneHelper.GameSceneLoaded)
             return;
 
-        InfoDisplay.Update();
-        HitboxViewer.Update();
-        NoClipper.Update();
-        CameraMover.Update();
+        InfoModule.Update();
+        HitboxModule.Update();
+        ClipModule.Update();
+        CameraModule.Update();
     }
 }
