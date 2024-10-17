@@ -1,7 +1,7 @@
-﻿using BlasII.DebugMod.InfoDisplay;
-using BlasII.DebugMod.EventLogger;
+﻿using BlasII.DebugMod.EventLogger;
 using BlasII.DebugMod.FreeCam;
 using BlasII.DebugMod.HitboxViewer;
+using BlasII.DebugMod.InfoDisplay;
 using BlasII.DebugMod.NoClip;
 using BlasII.ModdingAPI;
 using BlasII.ModdingAPI.Helpers;
