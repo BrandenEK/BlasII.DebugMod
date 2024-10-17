@@ -32,6 +32,9 @@
 - Press F4 to toggle free cam mode
 - Arrow keys or right stick can be used to move the camera around
 
+## Event Logger
+- Logs debug messages with parameters when specified events occur
+
 ## Installation
 This mod is available for download through the [Blasphemous Mod Installer](https://github.com/BrandenEK/Blasphemous.Modding.Installer)
 - Required dependencies: Modding API, UI Framework
