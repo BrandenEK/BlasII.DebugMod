@@ -188,7 +188,7 @@ class QuestManager_GetQuestStatus_Patch
     {
         string quest = QuestHelper.GetQuestName(questId);
 
-        Main.DebugMod.LoggerModule.LogEvent(nameof(QuestManager), nameof(QuestManager.SetQuestStatus), EventType.Quest,
+        Main.DebugMod.LoggerModule.LogEvent(nameof(QuestManager), nameof(QuestManager.GetQuestStatus), EventType.Quest,
             new EventParameter(nameof(quest), quest),
             new EventParameter("result", __result));
     }
