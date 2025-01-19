@@ -34,6 +34,7 @@ public class DebugMod : BlasIIMod
             { "HitboxViewer", KeyCode.F2 },
             { "NoClip", KeyCode.F3 },
             { "FreeCam", KeyCode.F4 },
+            { "Hitbox_Inactive", KeyCode.Keypad0 },
             { "Hitbox_Hazard", KeyCode.Keypad1 },
             { "Hitbox_Damageable", KeyCode.Keypad2 },
             { "Hitbox_Player", KeyCode.Keypad3 },

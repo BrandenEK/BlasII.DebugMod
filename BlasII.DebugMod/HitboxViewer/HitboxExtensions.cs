@@ -34,10 +34,6 @@ public static class HitboxExtensions
     /// </summary>
     public static void DisplayBox(this LineRenderer renderer, BoxCollider2D collider)
     {
-        // Skip colliders that are too large
-        if (collider.size.x >= 15 || collider.size.y >= 15 || collider.size.x <= 0.1f || collider.size.y <= 0.1f)
-            return;
-
         Vector2 halfSize = collider.size / 2f;
 
         renderer.positionCount = 5;
@@ -53,10 +49,6 @@ public static class HitboxExtensions
     /// </summary>
     public static void DisplayCircle(this LineRenderer renderer, CircleCollider2D collider)
     {
-        // Skip colliders that are too large
-        if (collider.radius >= 5 || collider.radius <= 0.1f)
-            return;
-
         int segments = 80;
         float radius = collider.radius;
 
@@ -130,8 +122,12 @@ public static class HitboxExtensions
     /// <summary>
     /// Determines the hitbox type from the components
     /// </summary>
-    public static HitboxType GetHitboxType(this Collider2D collider)
+    public static HitboxType GetHitboxType(this Collider2D collider, HitboxViewerSettings settings)
     {
+        if (!collider.enabled && settings.FullRefresh)
+        {
+            return HitboxType.Inactive;
+        }
         if (collider.transform.GetComponent<AttackHit>() != null)
         {
             return HitboxType.Hazard;

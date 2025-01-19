@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using BlasII.ModdingAPI;
+using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 namespace BlasII.DebugMod.HitboxViewer;
@@ -22,7 +24,12 @@ internal class HitboxModule(HitboxViewerSettings settings)
             int id = collider.gameObject.GetInstanceID();
             foundColliders.Add(id);
 
-            if (!_activeHitboxes.ContainsKey(id))
+            if (_activeHitboxes.TryGetValue(id, out HitboxData data))
+            {
+                if (_settings.FullRefresh)
+                    data.UpdateHitbox(_settings);
+            }
+            else
             {
                 _activeHitboxes.Add(id, new HitboxData(collider, _settings));
             }
@@ -78,11 +85,7 @@ internal class HitboxModule(HitboxViewerSettings settings)
                 AddHitboxes();
             }
 
-            _currentDelay += Time.deltaTime;
-            if (_currentDelay >= _settings.UpdateDelay)
-            {
-                AddHitboxes();
-            }
+            CheckRefreshHitboxes();
         }
 
         if (Main.DebugMod.InputHandler.GetKeyDown("HitboxViewer"))
@@ -93,6 +96,20 @@ internal class HitboxModule(HitboxViewerSettings settings)
             else
                 RemoveHitboxes();
         }
+    }
+
+    private void CheckRefreshHitboxes()
+    {
+        _currentDelay += Time.deltaTime;
+        if (_currentDelay < _settings.UpdateDelay)
+            return;
+
+        Stopwatch watch = Stopwatch.StartNew();
+        AddHitboxes();
+        watch.Stop();
+#if DEBUG
+        ModLog.Info($"Refresh tick: {watch.ElapsedMilliseconds} ms");
+#endif
     }
 
     private Sprite _hitboxImage;
