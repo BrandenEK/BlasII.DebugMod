@@ -13,10 +13,6 @@ internal class HitboxData
         ColliderType colliderType = collider.GetColliderType();
         HitboxType hitboxType = collider.GetHitboxType(settings);
 
-        // Verify that the collider type should be shown
-        if (colliderType == ColliderType.Invalid)
-            return;
-
         // Add line renderer component
         _line = collider.gameObject.AddComponent<LineRenderer>();
         _line.material = Main.DebugMod.HitboxModule.HitboxMaterial;
@@ -36,18 +32,11 @@ internal class HitboxData
 
     public void UpdateHitbox(HitboxViewerSettings settings)
     {
-        // Verify that the collider isnt null somehow
-        if (_collider == null)
-        {
-            //_line.positionCount = 0;
-            return;
-        }
-
         // Verify that the collider is a valid size
         if (_collider.bounds.extents.x * 2 < settings.MinSize || _collider.bounds.extents.x * 2 > settings.MaxSize ||
             _collider.bounds.extents.y * 2 < settings.MinSize || _collider.bounds.extents.y * 2 > settings.MaxSize)
         {
-            //_line.positionCount = 0;
+            _line.positionCount = 0;
             return;
         }
 
@@ -57,14 +46,14 @@ internal class HitboxData
         // Verify that the collider type should be shown
         if (colliderType == ColliderType.Invalid)
         {
-            //_line.positionCount = 0;
+            _line.positionCount = 0;
             return;
         }
 
         // Verify that the hitbox type should be shown
         if (!Main.DebugMod.HitboxModule.ToggledHitboxes[hitboxType])
         {
-            //_line.positionCount = 0;
+            _line.positionCount = 0;
             return;
         }
 
