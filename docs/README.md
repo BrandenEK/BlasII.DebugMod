@@ -14,6 +14,7 @@
 
 | Type | Color |
 | ---- | ----- |
+| Inactive | Grey |
 | Hazard | Pink |
 | Damageable | Orange |
 | Player | Cyan |
