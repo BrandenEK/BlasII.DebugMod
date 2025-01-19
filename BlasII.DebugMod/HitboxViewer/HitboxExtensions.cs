@@ -122,8 +122,8 @@ public static class HitboxExtensions
     public static Vector2 ApplyTransformToPoint(this Collider2D collider, Vector2 point)
     {
         point = point + collider.offset; // Apply offset
-        point = collider.transform.localRotation * point; // Apply rotation
-        point = Vector2.Scale(point, collider.transform.lossyScale); // Apply scale
+        //point = collider.transform.localRotation * point; // Apply rotation
+        //point = Vector2.Scale(point, collider.transform.localScale); // Apply scale
         return point; 
     }
 
