@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using BlasII.ModdingAPI;
+using UnityEngine;
 
 namespace BlasII.DebugMod.HitboxViewer;
 
@@ -30,6 +31,12 @@ internal class HitboxData
         _line.sortingLayerName = "Foreground Parallax 2";
         _line.useWorldSpace = false;
         _line.SetWidth(LINE_WIDTH, LINE_WIDTH);
+
+        // Debug info
+        ModLog.Info($"{collider.name} (collider={colliderType}, hitbox={hitboxType})");
+        ModLog.Warn($"position: {collider.transform.position}");
+        ModLog.Warn($"localRotation: {collider.transform.localRotation}");
+        ModLog.Warn($"lossyScale: {collider.transform.lossyScale}");
 
         // Set up drawing based on collider type
         switch (colliderType)
