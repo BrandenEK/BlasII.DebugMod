@@ -1,10 +1,8 @@
-﻿
-using BlasII.ModdingAPI;
-using Il2CppTGK.Framework;
+﻿using BlasII.ModdingAPI;
 using Il2CppTGK.Game;
+using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
-using static UnityEngine.Tilemaps.Tile;
 
 namespace BlasII.DebugMod.HitboxViewer;
 
@@ -43,6 +41,8 @@ public class CameraLines : MonoBehaviour
     // cannot call this on update, line wont be visible then.. and if used OnPostRender() thats works when attached to camera only
     void OnPostRender()
     {
+        Stopwatch watch = Stopwatch.StartNew();
+
         ModLog.Info("ON render post");
         lineMaterial.SetPass(0);
         GL.LoadOrtho();
@@ -59,14 +59,14 @@ public class CameraLines : MonoBehaviour
 
         GL.Begin(1);
         GL.Color(lineColor);
-        GL.Vertex(new Vector3(10, 10, 0));
-        GL.Vertex(new Vector3(10, 100, 0));
+        //GL.Vertex(new Vector3(10, 10, 0));
+        //GL.Vertex(new Vector3(10, 100, 0));
 
-        GL.Vertex(new Vector3(0, 1, 0));
-        GL.Vertex(new Vector3(1, 1, 0));
+        //GL.Vertex(new Vector3(0, 1, 0));
+        //GL.Vertex(new Vector3(1, 1, 0));
 
-        GL.Vertex(new Vector2(0, 1));
-        GL.Vertex(new Vector2(Input.mousePosition.x / Screen.width, Input.mousePosition.y / Screen.height));
+        //GL.Vertex(new Vector2(0, 1));
+        //GL.Vertex(new Vector2(Input.mousePosition.x / Screen.width, Input.mousePosition.y / Screen.height));
 
         GL.Vertex(new Vector2(0, 1));
         GL.Vertex(new Vector2(better.x / Screen.width, better.y / Screen.height));
@@ -86,16 +86,19 @@ public class CameraLines : MonoBehaviour
                     RenderCircle(collider.Cast<CircleCollider2D>());
                     break;
                 case ColliderType.Capsule:
-                    RenderBox(collider.Cast<CapsuleCollider2D>());
+                    RenderCapsule(collider.Cast<CapsuleCollider2D>());
                     break;
                 case ColliderType.Polygon:
-                    RenderBox(collider.Cast<PolygonCollider2D>());
+                    RenderPolygon(collider.Cast<PolygonCollider2D>());
                     break;
                 default:
                     break;
                     //throw new System.Exception("A valid type should be calculated before now!");
             }
         }
+
+        watch.Stop();
+        ModLog.Error("Tick: " + watch.ElapsedMilliseconds + " ms");
     }
 
     void RenderBox(BoxCollider2D collider)
@@ -105,7 +108,6 @@ public class CameraLines : MonoBehaviour
         var topRight = WorldToPercent(LocalToWorld(collider, new Vector2(halfSize.x, halfSize.y)));
         var bottomRight = WorldToPercent(LocalToWorld(collider, new Vector2(halfSize.x, -halfSize.y)));
         var bottomLeft = WorldToPercent(LocalToWorld(collider, new Vector2(-halfSize.x, -halfSize.y)));
-        //ModLog.Error(box.name + ": " + topLeft);
 
         GL.Begin(1);
         GL.Color(Color.green);
@@ -127,13 +129,105 @@ public class CameraLines : MonoBehaviour
 
     void RenderCircle(CircleCollider2D collider)
     {
+        int segments = 80;
+        float radius = collider.radius;
 
+        Vector3 start = WorldToPercent(LocalToWorld(collider, new Vector2(radius, 0)));
+        Vector3 previous = start;
+        GL.Begin(1);
+        GL.Color(Color.blue);
+
+        for (int currentStep = 1; currentStep < segments; currentStep++)
+        {
+            float circumferenceProgress = (float)currentStep / (segments - 1);
+            float currentRadian = circumferenceProgress * 2 * Mathf.PI;
+
+            float xScaled = Mathf.Cos(currentRadian);
+            float yScaled = Mathf.Sin(currentRadian);
+
+            var currentPosition = new Vector2(radius * xScaled, radius * yScaled);
+            Vector3 current = WorldToPercent(LocalToWorld(collider, currentPosition));
+
+            GL.Vertex(previous);
+            GL.Vertex(current);
+
+            previous = current;
+        }
+
+        GL.Vertex(previous);
+        GL.Vertex(start);
+
+        GL.End();
+    }
+
+    void RenderCapsule(CapsuleCollider2D collider)
+    {
+        int segments = 80;
+        float xRadius = collider.size.x / 2;
+        float yRadius = collider.size.y / 2;
+        float currAngle = 20f;
+
+        Vector3 start = Vector3.zero;
+        GL.Begin(1);
+        GL.Color(Color.yellow);
+
+        for (int i = 0; i <= segments; i++)
+        {
+            float x = Mathf.Sin(Mathf.Deg2Rad * currAngle) * xRadius;
+            float y = Mathf.Cos(Mathf.Deg2Rad * currAngle) * yRadius;
+
+            Vector3 point = WorldToPercent(LocalToWorld(collider, new Vector2(x, y)));
+            currAngle += (360f / segments);
+
+            if (i == 0)
+            {
+                start = point;
+                GL.Vertex(point);
+                continue;
+            }
+
+            GL.Vertex(point);
+            GL.Vertex(point);
+        }
+
+        GL.Vertex(start);
+        GL.End();
+    }
+
+    void RenderPolygon(PolygonCollider2D collider)
+    {
+        GL.Begin(1);
+        GL.Color(Color.red);
+
+        if (collider.pathCount == 0)
+            return;
+
+        Vector2[] points = collider.GetPath(0);
+
+        if (points.Length < 3)
+            return;
+
+        Vector3 start = WorldToPercent(LocalToWorld(collider, points[0]));
+        GL.Vertex(start);
+
+        for (int i = 1; i < points.Length; i++)
+        {
+            Vector3 point = WorldToPercent(LocalToWorld(collider, points[i]));
+
+            GL.Vertex(point);
+            GL.Vertex(point);
+        }
+
+        GL.Vertex(start);
+        GL.End();
     }
 
     private Vector3 LocalToWorld(Collider2D collider, Vector2 localPoint)
     {
-        Vector3 offset = localPoint + collider.offset;
-        return collider.transform.position + offset;
+        Vector3 point = localPoint + collider.offset; // Apply offset
+        point = collider.transform.rotation * point; // Apply rotation
+        point = Vector2.Scale(point, collider.transform.lossyScale); // Apply scale
+        return collider.transform.position + point;
     }
 
     private Vector2 WorldToPercent(Vector2 worldPoint)
