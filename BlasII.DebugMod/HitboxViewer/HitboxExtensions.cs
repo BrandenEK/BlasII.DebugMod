@@ -128,9 +128,10 @@ public static class HitboxExtensions
     /// </summary>
     public static Vector2 ApplyTransformToPoint(this Collider2D collider, Vector2 point)
     {
-        point = Quaternion.Inverse(collider.transform.localRotation) * point; // Apply rotation
+        point = point + collider.offset; // Apply offset
+        point = collider.transform.localRotation * point; // Apply rotation
         point = Vector2.Scale(point, collider.transform.lossyScale); // Apply scale
-        return point + collider.offset; // Apply offset
+        return point; 
     }
 
     /// <summary>
