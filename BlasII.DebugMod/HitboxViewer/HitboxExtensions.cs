@@ -39,20 +39,13 @@ public static class HitboxExtensions
             return;
 
         Vector2 halfSize = collider.size / 2f;
-        Vector2 topLeft = new(-halfSize.x, halfSize.y);
-        Vector2 topRight = halfSize;
-        Vector2 bottomRight = new(halfSize.x, -halfSize.y);
-        Vector2 bottomLeft = -halfSize;
-        Vector2[] points = new Vector2[]
-        {
-            topLeft, topRight, bottomRight, bottomLeft, topLeft
-        };
 
         renderer.positionCount = 5;
-        for (int i = 0; i < points.Length; i++)
-        {
-            renderer.SetPosition(i, collider.ApplyTransformToPoint(points[i]));
-        }
+        renderer.SetPosition(0, collider.ApplyTransformToPoint(new Vector2(-halfSize.x, halfSize.y)));
+        renderer.SetPosition(1, collider.ApplyTransformToPoint(new Vector2(halfSize.x, halfSize.y)));
+        renderer.SetPosition(2, collider.ApplyTransformToPoint(new Vector2(halfSize.x, -halfSize.y)));
+        renderer.SetPosition(3, collider.ApplyTransformToPoint(new Vector2(-halfSize.x, -halfSize.y)));
+        renderer.SetPosition(4, collider.ApplyTransformToPoint(new Vector2(-halfSize.x, halfSize.y)));
     }
 
     /// <summary>
