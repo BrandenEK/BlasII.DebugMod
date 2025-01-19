@@ -19,6 +19,7 @@ internal class HitboxToggler
     {
         HitboxType input = HitboxType.Invalid;
 
+        if (Main.DebugMod.InputHandler.GetKeyDown("Hitbox_Inactive")) input = HitboxType.Inactive;
         if (Main.DebugMod.InputHandler.GetKeyDown("Hitbox_Hazard")) input = HitboxType.Hazard;
         if (Main.DebugMod.InputHandler.GetKeyDown("Hitbox_Damageable")) input = HitboxType.Damageable;
         if (Main.DebugMod.InputHandler.GetKeyDown("Hitbox_Player")) input = HitboxType.Player;
