@@ -24,7 +24,11 @@ internal class HitboxModule(HitboxViewerSettings settings)
             int id = collider.gameObject.GetInstanceID();
             foundColliders.Add(id);
 
-            if (!_activeHitboxes.ContainsKey(id))
+            if (_activeHitboxes.TryGetValue(id, out HitboxData data))
+            {
+                data.UpdateHitbox(_settings);
+            }
+            else
             {
                 _activeHitboxes.Add(id, new HitboxData(collider, _settings));
             }
