@@ -11,7 +11,7 @@ internal class HitboxData
     public HitboxData(Collider2D collider, HitboxViewerSettings settings)
     {
         ColliderType colliderType = collider.GetColliderType();
-        HitboxType hitboxType = collider.GetHitboxType();
+        HitboxType hitboxType = collider.GetHitboxType(settings);
 
         // Verify that the collider type should be shown
         if (colliderType == ColliderType.Invalid)
@@ -36,18 +36,30 @@ internal class HitboxData
 
     public void UpdateHitbox(HitboxViewerSettings settings)
     {
+        // Verify that the collider isnt null somehow
         if (_collider == null)
         {
             //_line.positionCount = 0;
             return;
         }
 
+        // Verify that the collider is a valid size
+        if (_collider.bounds.extents.x * 2 < settings.MinSize || _collider.bounds.extents.x * 2 > settings.MaxSize ||
+            _collider.bounds.extents.y * 2 < settings.MinSize || _collider.bounds.extents.y * 2 > settings.MaxSize)
+        {
+            //_line.positionCount = 0;
+            return;
+        }
+
         ColliderType colliderType = _collider.GetColliderType();
-        HitboxType hitboxType = _collider.GetHitboxType();
+        HitboxType hitboxType = _collider.GetHitboxType(settings);
 
         // Verify that the collider type should be shown
         if (colliderType == ColliderType.Invalid)
+        {
+            //_line.positionCount = 0;
             return;
+        }
 
         // Verify that the hitbox type should be shown
         if (!Main.DebugMod.HitboxModule.ToggledHitboxes[hitboxType])
@@ -97,7 +109,7 @@ internal class HitboxData
         {
             case HitboxType.Inactive:
                 color = settings.InactiveColor;
-                order = 80;
+                order = 180;
                 break;
             case HitboxType.Hazard:
                 color = settings.HazardColor;
@@ -129,7 +141,7 @@ internal class HitboxData
                 break;
             case HitboxType.Geometry:
                 color = settings.GeometryColor;
-                order = 100;
+                order = 200;
                 break;
             case HitboxType.Other:
                 color = settings.OtherColor;

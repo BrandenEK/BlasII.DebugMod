@@ -26,7 +26,8 @@ internal class HitboxModule(HitboxViewerSettings settings)
 
             if (_activeHitboxes.TryGetValue(id, out HitboxData data))
             {
-                data.UpdateHitbox(_settings);
+                if (_settings.FullRefresh)
+                    data.UpdateHitbox(_settings);
             }
             else
             {
