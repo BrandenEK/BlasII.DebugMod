@@ -39,20 +39,13 @@ public static class HitboxExtensions
             return;
 
         Vector2 halfSize = collider.size / 2f;
-        Vector2 topLeft = new(-halfSize.x, halfSize.y);
-        Vector2 topRight = halfSize;
-        Vector2 bottomRight = new(halfSize.x, -halfSize.y);
-        Vector2 bottomLeft = -halfSize;
-        Vector2[] points = new Vector2[]
-        {
-            topLeft, topRight, bottomRight, bottomLeft, topLeft
-        };
 
         renderer.positionCount = 5;
-        for (int i = 0; i < points.Length; i++)
-        {
-            renderer.SetPosition(i, collider.offset + points[i]);
-        }
+        renderer.SetPosition(0, collider.ApplyTransformToPoint(new Vector2(-halfSize.x, halfSize.y)));
+        renderer.SetPosition(1, collider.ApplyTransformToPoint(new Vector2(halfSize.x, halfSize.y)));
+        renderer.SetPosition(2, collider.ApplyTransformToPoint(new Vector2(halfSize.x, -halfSize.y)));
+        renderer.SetPosition(3, collider.ApplyTransformToPoint(new Vector2(-halfSize.x, -halfSize.y)));
+        renderer.SetPosition(4, collider.ApplyTransformToPoint(new Vector2(-halfSize.x, halfSize.y)));
     }
 
     /// <summary>
@@ -78,7 +71,7 @@ public static class HitboxExtensions
             float yScaled = Mathf.Sin(currentRadian);
 
             var currentPosition = new Vector2(radius * xScaled, radius * yScaled);
-            renderer.SetPosition(currentStep, collider.offset + currentPosition);
+            renderer.SetPosition(currentStep, collider.ApplyTransformToPoint(currentPosition));
         }
     }
 
@@ -98,7 +91,7 @@ public static class HitboxExtensions
             float x = Mathf.Sin(Mathf.Deg2Rad * currAngle) * xRadius;
             float y = Mathf.Cos(Mathf.Deg2Rad * currAngle) * yRadius;
 
-            renderer.SetPosition(i, collider.offset + new Vector2(x, y));
+            renderer.SetPosition(i, collider.ApplyTransformToPoint(new Vector2(x, y)));
             currAngle += (360f / segments);
         }
     }
@@ -119,9 +112,19 @@ public static class HitboxExtensions
         renderer.positionCount = points.Count;
         for (int i = 0; i < points.Count; i++)
         {
-            Vector2 point = Vector2.Scale(points[i], collider.transform.localScale);
-            renderer.SetPosition(i, collider.offset + point);
+            renderer.SetPosition(i, collider.ApplyTransformToPoint(points[i]));
         }
+    }
+
+    /// <summary>
+    /// Applies rotation, scale, and offset to a Vector2
+    /// </summary>
+    public static Vector2 ApplyTransformToPoint(this Collider2D collider, Vector2 point)
+    {
+        point = point + collider.offset; // Apply offset
+        //point = collider.transform.localRotation * point; // Apply rotation
+        //point = Vector2.Scale(point, collider.transform.localScale); // Apply scale
+        return point; 
     }
 
     /// <summary>

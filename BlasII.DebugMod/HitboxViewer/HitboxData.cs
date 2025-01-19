@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using BlasII.ModdingAPI;
+using UnityEngine;
 
 namespace BlasII.DebugMod.HitboxViewer;
 
@@ -19,17 +20,18 @@ internal class HitboxData
         if (!Main.DebugMod.HitboxModule.ToggledHitboxes[hitboxType])
             return;
 
-        // Create object as child of collider
-        var obj = new GameObject("Hitbox");
-        obj.transform.parent = collider.transform;
-        obj.transform.localPosition = Vector3.zero;
-
         // Add line renderer component
-        _line = obj.AddComponent<LineRenderer>();
+        _line = collider.gameObject.AddComponent<LineRenderer>();
         _line.material = Main.DebugMod.HitboxModule.HitboxMaterial;
         _line.sortingLayerName = "Foreground Parallax 2";
         _line.useWorldSpace = false;
         _line.SetWidth(LINE_WIDTH, LINE_WIDTH);
+
+        // Debug info
+        //ModLog.Info($"{collider.name} (collider={colliderType}, hitbox={hitboxType})");
+        //ModLog.Warn($"position: {collider.transform.position}");
+        //ModLog.Warn($"localRotation: {collider.transform.localRotation}");
+        //ModLog.Warn($"lossyScale: {collider.transform.lossyScale}");
 
         // Set up drawing based on collider type
         switch (colliderType)
@@ -102,8 +104,8 @@ internal class HitboxData
 
     public void DestroyHitbox()
     {
-        if (_line != null && _line.gameObject != null)
-            Object.Destroy(_line.gameObject);
+        if (_line != null)
+            Object.Destroy(_line);
     }
 
     private const float LINE_WIDTH = 0.04f;
