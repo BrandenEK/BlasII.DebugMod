@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using BlasII.ModdingAPI;
+using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 namespace BlasII.DebugMod.HitboxViewer;
@@ -78,11 +80,7 @@ internal class HitboxModule(HitboxViewerSettings settings)
                 AddHitboxes();
             }
 
-            _currentDelay += Time.deltaTime;
-            if (_currentDelay >= _settings.UpdateDelay)
-            {
-                AddHitboxes();
-            }
+            CheckRefreshHitboxes();
         }
 
         if (Main.DebugMod.InputHandler.GetKeyDown("HitboxViewer"))
@@ -93,6 +91,20 @@ internal class HitboxModule(HitboxViewerSettings settings)
             else
                 RemoveHitboxes();
         }
+    }
+
+    private void CheckRefreshHitboxes()
+    {
+        _currentDelay += Time.deltaTime;
+        if (_currentDelay < _settings.UpdateDelay)
+            return;
+
+        Stopwatch watch = Stopwatch.StartNew();
+        AddHitboxes();
+        watch.Stop();
+#if DEBUG
+        ModLog.Info($"Refresh tick: {watch.ElapsedMilliseconds} ms");
+#endif
     }
 
     private Sprite _hitboxImage;
