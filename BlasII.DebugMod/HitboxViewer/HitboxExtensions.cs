@@ -51,7 +51,7 @@ public static class HitboxExtensions
         renderer.positionCount = 5;
         for (int i = 0; i < points.Length; i++)
         {
-            renderer.SetPosition(i, collider.offset + points[i]);
+            renderer.SetPosition(i, collider.ApplyTransformToPoint(points[i]));
         }
     }
 
@@ -78,7 +78,7 @@ public static class HitboxExtensions
             float yScaled = Mathf.Sin(currentRadian);
 
             var currentPosition = new Vector2(radius * xScaled, radius * yScaled);
-            renderer.SetPosition(currentStep, collider.offset + currentPosition);
+            renderer.SetPosition(currentStep, collider.ApplyTransformToPoint(currentPosition));
         }
     }
 
@@ -98,7 +98,7 @@ public static class HitboxExtensions
             float x = Mathf.Sin(Mathf.Deg2Rad * currAngle) * xRadius;
             float y = Mathf.Cos(Mathf.Deg2Rad * currAngle) * yRadius;
 
-            renderer.SetPosition(i, collider.offset + new Vector2(x, y));
+            renderer.SetPosition(i, collider.ApplyTransformToPoint(new Vector2(x, y)));
             currAngle += (360f / segments);
         }
     }
@@ -119,12 +119,18 @@ public static class HitboxExtensions
         renderer.positionCount = points.Count;
         for (int i = 0; i < points.Count; i++)
         {
-            Vector2 point = points[i];
-            point = Quaternion.Inverse(renderer.transform.localRotation) * point; // Apply rotation
-            point = Vector2.Scale(point, collider.transform.lossyScale); // Apply scale
-            point = point + collider.offset; // Apply offset
-            renderer.SetPosition(i, point);
+            renderer.SetPosition(i, collider.ApplyTransformToPoint(points[i]));
         }
+    }
+
+    /// <summary>
+    /// Applies rotation, scale, and offset to a Vector2
+    /// </summary>
+    public static Vector2 ApplyTransformToPoint(this Collider2D collider, Vector2 point)
+    {
+        point = Quaternion.Inverse(collider.transform.localRotation) * point; // Apply rotation
+        point = Vector2.Scale(point, collider.transform.lossyScale); // Apply scale
+        return point + collider.offset; // Apply offset
     }
 
     /// <summary>
