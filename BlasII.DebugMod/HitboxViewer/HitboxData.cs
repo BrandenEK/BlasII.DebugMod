@@ -23,6 +23,7 @@ internal class HitboxData
 
         // Debug info
         //ModLog.Info($"{collider.name} (collider={colliderType}, hitbox={hitboxType})");
+        //ModLog.Warn($"Bounds: {collider.bounds}");
         //ModLog.Warn($"position: {collider.transform.position}");
         //ModLog.Warn($"localRotation: {collider.transform.localRotation}");
         //ModLog.Warn($"lossyScale: {collider.transform.lossyScale}");
@@ -33,8 +34,8 @@ internal class HitboxData
     public void UpdateHitbox(HitboxViewerSettings settings)
     {
         // Verify that the collider is a valid size
-        if (_collider.bounds.extents.x * 2 < settings.MinSize || _collider.bounds.extents.x * 2 > settings.MaxSize ||
-            _collider.bounds.extents.y * 2 < settings.MinSize || _collider.bounds.extents.y * 2 > settings.MaxSize)
+        Vector2 size = _collider.bounds.extents * 2;
+        if (_collider.enabled && (size.x < settings.MinSize || size.x > settings.MaxSize || size.y < settings.MinSize || size.y > settings.MaxSize))
         {
             _line.positionCount = 0;
             return;
