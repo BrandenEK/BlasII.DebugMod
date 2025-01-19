@@ -57,6 +57,10 @@ internal class HitboxData
         int order;
         switch (hitboxType)
         {
+            case HitboxType.Inactive:
+                color = settings.InactiveColor;
+                order = 80;
+                break;
             case HitboxType.Hazard:
                 color = settings.HazardColor;
                 order = 420;

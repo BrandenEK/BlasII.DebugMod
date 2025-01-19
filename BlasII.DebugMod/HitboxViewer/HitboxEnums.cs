@@ -6,6 +6,8 @@ namespace BlasII.DebugMod.HitboxViewer;
 /// </summary>
 public enum HitboxType
 {
+    /// <summary> Currently disabled </summary>
+    Inactive,
     /// <summary> Damages the player on contact </summary>
     Hazard,
     /// <summary> Can be damaged </summary>

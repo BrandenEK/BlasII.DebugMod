@@ -38,6 +38,8 @@ public class HitboxViewerSettings
 {
     /// <summary> How many seconds between each hitbox update </summary>
     public float UpdateDelay { get; set; } = 0.2f;
+    /// <summary> The color of inactive colliders </summary>
+    public string InactiveColor { get; set; } = "#4D4E4C";
     /// <summary> The color of hazard colliders </summary>
     public string HazardColor { get; set; } = "#FF007F";
     /// <summary> The color of damageable colliders </summary>

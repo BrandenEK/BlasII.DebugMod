@@ -132,6 +132,10 @@ public static class HitboxExtensions
     /// </summary>
     public static HitboxType GetHitboxType(this Collider2D collider)
     {
+        if (!collider.enabled)
+        {
+            return HitboxType.Inactive;
+        }
         if (collider.transform.GetComponent<AttackHit>() != null)
         {
             return HitboxType.Hazard;
