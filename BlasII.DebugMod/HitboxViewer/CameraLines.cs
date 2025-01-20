@@ -1,6 +1,4 @@
-﻿using BlasII.ModdingAPI;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Linq;
 using UnityEngine;
 
 namespace BlasII.DebugMod.HitboxViewer;
@@ -50,14 +48,10 @@ internal class CameraLines : MonoBehaviour
         if (!_isShowing || _cachedColliders == null)
             return;
 
-        Stopwatch watch = Stopwatch.StartNew();
+        //Stopwatch watch = Stopwatch.StartNew();
 
-        //ModLog.Info("ON render post");
         _material.SetPass(0);
         GL.LoadOrtho();
-
-        //if (CoreCache.PlayerSpawn.PlayerInstance == null)
-        //    return;
 
         foreach (var collider in _cachedColliders)
         {
@@ -81,8 +75,8 @@ internal class CameraLines : MonoBehaviour
             }
         }
 
-        watch.Stop();
-        ModLog.Error("Tick: " + watch.ElapsedTicks + " ticks");
+        //watch.Stop();
+        //ModLog.Error("Tick: " + watch.ElapsedTicks + " ticks");
     }
 
     void RenderBox(BoxCollider2D collider)
@@ -206,14 +200,6 @@ internal class CameraLines : MonoBehaviour
         GL.End();
     }
 
-    //private Vector3 LocalToWorld(Collider2D collider, Vector2 localPoint)
-    //{
-    //    Vector3 point = localPoint + collider.offset; // Apply offset
-    //    point = collider.transform.rotation * point; // Apply rotation
-    //    point = Vector2.Scale(point, collider.transform.lossyScale); // Apply scale
-    //    return collider.transform.position + point;
-    //}
-
     private Vector3 LocalToWorld(Collider2D collider, Vector3 point)
     {
         Transform t = collider.transform;
@@ -238,26 +224,6 @@ internal class CameraLines : MonoBehaviour
 
         return point;
     }
-
-    //private Vector3 LocalToWorld(Collider2D collider, Vector2 localPoint)
-    //{
-    //    Transform t = collider.transform;
-    //    Vector3 point;
-
-    //    // Apply offset
-    //    point.x = localPoint.x + collider.offset.x;
-    //    point.y = localPoint.y + collider.offset.y;
-    //    point.z = 0;
-    //    // Apply rotation
-    //    point = t.rotation * point;
-    //    // Apply scale
-    //    point.x *= t.lossyScale.x;
-    //    point.y *= t.lossyScale.y;
-    //    // Convert to world space
-    //    point.x += t.position.x;
-    //    point.y += t.position.y;
-    //    return point;
-    //}
 
     private Vector2 WorldToPercent(Vector2 worldPoint)
     {
