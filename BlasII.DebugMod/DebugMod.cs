@@ -6,7 +6,6 @@ using BlasII.DebugMod.NoClip;
 using BlasII.ModdingAPI;
 using BlasII.ModdingAPI.Helpers;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace BlasII.DebugMod;
@@ -64,16 +63,6 @@ public class DebugMod : BlasIIMod
         HitboxModule.SceneLoaded();
         ClipModule.SceneLoaded();
         CameraModule.SceneLoaded();
-
-        foreach (var camera in Object.FindObjectsOfType<Camera>())
-        {
-            ModLog.Info(camera.name);
-        }
-
-        Camera cam = Camera.main;// Object.FindObjectsOfType<Camera>().First(x => x.name == "scene composition camera");
-
-        if (cam.GetComponent<CameraLines>() == null)
-            cam.gameObject.AddComponent<CameraLines>();
     }
 
     /// <summary>
