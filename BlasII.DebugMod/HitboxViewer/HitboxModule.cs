@@ -93,7 +93,7 @@ internal class HitboxModule(HitboxViewerSettings settings)
                 //AddHitboxes();
             }
 
-            //ShowHitboxes();
+            ShowHitboxes();
             //CheckRefreshHitboxes();
         }
 
