@@ -1,5 +1,4 @@
 ﻿using BlasII.ModdingAPI;
-using Il2CppTGK.Game;
 using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
@@ -7,10 +6,23 @@ using UnityEngine;
 namespace BlasII.DebugMod.HitboxViewer;
 
 [MelonLoader.RegisterTypeInIl2Cpp]
-public class CameraLines : MonoBehaviour
+internal class CameraLines : MonoBehaviour
 {
     private Material _material;
     private Camera _camera;
+
+    private Collider2D[] _cachedColliders = null;
+    private bool _isShowing = false;
+
+    public void UpdateColliders(Collider2D[] colliders)
+    {
+        _cachedColliders = colliders;
+    }
+
+    public void UpdateStatus(bool isShowing)
+    {
+        _isShowing = isShowing;
+    }
 
     void Awake()
     {
@@ -35,16 +47,19 @@ public class CameraLines : MonoBehaviour
 
     private void OnPostRender()
     {
+        if (!_isShowing || _cachedColliders == null)
+            return;
+
         Stopwatch watch = Stopwatch.StartNew();
 
         //ModLog.Info("ON render post");
         _material.SetPass(0);
         GL.LoadOrtho();
 
-        if (CoreCache.PlayerSpawn.PlayerInstance == null)
-            return;
+        //if (CoreCache.PlayerSpawn.PlayerInstance == null)
+        //    return;
 
-        foreach (var collider in Object.FindObjectsOfType<Collider2D>())
+        foreach (var collider in _cachedColliders)
         {
             ColliderType colliderType = collider.GetColliderType();
             switch (colliderType)

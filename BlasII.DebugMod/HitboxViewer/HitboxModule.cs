@@ -11,6 +11,7 @@ internal class HitboxModule(HitboxViewerSettings settings)
     private readonly Dictionary<int, HitboxData> _activeHitboxes = new();
 
     internal HitboxToggler ToggledHitboxes { get; } = new();
+    private CameraLines _cameraComponent;
 
     private bool _showHitboxes = false;
     private float _currentDelay = 0f;
@@ -65,17 +66,21 @@ internal class HitboxModule(HitboxViewerSettings settings)
     public void SceneLoaded()
     {
         if (Camera.main.GetComponent<CameraLines>() == null)
-            Camera.main.gameObject.AddComponent<CameraLines>();
+            _cameraComponent = Camera.main.gameObject.AddComponent<CameraLines>();
 
         StoreHitboxImage();
 
         if (_showHitboxes)
-            AddHitboxes();
+        {
+            ShowHitboxes();
+            //AddHitboxes();
+        }
     }
 
     public void SceneUnloaded()
     {
-        RemoveHitboxes();
+        //RemoveHitboxes();
+        HideHitboxes();
     }
 
     public void Update()
@@ -84,21 +89,34 @@ internal class HitboxModule(HitboxViewerSettings settings)
         {
             if (ToggledHitboxes.ProcessToggles())
             {
-                RemoveHitboxes();
-                AddHitboxes();
+                //RemoveHitboxes();
+                //AddHitboxes();
             }
 
-            CheckRefreshHitboxes();
+            //ShowHitboxes();
+            //CheckRefreshHitboxes();
         }
 
         if (Main.DebugMod.InputHandler.GetKeyDown("HitboxViewer"))
         {
             _showHitboxes = !_showHitboxes;
+            _cameraComponent.UpdateStatus(_showHitboxes);
             if (_showHitboxes)
-                AddHitboxes();
+                ShowHitboxes();
             else
-                RemoveHitboxes();
+                HideHitboxes();
         }
+    }
+
+    private void ShowHitboxes()
+    {
+        var colliders = Object.FindObjectsOfType<Collider2D>();
+        _cameraComponent.UpdateColliders(colliders);
+    }
+
+    private void HideHitboxes()
+    {
+        _cameraComponent.UpdateColliders(null);
     }
 
     private void CheckRefreshHitboxes()
