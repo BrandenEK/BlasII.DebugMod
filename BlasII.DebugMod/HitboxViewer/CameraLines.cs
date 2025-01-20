@@ -1,6 +1,4 @@
 ﻿using BlasII.ModdingAPI;
-using Harmony;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
@@ -14,35 +12,11 @@ internal class CameraLines : MonoBehaviour
     private Camera _camera;
 
     private Collider2D[] _cachedColliders = null;
-
-    private List<BoxCollider2D> _boxCache = [];
-    private List<CircleCollider2D> _circleCache = [];
-    private List<CapsuleCollider2D> _capsuleCache = [];
-    private List<PolygonCollider2D> _polygonCache = [];
     private bool _isShowing = false;
 
     public void UpdateColliders(Collider2D[] colliders)
     {
-        _boxCache.Clear();
-        _circleCache.Clear();
-        _capsuleCache.Clear();
-        _polygonCache.Clear();
-
-        if (colliders == null)
-            return;
-
         _cachedColliders = colliders;
-
-        foreach (var collider in colliders)
-        {
-            switch (collider.GetIl2CppType().Name)
-            {
-                case "BoxCollider2D": _boxCache.Add(collider.Cast<BoxCollider2D>()); break;
-                case "CircleCollider2D": _circleCache.Add(collider.Cast<CircleCollider2D>()); break;
-                case "CapsuleCollider2D": _capsuleCache.Add(collider.Cast<CapsuleCollider2D>()); break;
-                case "PolygonCollider2D": _polygonCache.Add(collider.Cast<PolygonCollider2D>()); break;
-            }
-        }
     }
 
     public void UpdateStatus(bool isShowing)
@@ -79,48 +53,33 @@ internal class CameraLines : MonoBehaviour
         Stopwatch watch = Stopwatch.StartNew();
 
         //ModLog.Info("ON render post");
-        GL.PushMatrix();
         _material.SetPass(0);
         GL.LoadOrtho();
-        GL.Begin(1);
+
         //if (CoreCache.PlayerSpawn.PlayerInstance == null)
         //    return;
 
         foreach (var collider in _cachedColliders)
         {
-            if (collider == null)
-                continue;
-
             ColliderType colliderType = collider.GetColliderType();
             switch (colliderType)
             {
                 case ColliderType.Box:
                     RenderBox(collider.Cast<BoxCollider2D>());
                     break;
-                //case ColliderType.Circle:
-                //    RenderCircle(collider.Cast<CircleCollider2D>());
-                //    break;
-                //case ColliderType.Capsule:
-                //    RenderCapsule(collider.Cast<CapsuleCollider2D>());
-                //    break;
-                //case ColliderType.Polygon:
-                //    RenderPolygon(collider.Cast<PolygonCollider2D>());
-                //    break;
+                case ColliderType.Circle:
+                    RenderCircle(collider.Cast<CircleCollider2D>());
+                    break;
+                case ColliderType.Capsule:
+                    RenderCapsule(collider.Cast<CapsuleCollider2D>());
+                    break;
+                case ColliderType.Polygon:
+                    RenderPolygon(collider.Cast<PolygonCollider2D>());
+                    break;
                 default:
                     break;
             }
         }
-        GL.End();
-        GL.PopMatrix();
-
-        //foreach (var box in _boxCache)
-        //    RenderBox(box);
-        //foreach (var circle in _circleCache)
-        //    RenderCircle(circle);
-        //foreach (var capsule in _capsuleCache)
-        //    RenderCapsule(capsule);
-        //foreach (var polygon in _polygonCache)
-        //    RenderPolygon(polygon);
 
         watch.Stop();
         ModLog.Error("Tick: " + watch.ElapsedMilliseconds + " ms");
@@ -134,7 +93,7 @@ internal class CameraLines : MonoBehaviour
         var bottomRight = WorldToPercent(LocalToWorld(collider, new Vector2(halfSize.x, -halfSize.y)));
         var bottomLeft = WorldToPercent(LocalToWorld(collider, new Vector2(-halfSize.x, -halfSize.y)));
 
-        //GL.Begin(1);
+        GL.Begin(1);
         GL.Color(Color.green);
 
         GL.Vertex(topLeft);
@@ -149,7 +108,7 @@ internal class CameraLines : MonoBehaviour
         GL.Vertex(bottomLeft);
         GL.Vertex(topLeft);
 
-        //GL.End();
+        GL.End();
     }
 
     void RenderCircle(CircleCollider2D collider)
@@ -159,7 +118,7 @@ internal class CameraLines : MonoBehaviour
 
         Vector3 start = WorldToPercent(LocalToWorld(collider, new Vector2(radius, 0)));
         Vector3 previous = start;
-        //GL.Begin(1);
+        GL.Begin(1);
         GL.Color(Color.blue);
 
         for (int currentStep = 1; currentStep < segments; currentStep++)
@@ -182,7 +141,7 @@ internal class CameraLines : MonoBehaviour
         GL.Vertex(previous);
         GL.Vertex(start);
 
-        //GL.End();
+        GL.End();
     }
 
     void RenderCapsule(CapsuleCollider2D collider)
@@ -193,7 +152,7 @@ internal class CameraLines : MonoBehaviour
         float currAngle = 20f;
 
         Vector3 start = Vector3.zero;
-        //GL.Begin(1);
+        GL.Begin(1);
         GL.Color(Color.yellow);
 
         for (int i = 0; i <= segments; i++)
@@ -216,12 +175,12 @@ internal class CameraLines : MonoBehaviour
         }
 
         GL.Vertex(start);
-        //GL.End();
+        GL.End();
     }
 
     void RenderPolygon(PolygonCollider2D collider)
     {
-        //GL.Begin(1);
+        GL.Begin(1);
         GL.Color(Color.red);
 
         if (collider.pathCount == 0)
@@ -244,7 +203,7 @@ internal class CameraLines : MonoBehaviour
         }
 
         GL.Vertex(start);
-        //GL.End();
+        GL.End();
     }
 
     private Vector3 LocalToWorld(Collider2D collider, Vector2 localPoint)
