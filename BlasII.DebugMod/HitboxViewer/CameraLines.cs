@@ -229,7 +229,6 @@ internal class CameraLines : MonoBehaviour
 
     private Vector2 WorldToPercent(Vector2 worldPoint)
     {
-        var screenPoint = _camera.WorldToScreenPoint(worldPoint);
-        return new Vector2(screenPoint.x / Screen.width, screenPoint.y / Screen.height);
+        return _camera.WorldToViewportPoint(worldPoint);
     }
 }
