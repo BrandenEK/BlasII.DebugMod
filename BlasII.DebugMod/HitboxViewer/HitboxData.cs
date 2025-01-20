@@ -15,7 +15,7 @@ internal class HitboxData
 
         // Add line renderer component
         _line = collider.gameObject.AddComponent<LineRenderer>();
-        _line.material = Main.DebugMod.HitboxModule.HitboxMaterial;
+        //_line.material = Main.DebugMod.HitboxModule.HitboxMaterial;
         _line.sortingLayerName = "Foreground Parallax 2";
         _line.useWorldSpace = false;
         _line.SetWidth(LINE_WIDTH, LINE_WIDTH);

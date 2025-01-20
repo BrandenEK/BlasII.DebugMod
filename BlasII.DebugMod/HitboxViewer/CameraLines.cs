@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using BlasII.ModdingAPI;
+using System.Diagnostics;
+using System.Linq;
 using UnityEngine;
 
 namespace BlasII.DebugMod.HitboxViewer;
@@ -48,7 +50,7 @@ internal class CameraLines : MonoBehaviour
         if (!_isShowing || _cachedColliders == null)
             return;
 
-        //Stopwatch watch = Stopwatch.StartNew();
+        Stopwatch watch = Stopwatch.StartNew();
 
         _material.SetPass(0);
         GL.LoadOrtho();
@@ -75,8 +77,8 @@ internal class CameraLines : MonoBehaviour
             }
         }
 
-        //watch.Stop();
-        //ModLog.Error("Tick: " + watch.ElapsedTicks + " ticks");
+        watch.Stop();
+        ModLog.Error("Tick: " + watch.ElapsedTicks + " ticks");
     }
 
     void RenderBox(BoxCollider2D collider)
