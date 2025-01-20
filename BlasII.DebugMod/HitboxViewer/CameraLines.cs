@@ -55,8 +55,24 @@ internal class CameraLines : MonoBehaviour
         _material.SetPass(0);
         GL.LoadOrtho();
 
+        Plane[] planes = new Plane[6];
+        GeometryUtility.CalculateFrustumPlanes(_camera, planes);
+
         foreach (var collider in _cachedColliders)
         {
+            if (collider == null)
+                continue;
+
+            if (!GeometryUtility.TestPlanesAABB(planes, collider.bounds))
+            {
+                ModLog.Warn("Skipping col: " + collider.name);
+                continue;
+            }
+
+            //Vector2 viewport = _camera.WorldToViewportPoint(collider.transform.position);
+            //if (viewport.x < -0.5 || viewport.x > 1.5 || viewport.y < -0.5 || viewport.y > 1.5)
+            //    continue;
+
             ColliderType colliderType = collider.GetColliderType();
             switch (colliderType)
             {
