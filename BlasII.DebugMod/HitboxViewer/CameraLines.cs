@@ -62,23 +62,23 @@ internal class CameraLines : MonoBehaviour
         GL.LoadOrtho();
         GL.Begin(1);
 
-        Plane[] planes = new Plane[6];
-        GeometryUtility.CalculateFrustumPlanes(_camera, planes);
+        //Plane[] planes = new Plane[6];
+        //GeometryUtility.CalculateFrustumPlanes(_camera, planes);
 
         foreach (var collider in _cachedColliders)
         {
             if (collider == null)
                 continue;
 
-            if (!GeometryUtility.TestPlanesAABB(planes, collider.bounds))
-            {
-                ModLog.Warn("Skipping col: " + collider.name);
-                continue;
-            }
-
-            //Vector2 viewport = _camera.WorldToViewportPoint(collider.transform.position);
-            //if (viewport.x < -0.5 || viewport.x > 1.5 || viewport.y < -0.5 || viewport.y > 1.5)
+            //if (!GeometryUtility.TestPlanesAABB(planes, collider.bounds))
+            //{
+            //    ModLog.Warn("Skipping col: " + collider.name);
             //    continue;
+            //}
+
+            Vector2 viewport = _camera.WorldToViewportPoint(collider.transform.position);
+            if (viewport.x < -0.5 || viewport.x > 1.5 || viewport.y < -0.5 || viewport.y > 1.5)
+                continue;
 
             HitboxType hitboxType = collider.GetHitboxType(_settings);
             GL.Color(TypeToColor(hitboxType));
@@ -132,7 +132,7 @@ internal class CameraLines : MonoBehaviour
 
     void RenderCircle(CircleCollider2D collider)
     {
-        int segments = 80;
+        int segments = 40;
         float radius = collider.radius;
 
         Vector3 start = WorldToPercent(LocalToWorld(collider, new Vector2(radius, 0)));
@@ -161,7 +161,7 @@ internal class CameraLines : MonoBehaviour
 
     void RenderCapsule(CapsuleCollider2D collider)
     {
-        int segments = 80;
+        int segments = 40;
         float xRadius = collider.size.x / 2;
         float yRadius = collider.size.y / 2;
         float currAngle = 20f;
