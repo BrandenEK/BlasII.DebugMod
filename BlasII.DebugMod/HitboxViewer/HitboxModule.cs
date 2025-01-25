@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Il2CppTGK.Game;
+using System.Linq;
+using UnityEngine;
 
 namespace BlasII.DebugMod.HitboxViewer;
 
@@ -14,7 +16,11 @@ internal class HitboxModule(HitboxViewerSettings settings)
     public void SceneLoaded()
     {
         if (Camera.main.GetComponent<CameraLines>() == null)
+        {
             _cameraComponent = Camera.main.gameObject.AddComponent<CameraLines>();
+            _cameraComponent.UpdateSettings(_settings);
+        }
+
 
         if (_showHitboxes)
         {
@@ -29,22 +35,20 @@ internal class HitboxModule(HitboxViewerSettings settings)
 
     public void Update()
     {
-        if (_showHitboxes)
-        {
-            ToggledHitboxes.ProcessToggles();
-
-            if (Time.frameCount % FRAME_SKIP == 0)
-                ShowHitboxes();
-        }
-
         if (Main.DebugMod.InputHandler.GetKeyDown("HitboxViewer"))
         {
             _showHitboxes = !_showHitboxes;
             _cameraComponent.UpdateStatus(_showHitboxes);
-            if (_showHitboxes)
-                ShowHitboxes();
-            else
+        }
+
+        if (_showHitboxes)
+        {
+            ToggledHitboxes.ProcessToggles();
+
+            if (BANNED_UI.Contains(CoreCache.UIManager.focusedControl?.name ?? string.Empty))
                 HideHitboxes();
+            else
+                ShowHitboxes();
         }
     }
 
@@ -59,5 +63,9 @@ internal class HitboxModule(HitboxViewerSettings settings)
         _cameraComponent.UpdateColliders(null);
     }
 
-    private const int FRAME_SKIP = 2;
+    private static readonly string[] BANNED_UI =
+    [
+        "InventoryWindow_prefab(Clone)",
+        "MapWindow_prefab(Clone)",
+    ];
 }
