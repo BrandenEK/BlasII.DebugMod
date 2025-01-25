@@ -37,8 +37,8 @@ internal class HitboxModule(HitboxViewerSettings settings)
         {
             ToggledHitboxes.ProcessToggles();
 
-            if (Time.frameCount % FRAME_SKIP == 0)
-                ShowHitboxes();
+            //if (Time.frameCount % FRAME_SKIP == 0)
+            ShowHitboxes();
         }
 
         if (Main.DebugMod.InputHandler.GetKeyDown("HitboxViewer"))
