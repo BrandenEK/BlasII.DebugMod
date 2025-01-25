@@ -97,10 +97,10 @@ internal class CameraLines : MonoBehaviour
     void RenderBox(BoxCollider2D collider)
     {
         Vector2 halfSize = collider.size / 2f;
-        var topLeft = WorldToPercent(LocalToWorld(collider, new Vector2(-halfSize.x, halfSize.y)));
-        var topRight = WorldToPercent(LocalToWorld(collider, new Vector2(halfSize.x, halfSize.y)));
-        var bottomRight = WorldToPercent(LocalToWorld(collider, new Vector2(halfSize.x, -halfSize.y)));
-        var bottomLeft = WorldToPercent(LocalToWorld(collider, new Vector2(-halfSize.x, -halfSize.y)));
+        var topLeft = CalculateViewport(collider, new Vector2(-halfSize.x, halfSize.y));
+        var topRight = CalculateViewport(collider, new Vector2(halfSize.x, halfSize.y));
+        var bottomRight = CalculateViewport(collider, new Vector2(halfSize.x, -halfSize.y));
+        var bottomLeft = CalculateViewport(collider, new Vector2(-halfSize.x, -halfSize.y));
 
         GL.Vertex(topLeft);
         GL.Vertex(topRight);
@@ -120,7 +120,7 @@ internal class CameraLines : MonoBehaviour
         int segments = 40;
         float radius = collider.radius;
 
-        Vector3 start = WorldToPercent(LocalToWorld(collider, new Vector2(radius, 0)));
+        Vector3 start = CalculateViewport(collider, new Vector2(radius, 0));
         Vector3 previous = start;
 
         for (int currentStep = 1; currentStep < segments; currentStep++)
@@ -132,7 +132,7 @@ internal class CameraLines : MonoBehaviour
             float yScaled = Mathf.Sin(currentRadian);
 
             var currentPosition = new Vector2(radius * xScaled, radius * yScaled);
-            Vector3 current = WorldToPercent(LocalToWorld(collider, currentPosition));
+            Vector3 current = CalculateViewport(collider, currentPosition);
 
             GL.Vertex(previous);
             GL.Vertex(current);
@@ -158,7 +158,7 @@ internal class CameraLines : MonoBehaviour
             float x = Mathf.Sin(Mathf.Deg2Rad * currAngle) * xRadius;
             float y = Mathf.Cos(Mathf.Deg2Rad * currAngle) * yRadius;
 
-            Vector3 point = WorldToPercent(LocalToWorld(collider, new Vector2(x, y)));
+            Vector3 point = CalculateViewport(collider, new Vector2(x, y));
             currAngle += (360f / segments);
 
             if (i == 0)
@@ -185,12 +185,12 @@ internal class CameraLines : MonoBehaviour
         if (points.Length < 3)
             return;
 
-        Vector3 start = WorldToPercent(LocalToWorld(collider, points[0]));
+        Vector3 start = CalculateViewport(collider, points[0]);
         GL.Vertex(start);
 
         for (int i = 1; i < points.Length; i++)
         {
-            Vector3 point = WorldToPercent(LocalToWorld(collider, points[i]));
+            Vector3 point = CalculateViewport(collider, points[i]);
 
             GL.Vertex(point);
             GL.Vertex(point);
@@ -199,7 +199,7 @@ internal class CameraLines : MonoBehaviour
         GL.Vertex(start);
     }
 
-    private Vector3 LocalToWorld(Collider2D collider, Vector3 point)
+    private Vector2 CalculateViewport(Collider2D collider, Vector3 point)
     {
         Transform t = collider.transform;
         Vector2 offset = collider.offset;
@@ -221,12 +221,7 @@ internal class CameraLines : MonoBehaviour
         point.x += position.x;
         point.y += position.y;
 
-        return point;
-    }
-
-    private Vector2 WorldToPercent(Vector2 worldPoint)
-    {
-        return _camera.WorldToViewportPoint(worldPoint);
+        return _camera.WorldToViewportPoint(point);
     }
 
     private Color TypeToColor(HitboxType hitboxType)
