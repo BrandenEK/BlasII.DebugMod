@@ -60,6 +60,7 @@ internal class CameraLines : MonoBehaviour
 
         _material.SetPass(0);
         GL.LoadOrtho();
+        GL.Begin(1);
 
         Plane[] planes = new Plane[6];
         GeometryUtility.CalculateFrustumPlanes(_camera, planes);
@@ -80,7 +81,7 @@ internal class CameraLines : MonoBehaviour
             //    continue;
 
             HitboxType hitboxType = collider.GetHitboxType(_settings);
-
+            GL.Color(TypeToColor(hitboxType));
 
             ColliderType colliderType = collider.GetColliderType();
             switch (colliderType)
@@ -102,6 +103,8 @@ internal class CameraLines : MonoBehaviour
             }
         }
 
+        GL.End();
+
         watch.Stop();
         ModLog.Error("Tick: " + watch.ElapsedTicks + " ticks");
     }
@@ -114,9 +117,6 @@ internal class CameraLines : MonoBehaviour
         var bottomRight = WorldToPercent(LocalToWorld(collider, new Vector2(halfSize.x, -halfSize.y)));
         var bottomLeft = WorldToPercent(LocalToWorld(collider, new Vector2(-halfSize.x, -halfSize.y)));
 
-        GL.Begin(1);
-        GL.Color(Color.green);
-
         GL.Vertex(topLeft);
         GL.Vertex(topRight);
 
@@ -128,8 +128,6 @@ internal class CameraLines : MonoBehaviour
 
         GL.Vertex(bottomLeft);
         GL.Vertex(topLeft);
-
-        GL.End();
     }
 
     void RenderCircle(CircleCollider2D collider)
@@ -139,8 +137,6 @@ internal class CameraLines : MonoBehaviour
 
         Vector3 start = WorldToPercent(LocalToWorld(collider, new Vector2(radius, 0)));
         Vector3 previous = start;
-        GL.Begin(1);
-        GL.Color(Color.blue);
 
         for (int currentStep = 1; currentStep < segments; currentStep++)
         {
@@ -161,8 +157,6 @@ internal class CameraLines : MonoBehaviour
 
         GL.Vertex(previous);
         GL.Vertex(start);
-
-        GL.End();
     }
 
     void RenderCapsule(CapsuleCollider2D collider)
@@ -173,8 +167,6 @@ internal class CameraLines : MonoBehaviour
         float currAngle = 20f;
 
         Vector3 start = Vector3.zero;
-        GL.Begin(1);
-        GL.Color(Color.yellow);
 
         for (int i = 0; i <= segments; i++)
         {
@@ -196,14 +188,10 @@ internal class CameraLines : MonoBehaviour
         }
 
         GL.Vertex(start);
-        GL.End();
     }
 
     void RenderPolygon(PolygonCollider2D collider)
     {
-        GL.Begin(1);
-        GL.Color(Color.red);
-
         if (collider.pathCount == 0)
             return;
 
@@ -224,7 +212,6 @@ internal class CameraLines : MonoBehaviour
         }
 
         GL.Vertex(start);
-        GL.End();
     }
 
     private Vector3 LocalToWorld(Collider2D collider, Vector3 point)
