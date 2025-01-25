@@ -251,15 +251,25 @@ internal class CameraLines : MonoBehaviour
 
     private HitboxInfo CalculateInfo(Collider2D collider)
     {
+        // Verify collider still exists
         if (collider == null)
             return new HitboxInfo(collider, HitboxType.Invalid, false);
 
+        // Verify collider is in camera bounds
         Vector2 viewport = _camera.WorldToViewportPoint(collider.transform.position);
         if (viewport.x < -0.5 || viewport.x > 1.5 || viewport.y < -0.5 || viewport.y > 1.5)
             return new HitboxInfo(collider, HitboxType.Invalid, false);
 
-        HitboxType type = collider.GetHitboxType(_settings);
-        // Check if it is toggled or not
+        // Verify collider is a valid size
+        Vector2 size = collider.bounds.extents * 2;
+        if (collider.enabled && (size.x < _settings.MinSize || size.x > _settings.MaxSize || size.y < _settings.MinSize || size.y > _settings.MaxSize))
+            return new HitboxInfo(collider, HitboxType.Invalid, false);
+
+        HitboxType type = collider.GetHitboxType();
+
+        // Verify collider is toggled on
+        if (!Main.DebugMod.HitboxModule.ToggledHitboxes[type])
+            return new HitboxInfo(collider, type, false);
 
         return new HitboxInfo(collider, type, true);
     }

@@ -10,7 +10,7 @@ internal class HitboxData
 
     public HitboxData(Collider2D collider, HitboxViewerSettings settings)
     {
-        HitboxType hitboxType = collider.GetHitboxType(settings);
+        HitboxType hitboxType = collider.GetHitboxType();
 
         // Add line renderer component
         _line = collider.gameObject.AddComponent<LineRenderer>();
@@ -40,7 +40,7 @@ internal class HitboxData
             return;
         }
 
-        HitboxType hitboxType = _collider.GetHitboxType(settings);
+        HitboxType hitboxType = _collider.GetHitboxType();
 
         // Verify that the hitbox type should be shown
         if (!Main.DebugMod.HitboxModule.ToggledHitboxes[hitboxType])
