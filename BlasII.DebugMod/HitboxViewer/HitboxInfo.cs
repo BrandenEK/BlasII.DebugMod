@@ -5,7 +5,7 @@ namespace BlasII.DebugMod.HitboxViewer;
 /// <summary>
 /// Information regarding a Collider2D
 /// </summary>
-public struct HitboxInfo(Collider2D collider, ColliderType ctype, HitboxType htype, bool isVisible)
+public readonly struct HitboxInfo(Collider2D collider, HitboxType type, bool isVisible)
 {
     /// <summary>
     /// The actual collider
@@ -13,14 +13,9 @@ public struct HitboxInfo(Collider2D collider, ColliderType ctype, HitboxType hty
     public Collider2D Collider { get; } = collider;
 
     /// <summary>
-    /// The type of collider
-    /// </summary>
-    public ColliderType Ctype { get; } = ctype;
-
-    /// <summary>
     /// The type of hitbox
     /// </summary>
-    public HitboxType Htype { get; } = htype;
+    public HitboxType Type { get; } = type;
 
     /// <summary>
     /// Whether this collider should be displayed

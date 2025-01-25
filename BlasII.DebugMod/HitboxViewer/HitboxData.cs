@@ -10,7 +10,6 @@ internal class HitboxData
 
     public HitboxData(Collider2D collider, HitboxViewerSettings settings)
     {
-        ColliderType colliderType = collider.GetColliderType();
         HitboxType hitboxType = collider.GetHitboxType(settings);
 
         // Add line renderer component
@@ -41,15 +40,7 @@ internal class HitboxData
             return;
         }
 
-        ColliderType colliderType = _collider.GetColliderType();
         HitboxType hitboxType = _collider.GetHitboxType(settings);
-
-        // Verify that the collider type should be shown
-        if (colliderType == ColliderType.Invalid)
-        {
-            _line.positionCount = 0;
-            return;
-        }
 
         // Verify that the hitbox type should be shown
         if (!Main.DebugMod.HitboxModule.ToggledHitboxes[hitboxType])
@@ -58,7 +49,6 @@ internal class HitboxData
             return;
         }
 
-        SetLines(colliderType);
         SetColor(hitboxType, settings);
     }
 
@@ -66,28 +56,6 @@ internal class HitboxData
     {
         if (_line != null)
             Object.Destroy(_line);
-    }
-
-    private void SetLines(ColliderType colliderType)
-    {
-        // Set up drawing based on collider type
-        switch (colliderType)
-        {
-            case ColliderType.Box:
-                _line.DisplayBox(_collider.Cast<BoxCollider2D>());
-                break;
-            case ColliderType.Circle:
-                _line.DisplayCircle(_collider.Cast<CircleCollider2D>());
-                break;
-            case ColliderType.Capsule:
-                _line.DisplayCapsule(_collider.Cast<CapsuleCollider2D>());
-                break;
-            case ColliderType.Polygon:
-                _line.DisplayPolygon(_collider.Cast<PolygonCollider2D>());
-                break;
-            default:
-                throw new System.Exception("A valid type should be calculated before now!");
-        }
     }
 
     private void SetColor(HitboxType hitboxType, HitboxViewerSettings settings)

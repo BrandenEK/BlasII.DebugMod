@@ -163,19 +163,4 @@ public static class HitboxExtensions
 
         return HitboxType.Other;
     }
-
-    /// <summary>
-    /// Determines the collider type from the component type
-    /// </summary>
-    public static ColliderType GetColliderType(this Collider2D collider)
-    {
-        return collider.GetIl2CppType().Name switch
-        {
-            "BoxCollider2D" => ColliderType.Box,
-            "CircleCollider2D" => ColliderType.Circle,
-            "CapsuleCollider2D" => ColliderType.Capsule,
-            "PolygonCollider2D" => ColliderType.Polygon,
-            _ => ColliderType.Invalid,
-        };
-    }
 }

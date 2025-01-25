@@ -62,25 +62,25 @@ internal class CameraLines : MonoBehaviour
         GL.LoadOrtho();
         GL.Begin(1);
 
-        foreach (var info in _cachedColliders.Select(CalculateInfo).OrderBy(x => x.Htype))
+        foreach (var info in _cachedColliders.Select(CalculateInfo).OrderBy(x => x.Type))
         {
             if (!info.IsVisible)
                 continue;
 
-            GL.Color(TypeToColor(info.Htype));
+            GL.Color(TypeToColor(info.Type));
 
-            switch (info.Ctype)
+            switch (info.Collider.GetIl2CppType().Name)
             {
-                case ColliderType.Box:
+                case "BoxCollider2D":
                     RenderBox(info.Collider.Cast<BoxCollider2D>());
                     break;
-                case ColliderType.Circle:
+                case "CircleCollider2D":
                     RenderCircle(info.Collider.Cast<CircleCollider2D>());
                     break;
-                case ColliderType.Capsule:
+                case "CapsuleCollider2D":
                     RenderCapsule(info.Collider.Cast<CapsuleCollider2D>());
                     break;
-                case ColliderType.Polygon:
+                case "PolygonCollider2D":
                     RenderPolygon(info.Collider.Cast<PolygonCollider2D>());
                     break;
                 default:
@@ -252,16 +252,15 @@ internal class CameraLines : MonoBehaviour
     private HitboxInfo CalculateInfo(Collider2D collider)
     {
         if (collider == null)
-            return new HitboxInfo(collider, ColliderType.Invalid, HitboxType.Invalid, false);
+            return new HitboxInfo(collider, HitboxType.Invalid, false);
 
         Vector2 viewport = _camera.WorldToViewportPoint(collider.transform.position);
         if (viewport.x < -0.5 || viewport.x > 1.5 || viewport.y < -0.5 || viewport.y > 1.5)
-            return new HitboxInfo(collider, ColliderType.Invalid, HitboxType.Invalid, false);
+            return new HitboxInfo(collider, HitboxType.Invalid, false);
 
-        HitboxType htype = collider.GetHitboxType(_settings);
+        HitboxType type = collider.GetHitboxType(_settings);
         // Check if it is toggled or not
 
-        ColliderType ctype = collider.GetColliderType();
-        return new HitboxInfo(collider, ctype, htype, true);
+        return new HitboxInfo(collider, type, true);
     }
 }

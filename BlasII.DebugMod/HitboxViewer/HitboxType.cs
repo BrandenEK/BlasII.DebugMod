@@ -30,21 +30,3 @@ public enum HitboxType
     /// <summary> Damages the player on contact </summary>
     Hazard,
 }
-
-/// <summary>
-/// Types of colliders
-/// </summary>
-public enum ColliderType
-{
-    /// <summary> Invalid type </summary>
-    Invalid,
-
-    /// <summary> <see cref="UnityEngine.BoxCollider2D"/> </summary>
-    Box,
-    /// <summary> <see cref="UnityEngine.CircleCollider2D"/> </summary>
-    Circle,
-    /// <summary> <see cref="UnityEngine.CapsuleCollider2D"/> </summary>
-    Capsule,
-    /// <summary> <see cref="UnityEngine.PolygonCollider2D"/> </summary>
-    Polygon,
-}
