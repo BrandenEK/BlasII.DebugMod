@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Il2CppTGK.Game;
+using System.Linq;
+using UnityEngine;
 
 namespace BlasII.DebugMod.HitboxViewer;
 
@@ -42,7 +44,11 @@ internal class HitboxModule(HitboxViewerSettings settings)
         if (_showHitboxes)
         {
             ToggledHitboxes.ProcessToggles();
-            ShowHitboxes();
+
+            if (BANNED_UI.Contains(CoreCache.UIManager.focusedControl?.name ?? string.Empty))
+                HideHitboxes();
+            else
+                ShowHitboxes();
         }
     }
 
@@ -56,4 +62,10 @@ internal class HitboxModule(HitboxViewerSettings settings)
     {
         _cameraComponent.UpdateColliders(null);
     }
+
+    private static readonly string[] BANNED_UI =
+    [
+        "InventoryWindow_prefab(Clone)",
+        "MapWindow_prefab(Clone)",
+    ];
 }
