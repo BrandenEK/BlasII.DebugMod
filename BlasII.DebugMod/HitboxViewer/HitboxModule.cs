@@ -14,7 +14,11 @@ internal class HitboxModule(HitboxViewerSettings settings)
     public void SceneLoaded()
     {
         if (Camera.main.GetComponent<CameraLines>() == null)
+        {
             _cameraComponent = Camera.main.gameObject.AddComponent<CameraLines>();
+            _cameraComponent.UpdateSettings(_settings);
+        }
+
 
         if (_showHitboxes)
         {

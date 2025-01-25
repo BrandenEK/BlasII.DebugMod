@@ -8,11 +8,17 @@ namespace BlasII.DebugMod.HitboxViewer;
 [MelonLoader.RegisterTypeInIl2Cpp]
 internal class CameraLines : MonoBehaviour
 {
+    private HitboxViewerSettings _settings;
     private Material _material;
     private Camera _camera;
 
     private Collider2D[] _cachedColliders = null;
     private bool _isShowing = false;
+
+    public void UpdateSettings(HitboxViewerSettings settings)
+    {
+        _settings = settings;
+    }
 
     public void UpdateColliders(Collider2D[] colliders)
     {
@@ -72,6 +78,9 @@ internal class CameraLines : MonoBehaviour
             //Vector2 viewport = _camera.WorldToViewportPoint(collider.transform.position);
             //if (viewport.x < -0.5 || viewport.x > 1.5 || viewport.y < -0.5 || viewport.y > 1.5)
             //    continue;
+
+            HitboxType hitboxType = collider.GetHitboxType(_settings);
+
 
             ColliderType colliderType = collider.GetColliderType();
             switch (colliderType)
@@ -246,5 +255,25 @@ internal class CameraLines : MonoBehaviour
     private Vector2 WorldToPercent(Vector2 worldPoint)
     {
         return _camera.WorldToViewportPoint(worldPoint);
+    }
+
+    private Color TypeToColor(HitboxType hitboxType)
+    {
+        string color = hitboxType switch
+        {
+            HitboxType.Inactive => _settings.InactiveColor,
+            HitboxType.Hazard => _settings.HazardColor,
+            HitboxType.Damageable => _settings.DamageableColor,
+            HitboxType.Player => _settings.PlayerColor,
+            HitboxType.Sensor => _settings.SensorColor,
+            HitboxType.Enemy => _settings.EnemyColor,
+            HitboxType.Interactable => _settings.InteractableColor,
+            HitboxType.Trigger => _settings.TriggerColor,
+            HitboxType.Geometry => _settings.GeometryColor,
+            HitboxType.Other => _settings.OtherColor,
+            _ => throw new System.Exception("A valid type should be calculated before now!"),
+        };
+
+        return ColorUtility.TryParseHtmlString(color, out Color c) ? c : Color.white;
     }
 }
