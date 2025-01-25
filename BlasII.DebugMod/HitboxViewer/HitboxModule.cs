@@ -33,22 +33,16 @@ internal class HitboxModule(HitboxViewerSettings settings)
 
     public void Update()
     {
-        if (_showHitboxes)
-        {
-            ToggledHitboxes.ProcessToggles();
-
-            //if (Time.frameCount % FRAME_SKIP == 0)
-            ShowHitboxes();
-        }
-
         if (Main.DebugMod.InputHandler.GetKeyDown("HitboxViewer"))
         {
             _showHitboxes = !_showHitboxes;
             _cameraComponent.UpdateStatus(_showHitboxes);
-            if (_showHitboxes)
-                ShowHitboxes();
-            else
-                HideHitboxes();
+        }
+
+        if (_showHitboxes)
+        {
+            ToggledHitboxes.ProcessToggles();
+            ShowHitboxes();
         }
     }
 
@@ -62,6 +56,4 @@ internal class HitboxModule(HitboxViewerSettings settings)
     {
         _cameraComponent.UpdateColliders(null);
     }
-
-    private const int FRAME_SKIP = 2;
 }
