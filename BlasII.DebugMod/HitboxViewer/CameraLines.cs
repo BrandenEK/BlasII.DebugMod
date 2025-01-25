@@ -62,41 +62,26 @@ internal class CameraLines : MonoBehaviour
         GL.LoadOrtho();
         GL.Begin(1);
 
-        //Plane[] planes = new Plane[6];
-        //GeometryUtility.CalculateFrustumPlanes(_camera, planes);
-
-        foreach (var collider in _cachedColliders)
+        foreach (var info in _cachedColliders.Select(CalculateInfo).OrderBy(x => x.Htype))
         {
-            if (collider == null)
+            if (!info.IsVisible)
                 continue;
 
-            //if (!GeometryUtility.TestPlanesAABB(planes, collider.bounds))
-            //{
-            //    ModLog.Warn("Skipping col: " + collider.name);
-            //    continue;
-            //}
+            GL.Color(TypeToColor(info.Htype));
 
-            Vector2 viewport = _camera.WorldToViewportPoint(collider.transform.position);
-            if (viewport.x < -0.5 || viewport.x > 1.5 || viewport.y < -0.5 || viewport.y > 1.5)
-                continue;
-
-            HitboxType hitboxType = collider.GetHitboxType(_settings);
-            GL.Color(TypeToColor(hitboxType));
-
-            ColliderType colliderType = collider.GetColliderType();
-            switch (colliderType)
+            switch (info.Ctype)
             {
                 case ColliderType.Box:
-                    RenderBox(collider.Cast<BoxCollider2D>());
+                    RenderBox(info.Collider.Cast<BoxCollider2D>());
                     break;
                 case ColliderType.Circle:
-                    RenderCircle(collider.Cast<CircleCollider2D>());
+                    RenderCircle(info.Collider.Cast<CircleCollider2D>());
                     break;
                 case ColliderType.Capsule:
-                    RenderCapsule(collider.Cast<CapsuleCollider2D>());
+                    RenderCapsule(info.Collider.Cast<CapsuleCollider2D>());
                     break;
                 case ColliderType.Polygon:
-                    RenderPolygon(collider.Cast<PolygonCollider2D>());
+                    RenderPolygon(info.Collider.Cast<PolygonCollider2D>());
                     break;
                 default:
                     break;
@@ -262,5 +247,21 @@ internal class CameraLines : MonoBehaviour
         };
 
         return ColorUtility.TryParseHtmlString(color, out Color c) ? c : Color.white;
+    }
+
+    private HitboxInfo CalculateInfo(Collider2D collider)
+    {
+        if (collider == null)
+            return new HitboxInfo(collider, ColliderType.Invalid, HitboxType.Invalid, false);
+
+        Vector2 viewport = _camera.WorldToViewportPoint(collider.transform.position);
+        if (viewport.x < -0.5 || viewport.x > 1.5 || viewport.y < -0.5 || viewport.y > 1.5)
+            return new HitboxInfo(collider, ColliderType.Invalid, HitboxType.Invalid, false);
+
+        HitboxType htype = collider.GetHitboxType(_settings);
+        // Check if it is toggled or not
+
+        ColliderType ctype = collider.GetColliderType();
+        return new HitboxInfo(collider, ctype, htype, true);
     }
 }

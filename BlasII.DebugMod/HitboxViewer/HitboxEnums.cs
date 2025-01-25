@@ -6,29 +6,29 @@ namespace BlasII.DebugMod.HitboxViewer;
 /// </summary>
 public enum HitboxType
 {
+    /// <summary> Invalid type </summary>
+    Invalid,
+
     /// <summary> Currently disabled </summary>
     Inactive,
-    /// <summary> Damages the player on contact </summary>
-    Hazard,
-    /// <summary> Can be damaged </summary>
-    Damageable,
-    /// <summary> Part of the player object </summary>
-    Player,
-    /// <summary> Detects when something enters its area </summary>
-    Sensor,
-    /// <summary> Part of an enemy object </summary>
-    Enemy,
-    /// <summary> Can be interacted with </summary>
-    Interactable,
-    /// <summary> Has the isTrigger flag </summary>
-    Trigger,
     /// <summary> Part of the level geometry </summary>
     Geometry,
     /// <summary> Any other hitbox </summary>
     Other,
-
-    /// <summary> Invalid type </summary>
-    Invalid
+    /// <summary> Has the isTrigger flag </summary>
+    Trigger,
+    /// <summary> Can be interacted with </summary>
+    Interactable,
+    /// <summary> Part of an enemy object </summary>
+    Enemy,
+    /// <summary> Detects when something enters its area </summary>
+    Sensor,
+    /// <summary> Part of the player object </summary>
+    Player,
+    /// <summary> Can be damaged </summary>
+    Damageable,
+    /// <summary> Damages the player on contact </summary>
+    Hazard,
 }
 
 /// <summary>
@@ -36,6 +36,9 @@ public enum HitboxType
 /// </summary>
 public enum ColliderType
 {
+    /// <summary> Invalid type </summary>
+    Invalid,
+
     /// <summary> <see cref="UnityEngine.BoxCollider2D"/> </summary>
     Box,
     /// <summary> <see cref="UnityEngine.CircleCollider2D"/> </summary>
@@ -44,7 +47,4 @@ public enum ColliderType
     Capsule,
     /// <summary> <see cref="UnityEngine.PolygonCollider2D"/> </summary>
     Polygon,
-
-    /// <summary> Invalid type </summary>
-    Invalid
 }
