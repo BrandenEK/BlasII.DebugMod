@@ -119,28 +119,22 @@ internal class CameraLines : MonoBehaviour
     {
         int segments = 40;
         float radius = collider.radius;
+        float angleStep = 2 * Mathf.PI / segments;
 
         Vector3 start = CalculateViewport(collider, new Vector2(radius, 0));
-        Vector3 previous = start;
+        GL.Vertex(start);
 
-        for (int currentStep = 1; currentStep < segments; currentStep++)
+        for (int i = 1; i < segments; i++)
         {
-            float circumferenceProgress = (float)currentStep / (segments - 1);
-            float currentRadian = circumferenceProgress * 2 * Mathf.PI;
+            float angle = i * angleStep;
+            float x = Mathf.Cos(angle) * radius;
+            float y = Mathf.Sin(angle) * radius;
 
-            float xScaled = Mathf.Cos(currentRadian);
-            float yScaled = Mathf.Sin(currentRadian);
-
-            var currentPosition = new Vector2(radius * xScaled, radius * yScaled);
-            Vector3 current = CalculateViewport(collider, currentPosition);
-
-            GL.Vertex(previous);
-            GL.Vertex(current);
-
-            previous = current;
+            Vector2 point = CalculateViewport(collider, new Vector2(x, y));
+            GL.Vertex(point);
+            GL.Vertex(point);
         }
 
-        GL.Vertex(previous);
         GL.Vertex(start);
     }
 
