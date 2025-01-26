@@ -36,16 +36,12 @@ public class InfoDisplaySettings
 /// </summary>
 public class HitboxViewerSettings
 {
-    /// <summary> How many seconds between each hitbox update </summary>
-    public float UpdateDelay { get; set; } = 0.2f;
-
-    /// <summary> Whether hitbox colors/sizes should be updated every tick </summary>
-    public bool FullRefresh { get; set; } = false;
-
     /// <summary> The minimum size for a hitbox to be shown </summary>
     public float MinSize { get; set; } = 0.1f;
     /// <summary> The maxmimum size for a hitbox to be shown </summary>
     public float MaxSize { get; set; } = 12f;
+    /// <summary> The number of line segments to draw per arc </summary>
+    public int ArcSegments { get; set; } = 32;
 
     /// <summary> The color of inactive colliders </summary>
     public string InactiveColor { get; set; } = "#4D4E4C";

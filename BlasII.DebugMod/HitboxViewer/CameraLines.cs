@@ -21,7 +21,7 @@ internal class CameraLines : MonoBehaviour
     public void UpdateSettings(HitboxViewerSettings settings)
     {
         _settings = settings;
-        _segments = 40;
+        _segments = settings.ArcSegments;
         _angleStep = 2 * Mathf.PI / _segments;
     }
 
