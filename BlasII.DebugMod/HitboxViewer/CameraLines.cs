@@ -15,9 +15,14 @@ internal class CameraLines : MonoBehaviour
     private Collider2D[] _cachedColliders = null;
     private bool _isShowing = false;
 
+    private int _segments;
+    private float _angleStep;
+
     public void UpdateSettings(HitboxViewerSettings settings)
     {
         _settings = settings;
+        _segments = settings.ArcSegments;
+        _angleStep = 2 * Mathf.PI / _segments;
     }
 
     public void UpdateColliders(Collider2D[] colliders)
@@ -56,7 +61,7 @@ internal class CameraLines : MonoBehaviour
         if (!_isShowing || _cachedColliders == null)
             return;
 
-        Stopwatch watch = Stopwatch.StartNew();
+        //Stopwatch watch = Stopwatch.StartNew();
 
         _material.SetPass(0);
         GL.LoadOrtho();
@@ -90,8 +95,8 @@ internal class CameraLines : MonoBehaviour
 
         GL.End();
 
-        watch.Stop();
-        ModLog.Error("Tick: " + watch.ElapsedTicks + " ticks");
+        //watch.Stop();
+        //ModLog.Error("Tick: " + watch.ElapsedTicks + " ticks");
     }
 
     void RenderBox(BoxCollider2D collider)
@@ -117,57 +122,40 @@ internal class CameraLines : MonoBehaviour
 
     void RenderCircle(CircleCollider2D collider)
     {
-        int segments = 40;
         float radius = collider.radius;
 
         Vector3 start = CalculateViewport(collider, new Vector2(radius, 0));
-        Vector3 previous = start;
+        GL.Vertex(start);
 
-        for (int currentStep = 1; currentStep < segments; currentStep++)
+        for (int i = 1; i < _segments; i++)
         {
-            float circumferenceProgress = (float)currentStep / (segments - 1);
-            float currentRadian = circumferenceProgress * 2 * Mathf.PI;
+            float angle = i * _angleStep;
+            float x = Mathf.Cos(angle) * radius;
+            float y = Mathf.Sin(angle) * radius;
 
-            float xScaled = Mathf.Cos(currentRadian);
-            float yScaled = Mathf.Sin(currentRadian);
-
-            var currentPosition = new Vector2(radius * xScaled, radius * yScaled);
-            Vector3 current = CalculateViewport(collider, currentPosition);
-
-            GL.Vertex(previous);
-            GL.Vertex(current);
-
-            previous = current;
+            Vector2 point = CalculateViewport(collider, new Vector2(x, y));
+            GL.Vertex(point);
+            GL.Vertex(point);
         }
 
-        GL.Vertex(previous);
         GL.Vertex(start);
     }
 
     void RenderCapsule(CapsuleCollider2D collider)
     {
-        int segments = 40;
-        float xRadius = collider.size.x / 2;
-        float yRadius = collider.size.y / 2;
-        float currAngle = 20f;
+        float radius = collider.size.x / 2;
+        float height = collider.size.y / 2;
 
-        Vector3 start = Vector3.zero;
+        Vector3 start = CalculateViewport(collider, new Vector2(0, height));
+        GL.Vertex(start);
 
-        for (int i = 0; i <= segments; i++)
+        for (int i = 1; i < _segments; i++)
         {
-            float x = Mathf.Sin(Mathf.Deg2Rad * currAngle) * xRadius;
-            float y = Mathf.Cos(Mathf.Deg2Rad * currAngle) * yRadius;
+            float angle = i * _angleStep;
+            float x = Mathf.Sin(angle) * radius;
+            float y = Mathf.Cos(angle) * height;
 
-            Vector3 point = CalculateViewport(collider, new Vector2(x, y));
-            currAngle += (360f / segments);
-
-            if (i == 0)
-            {
-                start = point;
-                GL.Vertex(point);
-                continue;
-            }
-
+            Vector2 point = CalculateViewport(collider, new Vector2(x, y));
             GL.Vertex(point);
             GL.Vertex(point);
         }
