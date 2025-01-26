@@ -118,8 +118,9 @@ internal class CameraLines : MonoBehaviour
     void RenderCircle(CircleCollider2D collider)
     {
         int segments = 40;
-        float radius = collider.radius;
         float angleStep = 2 * Mathf.PI / segments;
+
+        float radius = collider.radius;
 
         Vector3 start = CalculateViewport(collider, new Vector2(radius, 0));
         GL.Vertex(start);
@@ -141,27 +142,21 @@ internal class CameraLines : MonoBehaviour
     void RenderCapsule(CapsuleCollider2D collider)
     {
         int segments = 40;
-        float xRadius = collider.size.x / 2;
-        float yRadius = collider.size.y / 2;
-        float currAngle = 20f;
+        float angleStep = 2 * Mathf.PI / segments;
 
-        Vector3 start = Vector3.zero;
+        float radius = collider.size.x / 2;
+        float height = collider.size.y / 2;
 
-        for (int i = 0; i <= segments; i++)
+        Vector3 start = CalculateViewport(collider, new Vector2(0, height));
+        GL.Vertex(start);
+
+        for (int i = 1; i < segments; i++)
         {
-            float x = Mathf.Sin(Mathf.Deg2Rad * currAngle) * xRadius;
-            float y = Mathf.Cos(Mathf.Deg2Rad * currAngle) * yRadius;
+            float angle = i * angleStep;
+            float x = Mathf.Sin(angle) * radius;
+            float y = Mathf.Cos(angle) * height;
 
-            Vector3 point = CalculateViewport(collider, new Vector2(x, y));
-            currAngle += (360f / segments);
-
-            if (i == 0)
-            {
-                start = point;
-                GL.Vertex(point);
-                continue;
-            }
-
+            Vector2 point = CalculateViewport(collider, new Vector2(x, y));
             GL.Vertex(point);
             GL.Vertex(point);
         }
