@@ -15,9 +15,14 @@ internal class CameraLines : MonoBehaviour
     private Collider2D[] _cachedColliders = null;
     private bool _isShowing = false;
 
+    private int _segments;
+    private float _angleStep;
+
     public void UpdateSettings(HitboxViewerSettings settings)
     {
         _settings = settings;
+        _segments = 40;
+        _angleStep = 2 * Mathf.PI / _segments;
     }
 
     public void UpdateColliders(Collider2D[] colliders)
@@ -117,17 +122,14 @@ internal class CameraLines : MonoBehaviour
 
     void RenderCircle(CircleCollider2D collider)
     {
-        int segments = 40;
-        float angleStep = 2 * Mathf.PI / segments;
-
         float radius = collider.radius;
 
         Vector3 start = CalculateViewport(collider, new Vector2(radius, 0));
         GL.Vertex(start);
 
-        for (int i = 1; i < segments; i++)
+        for (int i = 1; i < _segments; i++)
         {
-            float angle = i * angleStep;
+            float angle = i * _angleStep;
             float x = Mathf.Cos(angle) * radius;
             float y = Mathf.Sin(angle) * radius;
 
@@ -141,18 +143,15 @@ internal class CameraLines : MonoBehaviour
 
     void RenderCapsule(CapsuleCollider2D collider)
     {
-        int segments = 40;
-        float angleStep = 2 * Mathf.PI / segments;
-
         float radius = collider.size.x / 2;
         float height = collider.size.y / 2;
 
         Vector3 start = CalculateViewport(collider, new Vector2(0, height));
         GL.Vertex(start);
 
-        for (int i = 1; i < segments; i++)
+        for (int i = 1; i < _segments; i++)
         {
-            float angle = i * angleStep;
+            float angle = i * _angleStep;
             float x = Mathf.Sin(angle) * radius;
             float y = Mathf.Cos(angle) * height;
 
