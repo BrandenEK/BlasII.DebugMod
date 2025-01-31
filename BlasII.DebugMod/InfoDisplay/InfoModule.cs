@@ -40,7 +40,7 @@ internal class InfoModule(InfoDisplaySettings settings)
 
         _fpsTracker.Update();
 
-        if (_showInfo)
+        if (_showInfo && CoreCache.PlayerSpawn.PlayerInstance != null)
         {
             UpdateText();
         }
