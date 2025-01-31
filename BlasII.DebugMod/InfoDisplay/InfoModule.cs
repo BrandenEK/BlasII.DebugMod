@@ -11,6 +11,7 @@ namespace BlasII.DebugMod.InfoDisplay;
 internal class InfoModule(InfoDisplaySettings settings)
 {
     private readonly InfoDisplaySettings _settings = settings;
+    private readonly FpsTracker _fpsTracker = new FpsTracker();
 
     private bool _showInfo = false;
     private TextMeshProUGUI _infoText;
@@ -19,6 +20,8 @@ internal class InfoModule(InfoDisplaySettings settings)
     {
         if (_showInfo && SceneHelper.GameSceneLoaded)
             SetTextVisibility(true);
+
+        _fpsTracker.Reset();
     }
 
     public void SceneUnloaded()
@@ -34,6 +37,8 @@ internal class InfoModule(InfoDisplaySettings settings)
             _showInfo = !_showInfo;
             SetTextVisibility(_showInfo);
         }
+
+        _fpsTracker.Update();
 
         if (_showInfo)
         {
@@ -62,6 +67,10 @@ internal class InfoModule(InfoDisplaySettings settings)
         int currentFervour = AssetStorage.PlayerStats.GetCurrentValue(AssetStorage.RangeStats["Fervour"]);
         int maxFervour = AssetStorage.PlayerStats.GetMaxValue(AssetStorage.RangeStats["Fervour"]);
         sb.AppendLine($"Fervour: {currentFervour}/{maxFervour}");
+
+        // FPS
+        float fps = _fpsTracker.CurrentFps;
+        sb.AppendLine($"FPS: {fps:F0}");
 
         _infoText.text = sb.ToString();
     }
