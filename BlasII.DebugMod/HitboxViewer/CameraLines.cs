@@ -61,7 +61,8 @@ internal class CameraLines : MonoBehaviour
         if (!_isShowing || _cachedColliders == null)
             return;
 
-        //Stopwatch watch = Stopwatch.StartNew();
+        Stopwatch watch = Stopwatch.StartNew();
+        int visibleObjects = 0;
 
         _material.SetPass(0);
         GL.LoadOrtho();
@@ -72,6 +73,7 @@ internal class CameraLines : MonoBehaviour
             if (!info.IsVisible)
                 continue;
 
+            visibleObjects++;
             GL.Color(TypeToColor(info.Type));
 
             switch (info.Collider.GetIl2CppType().Name)
@@ -95,8 +97,8 @@ internal class CameraLines : MonoBehaviour
 
         GL.End();
 
-        //watch.Stop();
-        //ModLog.Error("Tick: " + watch.ElapsedTicks + " ticks");
+        watch.Stop();
+        ModLog.Error($"OnPostRender: {watch.ElapsedTicks} ticks, {visibleObjects} objects");
     }
 
     void RenderBox(BoxCollider2D collider)
