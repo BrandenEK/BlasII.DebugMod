@@ -9,8 +9,10 @@ namespace BlasII.DebugMod.HitboxViewer;
 internal class CameraLines : MonoBehaviour
 {
     private HitboxViewerSettings _settings;
-    private Material _material;
     private Camera _camera;
+
+    private Material _material;
+    private Bounds _camBounds;
 
     private Collider2D[] _cachedColliders = null;
     private bool _isShowing = false;
@@ -37,11 +39,11 @@ internal class CameraLines : MonoBehaviour
 
     void Awake()
     {
-        CreateLineMaterial();
+        CacheLineMaterial();
         _camera = Object.FindObjectsOfType<Camera>().First(x => x.name == "scene composition camera"); //GetComponent<Camera>();
     }
 
-    private void CreateLineMaterial()
+    private void CacheLineMaterial()
     {
         // Unity has a built-in shader that is useful for drawing simple colored things
         var shader = Shader.Find("Hidden/Internal-Colored");
@@ -56,6 +58,13 @@ internal class CameraLines : MonoBehaviour
         _material.SetInt("_ZWrite", 0);
     }
 
+    private void CacheCameraBounds()
+    {
+        float height = _camera.orthographicSize;
+        float width = _camera.aspect * height;
+        _camBounds = new(_camera.transform.position, new Vector3(width, height) * 2);
+    }
+
     private void OnPostRender()
     {
         if (!_isShowing || _cachedColliders == null)
@@ -65,6 +74,8 @@ internal class CameraLines : MonoBehaviour
         int visibleObjects = 0;
 
         _material.SetPass(0);
+        CacheCameraBounds();
+
         GL.LoadOrtho();
         GL.Begin(1);
 
@@ -240,19 +251,10 @@ internal class CameraLines : MonoBehaviour
         if (collider == null)
             return new HitboxInfo(collider, HitboxType.Invalid, false);
 
-        float camHeight = _camera.orthographicSize;
-        float camWidth = _camera.aspect * camHeight;
-        Bounds camBounds = new(_camera.transform.position, new Vector3(camWidth, camHeight) * 2);
-
         // Verify collider is in camera bounds
-        if (collider.bounds.min.x > camBounds.max.x || collider.bounds.min.y > camBounds.max.y ||
-            collider.bounds.max.x < camBounds.min.x || collider.bounds.max.y < camBounds.min.y)
+        if (collider.bounds.min.x > _camBounds.max.x || collider.bounds.min.y > _camBounds.max.y ||
+            collider.bounds.max.x < _camBounds.min.x || collider.bounds.max.y < _camBounds.min.y)
             return new HitboxInfo(collider, HitboxType.Invalid, false);
-
-        // Verify collider is in camera bounds
-        //Vector2 viewport = _camera.WorldToViewportPoint(collider.transform.position);
-        //if (viewport.x < -0.5 || viewport.x > 1.5 || viewport.y < -0.5 || viewport.y > 1.5)
-        //    return new HitboxInfo(collider, HitboxType.Invalid, false);
 
         // Verify collider is a valid size
         Vector2 size = collider.bounds.extents * 2;
