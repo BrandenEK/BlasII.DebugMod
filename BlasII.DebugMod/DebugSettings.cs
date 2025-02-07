@@ -39,7 +39,7 @@ public class HitboxViewerSettings
     /// <summary> The minimum size for a hitbox to be shown </summary>
     public float MinSize { get; set; } = 0.1f;
     /// <summary> The maxmimum size for a hitbox to be shown </summary>
-    public float MaxSize { get; set; } = 12f;
+    public float MaxSize { get; set; } = 100f;
     /// <summary> The number of line segments to draw per arc </summary>
     public int ArcSegments { get; set; } = 32;
 
