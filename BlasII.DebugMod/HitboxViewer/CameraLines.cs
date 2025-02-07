@@ -240,10 +240,19 @@ internal class CameraLines : MonoBehaviour
         if (collider == null)
             return new HitboxInfo(collider, HitboxType.Invalid, false);
 
+        float camHeight = _camera.orthographicSize;
+        float camWidth = _camera.aspect * camHeight;
+        Bounds camBounds = new(_camera.transform.position, new Vector3(camWidth, camHeight) * 2);
+
         // Verify collider is in camera bounds
-        Vector2 viewport = _camera.WorldToViewportPoint(collider.transform.position);
-        if (viewport.x < -0.5 || viewport.x > 1.5 || viewport.y < -0.5 || viewport.y > 1.5)
+        if (collider.bounds.min.x > camBounds.max.x || collider.bounds.min.y > camBounds.max.y ||
+            collider.bounds.max.x < camBounds.min.x || collider.bounds.max.y < camBounds.min.y)
             return new HitboxInfo(collider, HitboxType.Invalid, false);
+
+        // Verify collider is in camera bounds
+        //Vector2 viewport = _camera.WorldToViewportPoint(collider.transform.position);
+        //if (viewport.x < -0.5 || viewport.x > 1.5 || viewport.y < -0.5 || viewport.y > 1.5)
+        //    return new HitboxInfo(collider, HitboxType.Invalid, false);
 
         // Verify collider is a valid size
         Vector2 size = collider.bounds.extents * 2;
