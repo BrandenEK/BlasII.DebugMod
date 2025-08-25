@@ -48,7 +48,7 @@ internal class CameraModule(FreeCamSettings settings)
         float v = Main.DebugMod.InputHandler.GetAxis(AxisType.MoveRVertical);
         var direction = new Vector3(h, v).normalized;
 
-        _cameraPosition += direction * speed * Time.deltaTime;
+        _cameraPosition += direction * speed * Time.unscaledDeltaTime;
 
         CameraObject.position = _cameraPosition;
     }
