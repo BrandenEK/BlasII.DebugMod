@@ -5,8 +5,11 @@ using BlasII.DebugMod.InfoDisplay;
 using BlasII.DebugMod.NoClip;
 using BlasII.ModdingAPI;
 using BlasII.ModdingAPI.Helpers;
+using Il2CppLightbug.Kinematic2D.Core;
 using Il2CppTGK.Game;
 using Il2CppTGK.Game.Components;
+using Il2CppTGK.Game.Components.UI;
+using MelonLoader;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -60,6 +63,8 @@ public class DebugMod : BlasIIMod
         ModLog.Error("Creating render texture");
         renderTexture = new RenderTexture(WIDTH, HEIGHT, 24, RenderTextureFormat.ARGB32);
         renderTexture.Create();
+
+        //CoreCache.PlayerSpawn.add_OnPlayerSpawned((Il2CppSystem.Action)Spawn);
     }
 
     /// <summary>
@@ -72,7 +77,89 @@ public class DebugMod : BlasIIMod
         ClipModule.SceneLoaded();
         CameraModule.SceneLoaded();
 
+        if (sceneName == "MainMenu")
+            return;
+
         CoreCache.UINavigationHelper.HideHud = true;
+        //CoreCache.UINavigationHelper.ClearFade(0);
+        //CoreCache.UINavigationHelper.CloseFadeWindow();
+        //var fade = Object.FindObjectOfType<FadeWindowLogic>();
+        //fade.colorImage.color = new Color(0, 0, 0, 0);
+
+        var parallax = Object.FindObjectOfType<ParallaxComponent>();
+        if (parallax != null)
+        {
+            GameObject obj = parallax.layers[0].layer;
+
+            ModLog.Warn("Changing parallax: " + obj.name);
+            obj.SetActive(false);
+            parallax.influenceX = 0;
+            parallax.influenceY = 0;
+        }
+
+        positions = new Dictionary<EnemyRoomEntity, Vector3>();
+        foreach (var enemy in Object.FindObjectsOfType<EnemyRoomEntity>())
+        {
+            ModLog.Warn("Found: " + enemy.name);
+            positions.Add(enemy, enemy.transform.position);
+        }
+
+        //MelonCoroutines.Start(Wait());
+    }
+
+    private Dictionary<EnemyRoomEntity, Vector3> positions;
+
+    private System.Collections.IEnumerator Wait()
+    {
+        yield return new WaitForSecondsRealtime(0.2f);
+        Time.timeScale = 0;
+    }
+
+    protected override void OnLateUpdate()
+    {
+        if (!SceneHelper.GameSceneLoaded)
+            return;
+
+        //foreach (var enemy in Object.FindObjectsOfType<EnemyRoomEntity>())
+        //{
+        //    if (positions.TryGetValue(enemy, out Vector3 pos))
+        //    {
+        //        enemy.transform.position = pos;
+        //    }
+        //}
+
+        foreach (var spawn in CoreCache.EnemySpawn.activeSpawnPoints)
+        {
+            Transform point = spawn.spawnParent;
+
+            if (point == null)
+                continue;
+
+            GameObject enemy = spawn.ObtainSpawnedEnemy();
+
+            if (enemy == null)
+                continue;
+
+            var impl = enemy.GetComponent<CharacterBody2DImpl>();
+
+            if (impl == null)
+                continue;
+
+            ModLog.Info($"Updating position for {enemy.name}");
+            enemy.transform.position = point.position;
+            impl.bodyTransform = new BodyTransform { position = point.position };
+
+            if (Input.GetKey(KeyCode.Keypad7))
+                Time.timeScale = 0;
+            else
+                Time.timeScale = 1;
+        }
+    }
+
+    private void Spawn()
+    {
+        ModLog.Info("Spawned");
+        Time.timeScale = 0;
     }
 
     /// <summary>
@@ -114,13 +201,13 @@ public class DebugMod : BlasIIMod
         ModLog.Error("Saving picture");
         //Time.timeScale = 0;
 
-        foreach (var comp in Object.FindObjectsOfType<ParallaxComponent>())
-        {
-            ModLog.Info("Hiding " + comp.name);
-            comp.influenceX = 0;
-            comp.influenceY = 0;
-            //comp.gameObject.SetActive(false);
-        }
+        //foreach (var comp in Object.FindObjectsOfType<ParallaxComponent>())
+        //{
+        //    ModLog.Info("Hiding " + comp.name);
+        //    comp.influenceX = 0;
+        //    comp.influenceY = 0;
+        //    //comp.gameObject.SetActive(false);
+        //}
         CoreCache.PlayerSpawn.PlayerInstance.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
 
         //foreach (var renderer in CoreCache.PlayerSpawn.PlayerInstance.GetComponentsInChildren<Renderer>())
@@ -142,6 +229,18 @@ public class DebugMod : BlasIIMod
 
         Camera cam = Object.FindObjectsOfType<Camera>().First(x => x.name == "scene composition camera"); // 1920x1080
         //Camera cam = Camera.main; //640x360
+        //Camera.main.backgroundColor = new Color(0, 0, 0, 0);
+
+        //var parallax = Object.FindObjectOfType<ParallaxComponent>();
+        //if (parallax != null)
+        //{
+        //    GameObject obj = parallax.layers[0].layer;
+
+        //    ModLog.Warn("Changing parallax: " + obj.name);
+        //    obj.SetActive(false);
+        //    parallax.influenceX = 0;
+        //    parallax.influenceY = 0;
+        //}
 
         if (count == 0)
         {

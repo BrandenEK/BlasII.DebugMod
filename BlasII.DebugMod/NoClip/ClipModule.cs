@@ -54,7 +54,7 @@ internal class ClipModule(NoClipSettings settings)
         float v = Main.DebugMod.InputHandler.GetAxis(AxisType.MoveVertical);
         var direction = new Vector3(h, v).normalized;
 
-        _playerPosition += direction * speed * Time.deltaTime;
+        _playerPosition += direction * speed * Time.unscaledDeltaTime;
 
         Body.bodyTransform = new BodyTransform { position = _playerPosition };
         CoreCache.PlayerSpawn.PlayerInstance.transform.position = _playerPosition;
