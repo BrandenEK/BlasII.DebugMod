@@ -2,6 +2,7 @@
 using BlasII.ModdingAPI.Assets;
 using BlasII.ModdingAPI.Helpers;
 using Il2CppTGK.Game;
+using Il2CppTGK.Game.Components.UI;
 using Il2CppTMPro;
 using System.Text;
 using UnityEngine;
@@ -14,7 +15,7 @@ internal class InfoModule(InfoDisplaySettings settings)
     private readonly FpsTracker _fpsTracker = new FpsTracker();
 
     private bool _showInfo = false;
-    private TextMeshProUGUI _infoText;
+    private UIPixelTextWithShadow _infoText;
 
     public void SceneLoaded()
     {
@@ -72,7 +73,7 @@ internal class InfoModule(InfoDisplaySettings settings)
         float fps = _fpsTracker.CurrentFps;
         sb.AppendLine($"FPS: {fps:F0}");
 
-        _infoText.text = sb.ToString();
+        _infoText.SetText(sb.ToString());
     }
 
     private void SetTextVisibility(bool visible)
@@ -99,7 +100,7 @@ internal class InfoModule(InfoDisplaySettings settings)
             Alignment = TextAlignmentOptions.TopLeft,
             FontSize = 40,
             WordWrap = false,
-        });
+        }).AddShadow();
     }
 
     private string RoundToPrecision(float num)
