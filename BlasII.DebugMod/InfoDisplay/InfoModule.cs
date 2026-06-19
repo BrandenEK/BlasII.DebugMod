@@ -51,9 +51,20 @@ internal class InfoModule(InfoDisplaySettings settings)
     {
         var sb = new StringBuilder();
 
+        // General
+        sb.AppendLine("<color=#FFE741>General</color>");
+
         // Scene
         string currentScene = SceneHelper.CurrentScene;
         sb.AppendLine($"Scene: {currentScene}");
+
+        // FPS
+        float fps = _fpsTracker.CurrentFps;
+        sb.AppendLine($"FPS: {fps:F0}");
+
+        // Player
+        sb.AppendLine();
+        sb.AppendLine("<color=#FFE741>Player</color>");
 
         // Position
         Vector2 playerPosition = CoreCache.PlayerSpawn.PlayerInstance.transform.position;
@@ -68,10 +79,6 @@ internal class InfoModule(InfoDisplaySettings settings)
         int currentFervour = AssetStorage.PlayerStats.GetCurrentValue(AssetStorage.RangeStats["Fervour"]);
         int maxFervour = AssetStorage.PlayerStats.GetMaxValue(AssetStorage.RangeStats["Fervour"]);
         sb.AppendLine($"Fervour: {currentFervour}/{maxFervour}");
-
-        // FPS
-        float fps = _fpsTracker.CurrentFps;
-        sb.AppendLine($"FPS: {fps:F0}");
 
         _infoText.SetText(sb.ToString());
     }
@@ -98,7 +105,9 @@ internal class InfoModule(InfoDisplaySettings settings)
         }).AddText(new TextCreationOptions()
         {
             Alignment = TextAlignmentOptions.TopLeft,
+            Color = new Color32(222, 222, 222, 255),
             FontSize = 40,
+            UseRichText = true,
             WordWrap = false,
         }).AddShadow();
     }
