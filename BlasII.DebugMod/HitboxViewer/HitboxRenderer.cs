@@ -72,15 +72,11 @@ internal class HitboxRenderer
         if (!_isShowing || cam != _camera || _cachedColliders == null)
             return;
 
-        //ModLog.Info("Rendering for " + cam.name);
-
         _material.SetPass(0);
         CacheCameraBounds();
 
         GL.LoadOrtho();
         GL.Begin(1);
-
-        // ...
 
         foreach (var info in _cachedColliders.Select(CalculateInfo).OrderBy(x => x.Type))
         {
@@ -107,10 +103,6 @@ internal class HitboxRenderer
                     break;
             }
         }
-
-        GL.Color(Color.red);
-        GL.Vertex(new Vector3(0, 0, 1));
-        GL.Vertex(new Vector3(1, 1, 1));
 
         GL.End();
     }
