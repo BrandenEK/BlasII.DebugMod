@@ -11,7 +11,6 @@ internal class HitboxModule
     private readonly HitboxViewerSettings _settings;
 
     internal HitboxToggler ToggledHitboxes { get; } = new(); // Can change this to private afterwards, pass in a dependency
-    private CameraLines _cameraComponent;
 
     private bool _showHitboxes = false;
 
@@ -26,13 +25,6 @@ internal class HitboxModule
 
     public void SceneLoaded()
     {
-        //if (Camera.main.GetComponent<CameraLines>() == null)
-        //{
-        //    _cameraComponent = Camera.main.gameObject.AddComponent<CameraLines>();
-        //    _cameraComponent.UpdateSettings(_settings);
-        //}
-
-
         if (_showHitboxes)
         {
             ShowHitboxes();
@@ -50,7 +42,6 @@ internal class HitboxModule
         {
             _showHitboxes = !_showHitboxes;
             _renderer.UpdateStatus(_showHitboxes);
-            //_cameraComponent.UpdateStatus(_showHitboxes);
         }
 
         if (_showHitboxes)
@@ -68,13 +59,11 @@ internal class HitboxModule
     {
         var colliders = Object.FindObjectsOfType<Collider2D>();
         _renderer.UpdateColliders(colliders);
-        //_cameraComponent.UpdateColliders(colliders);
     }
 
     private void HideHitboxes()
     {
         _renderer.UpdateColliders(null);
-        //_cameraComponent.UpdateColliders(null);
     }
 
     private static readonly string[] BANNED_UI =
