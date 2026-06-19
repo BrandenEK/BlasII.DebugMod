@@ -4,6 +4,7 @@ using BlasII.ModdingAPI.Helpers;
 using Il2CppTGK.Game;
 using Il2CppTGK.Game.Components.UI;
 using Il2CppTMPro;
+using System;
 using System.Text;
 using UnityEngine;
 
@@ -80,7 +81,30 @@ internal class InfoModule(InfoDisplaySettings settings)
         int maxFervour = AssetStorage.PlayerStats.GetMaxValue(AssetStorage.RangeStats["Fervour"]);
         sb.AppendLine($"Fervour: {currentFervour}/{maxFervour}");
 
-        _infoText.SetText(sb.ToString());
+        if (CoreCache.PlayerFamiliarsManager.currentID != -1)
+        {
+            // Familiar
+            sb.AppendLine();
+            sb.AppendLine("<color=#FFE741>Familiar</color>");
+
+            // ID
+            var familiar = CoreCache.PlayerFamiliarsManager.familiars[CoreCache.PlayerFamiliarsManager.currentID];
+            sb.AppendLine($"ID: {familiar.id.name}");
+
+            // Level
+            int level = familiar.currentLevel;
+            sb.AppendLine($"Level: {level + 1}/4");
+
+            // EXP
+            int xp = familiar.currentExp;
+            sb.AppendLine($"EXP: {xp}{level switch { 0 => "/100", 1 => "/400", 2 => "/900", _ => string.Empty }}");
+        }
+
+        try
+        {
+            _infoText.SetText(sb.ToString());
+        }
+        catch (Exception) { } // Quitting the game throws an error inside SetText()
     }
 
     private void SetTextVisibility(bool visible)
