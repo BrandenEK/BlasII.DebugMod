@@ -4,14 +4,23 @@ using UnityEngine;
 
 namespace BlasII.DebugMod.HitboxViewer;
 
-internal class HitboxModule(HitboxViewerSettings settings)
+internal class HitboxModule
 {
-    private readonly HitboxViewerSettings _settings = settings;
+    private readonly HitboxRenderer _renderer;
 
-    internal HitboxToggler ToggledHitboxes { get; } = new();
+    private readonly HitboxViewerSettings _settings;
+
+    internal HitboxToggler ToggledHitboxes { get; } = new(); // Can change this to private afterwards, pass in a dependency
     private CameraLines _cameraComponent;
 
     private bool _showHitboxes = false;
+
+    public HitboxModule(HitboxViewerSettings settings)
+    {
+        _renderer = new HitboxRenderer();
+
+        _settings = settings;
+    }
 
     public void SceneLoaded()
     {
