@@ -44,6 +44,7 @@ internal class HitboxModule
         {
             _toggler.ProcessToggles();
 
+            //if (CoreCache.UIManager.focusedControl?.name != "InGameWindow_prefab(Clone)")
             if (BANNED_UI.Contains(CoreCache.UIManager.focusedControl?.name ?? string.Empty))
                 HideHitboxes();
             else
@@ -66,5 +67,10 @@ internal class HitboxModule
     [
         "InventoryWindow_prefab(Clone)",
         "MapWindow_prefab(Clone)",
+        "AltarpieceWidget",
+        "FamiliarsWindow_prefab(Clone)",
+        "PrieuDieuMenu_prefab(Clone)",
+        "GenericMenuWindow_prefab(Clone)",
+        "ShopWindow_prefab(Clone)",
     ];
 }
