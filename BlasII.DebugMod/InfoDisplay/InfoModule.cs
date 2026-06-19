@@ -2,7 +2,9 @@
 using BlasII.ModdingAPI.Assets;
 using BlasII.ModdingAPI.Helpers;
 using Il2CppTGK.Game;
+using Il2CppTGK.Game.Components.UI;
 using Il2CppTMPro;
+using System;
 using System.Text;
 using UnityEngine;
 
@@ -14,7 +16,7 @@ internal class InfoModule(InfoDisplaySettings settings)
     private readonly FpsTracker _fpsTracker = new FpsTracker();
 
     private bool _showInfo = false;
-    private TextMeshProUGUI _infoText;
+    private UIPixelTextWithShadow _infoText;
 
     public void SceneLoaded()
     {
@@ -50,9 +52,20 @@ internal class InfoModule(InfoDisplaySettings settings)
     {
         var sb = new StringBuilder();
 
+        // General
+        sb.AppendLine("<color=#FFE741>General</color>");
+
         // Scene
         string currentScene = SceneHelper.CurrentScene;
         sb.AppendLine($"Scene: {currentScene}");
+
+        // FPS
+        float fps = _fpsTracker.CurrentFps;
+        sb.AppendLine($"FPS: {fps:F0}");
+
+        // Player
+        sb.AppendLine();
+        sb.AppendLine("<color=#FFE741>Player</color>");
 
         // Position
         Vector2 playerPosition = CoreCache.PlayerSpawn.PlayerInstance.transform.position;
@@ -68,11 +81,30 @@ internal class InfoModule(InfoDisplaySettings settings)
         int maxFervour = AssetStorage.PlayerStats.GetMaxValue(AssetStorage.RangeStats["Fervour"]);
         sb.AppendLine($"Fervour: {currentFervour}/{maxFervour}");
 
-        // FPS
-        float fps = _fpsTracker.CurrentFps;
-        sb.AppendLine($"FPS: {fps:F0}");
+        if (CoreCache.PlayerFamiliarsManager.currentID != -1)
+        {
+            // Familiar
+            sb.AppendLine();
+            sb.AppendLine("<color=#FFE741>Familiar</color>");
 
-        _infoText.text = sb.ToString();
+            // ID
+            var familiar = CoreCache.PlayerFamiliarsManager.familiars[CoreCache.PlayerFamiliarsManager.currentID];
+            sb.AppendLine($"ID: {familiar.id.name}");
+
+            // Level
+            int level = familiar.currentLevel;
+            sb.AppendLine($"Level: {level + 1}/4");
+
+            // EXP
+            int xp = familiar.currentExp;
+            sb.AppendLine($"EXP: {xp}{level switch { 0 => "/100", 1 => "/400", 2 => "/900", _ => string.Empty }}");
+        }
+
+        try
+        {
+            _infoText.SetText(sb.ToString());
+        }
+        catch (Exception) { } // Quitting the game throws an error inside SetText()
     }
 
     private void SetTextVisibility(bool visible)
@@ -97,9 +129,11 @@ internal class InfoModule(InfoDisplaySettings settings)
         }).AddText(new TextCreationOptions()
         {
             Alignment = TextAlignmentOptions.TopLeft,
+            Color = new Color32(222, 222, 222, 255),
             FontSize = 40,
+            UseRichText = true,
             WordWrap = false,
-        });
+        }).AddShadow();
     }
 
     private string RoundToPrecision(float num)
