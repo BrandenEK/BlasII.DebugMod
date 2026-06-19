@@ -1,16 +1,14 @@
 ﻿using BlasII.ModdingAPI;
-using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
 
 namespace BlasII.DebugMod.HitboxViewer;
 
-[MelonLoader.RegisterTypeInIl2Cpp]
-internal class CameraLines : MonoBehaviour
+internal class HitboxRenderer
 {
-    private HitboxViewerSettings _settings;
-    private Camera _camera;
+    private readonly HitboxViewerSettings _settings;
 
+    private Camera _camera;
     private Material _material;
     private Bounds _camBounds;
 
@@ -20,9 +18,11 @@ internal class CameraLines : MonoBehaviour
     private int _segments;
     private float _angleStep;
 
-    public void UpdateSettings(HitboxViewerSettings settings)
+    public HitboxRenderer(HitboxViewerSettings settings)
     {
         _settings = settings;
+        CacheLineMaterial();
+
         _segments = settings.ArcSegments;
         _angleStep = 2 * Mathf.PI / _segments;
     }
@@ -37,10 +37,9 @@ internal class CameraLines : MonoBehaviour
         _isShowing = isShowing;
     }
 
-    void Awake()
+    private void CacheCameraComponent()
     {
-        CacheLineMaterial();
-        _camera = Object.FindObjectsOfType<Camera>().First(x => x.name == "scene composition camera"); //GetComponent<Camera>();
+        _camera = Object.FindObjectsOfType<Camera>().First(x => x.name == "scene composition camera");
     }
 
     private void CacheLineMaterial()
@@ -65,13 +64,13 @@ internal class CameraLines : MonoBehaviour
         _camBounds = new(_camera.transform.position, new Vector3(width, height) * 2);
     }
 
-    private void OnPostRender()
+    public void OnPostRender(Camera cam)
     {
-        if (!_isShowing || _cachedColliders == null)
-            return;
+        if (_camera == null)
+            CacheCameraComponent();
 
-        //Stopwatch watch = Stopwatch.StartNew();
-        //int visibleObjects = 0;
+        if (!_isShowing || cam != _camera || _cachedColliders == null)
+            return;
 
         _material.SetPass(0);
         CacheCameraBounds();
@@ -84,7 +83,6 @@ internal class CameraLines : MonoBehaviour
             if (!info.IsVisible)
                 continue;
 
-            //visibleObjects++;
             GL.Color(TypeToColor(info.Type));
 
             switch (info.Collider.GetIl2CppType().Name)
@@ -107,9 +105,6 @@ internal class CameraLines : MonoBehaviour
         }
 
         GL.End();
-
-        //watch.Stop();
-        //ModLog.Error($"OnPostRender: {watch.ElapsedTicks} ticks, {visibleObjects} objects");
     }
 
     void RenderBox(BoxCollider2D collider)
@@ -146,7 +141,7 @@ internal class CameraLines : MonoBehaviour
             float x = Mathf.Cos(angle) * radius;
             float y = Mathf.Sin(angle) * radius;
 
-            Vector2 point = CalculateViewport(collider, new Vector2(x, y));
+            Vector3 point = CalculateViewport(collider, new Vector2(x, y));
             GL.Vertex(point);
             GL.Vertex(point);
         }
@@ -168,7 +163,7 @@ internal class CameraLines : MonoBehaviour
             float x = Mathf.Sin(angle) * radius;
             float y = Mathf.Cos(angle) * height;
 
-            Vector2 point = CalculateViewport(collider, new Vector2(x, y));
+            Vector3 point = CalculateViewport(collider, new Vector2(x, y));
             GL.Vertex(point);
             GL.Vertex(point);
         }
@@ -200,7 +195,7 @@ internal class CameraLines : MonoBehaviour
         GL.Vertex(start);
     }
 
-    private Vector2 CalculateViewport(Collider2D collider, Vector3 point)
+    private Vector3 CalculateViewport(Collider2D collider, Vector3 point)
     {
         Transform t = collider.transform;
         Vector2 offset = collider.offset;
@@ -213,7 +208,7 @@ internal class CameraLines : MonoBehaviour
 
         // Apply rotation
         point = t.rotation * point;
-        
+
         // Apply scale
         point.x *= scale.x;
         point.y *= scale.y;
@@ -222,7 +217,9 @@ internal class CameraLines : MonoBehaviour
         point.x += position.x;
         point.y += position.y;
 
-        return _camera.WorldToViewportPoint(point);
+        point = _camera.WorldToViewportPoint(point);
+        point.z = 1;
+        return point;
     }
 
     private Color TypeToColor(HitboxType hitboxType)

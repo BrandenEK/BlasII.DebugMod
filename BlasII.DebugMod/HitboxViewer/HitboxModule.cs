@@ -4,24 +4,27 @@ using UnityEngine;
 
 namespace BlasII.DebugMod.HitboxViewer;
 
-internal class HitboxModule(HitboxViewerSettings settings)
+internal class HitboxModule
 {
-    private readonly HitboxViewerSettings _settings = settings;
+    private readonly HitboxRenderer _renderer;
 
-    internal HitboxToggler ToggledHitboxes { get; } = new();
-    private CameraLines _cameraComponent;
+    private readonly HitboxViewerSettings _settings;
+
+    internal HitboxToggler ToggledHitboxes { get; } = new(); // Can change this to private afterwards, pass in a dependency
 
     private bool _showHitboxes = false;
 
+    public HitboxModule(HitboxViewerSettings settings)
+    {
+        _renderer = new HitboxRenderer(settings);
+
+        _settings = settings;
+
+        Camera.onPostRender += new System.Action<Camera>(_renderer.OnPostRender);
+    }
+
     public void SceneLoaded()
     {
-        if (Camera.main.GetComponent<CameraLines>() == null)
-        {
-            _cameraComponent = Camera.main.gameObject.AddComponent<CameraLines>();
-            _cameraComponent.UpdateSettings(_settings);
-        }
-
-
         if (_showHitboxes)
         {
             ShowHitboxes();
@@ -38,7 +41,7 @@ internal class HitboxModule(HitboxViewerSettings settings)
         if (Main.DebugMod.InputHandler.GetKeyDown("HitboxViewer"))
         {
             _showHitboxes = !_showHitboxes;
-            _cameraComponent.UpdateStatus(_showHitboxes);
+            _renderer.UpdateStatus(_showHitboxes);
         }
 
         if (_showHitboxes)
@@ -55,12 +58,12 @@ internal class HitboxModule(HitboxViewerSettings settings)
     private void ShowHitboxes()
     {
         var colliders = Object.FindObjectsOfType<Collider2D>();
-        _cameraComponent.UpdateColliders(colliders);
+        _renderer.UpdateColliders(colliders);
     }
 
     private void HideHitboxes()
     {
-        _cameraComponent.UpdateColliders(null);
+        _renderer.UpdateColliders(null);
     }
 
     private static readonly string[] BANNED_UI =
