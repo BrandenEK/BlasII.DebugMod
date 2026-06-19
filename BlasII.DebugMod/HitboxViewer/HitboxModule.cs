@@ -17,18 +17,20 @@ internal class HitboxModule
 
     public HitboxModule(HitboxViewerSettings settings)
     {
-        _renderer = new HitboxRenderer();
+        _renderer = new HitboxRenderer(settings);
 
         _settings = settings;
+
+        Camera.onPostRender += new System.Action<Camera>(_renderer.OnPostRender);
     }
 
     public void SceneLoaded()
     {
-        if (Camera.main.GetComponent<CameraLines>() == null)
-        {
-            _cameraComponent = Camera.main.gameObject.AddComponent<CameraLines>();
-            _cameraComponent.UpdateSettings(_settings);
-        }
+        //if (Camera.main.GetComponent<CameraLines>() == null)
+        //{
+        //    _cameraComponent = Camera.main.gameObject.AddComponent<CameraLines>();
+        //    _cameraComponent.UpdateSettings(_settings);
+        //}
 
 
         if (_showHitboxes)
@@ -47,7 +49,8 @@ internal class HitboxModule
         if (Main.DebugMod.InputHandler.GetKeyDown("HitboxViewer"))
         {
             _showHitboxes = !_showHitboxes;
-            _cameraComponent.UpdateStatus(_showHitboxes);
+            _renderer.UpdateStatus(_showHitboxes);
+            //_cameraComponent.UpdateStatus(_showHitboxes);
         }
 
         if (_showHitboxes)
@@ -64,12 +67,14 @@ internal class HitboxModule
     private void ShowHitboxes()
     {
         var colliders = Object.FindObjectsOfType<Collider2D>();
-        _cameraComponent.UpdateColliders(colliders);
+        _renderer.UpdateColliders(colliders);
+        //_cameraComponent.UpdateColliders(colliders);
     }
 
     private void HideHitboxes()
     {
-        _cameraComponent.UpdateColliders(null);
+        _renderer.UpdateColliders(null);
+        //_cameraComponent.UpdateColliders(null);
     }
 
     private static readonly string[] BANNED_UI =
