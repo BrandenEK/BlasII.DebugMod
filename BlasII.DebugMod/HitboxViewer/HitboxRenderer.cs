@@ -1,11 +1,11 @@
-﻿using BlasII.ModdingAPI;
-using System.Linq;
+﻿using System.Linq;
 using UnityEngine;
 
 namespace BlasII.DebugMod.HitboxViewer;
 
 internal class HitboxRenderer
 {
+    private readonly HitboxToggler _toggler;
     private readonly HitboxViewerSettings _settings;
 
     private Camera _camera;
@@ -18,13 +18,15 @@ internal class HitboxRenderer
     private int _segments;
     private float _angleStep;
 
-    public HitboxRenderer(HitboxViewerSettings settings)
+    public HitboxRenderer(HitboxToggler toggler, HitboxViewerSettings settings)
     {
+        _toggler = toggler;
         _settings = settings;
-        CacheLineMaterial();
 
         _segments = settings.ArcSegments;
         _angleStep = 2 * Mathf.PI / _segments;
+
+        CacheLineMaterial();
     }
 
     public void UpdateColliders(Collider2D[] colliders)
@@ -261,7 +263,7 @@ internal class HitboxRenderer
         HitboxType type = collider.GetHitboxType();
 
         // Verify collider is toggled on
-        if (!Main.DebugMod.HitboxModule.ToggledHitboxes[type])
+        if (!_toggler[type])
             return new HitboxInfo(collider, type, false);
 
         return new HitboxInfo(collider, type, true);
