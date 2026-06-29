@@ -2,6 +2,7 @@
 using BlasII.ModdingAPI.Assets;
 using BlasII.ModdingAPI.Helpers;
 using Il2CppTGK.Game;
+using Il2CppTGK.Game.Components.Attack;
 using Il2CppTGK.Game.Components.UI;
 using Il2CppTMPro;
 using System;
@@ -80,6 +81,15 @@ internal class InfoModule(InfoDisplaySettings settings)
         int currentFervour = AssetStorage.PlayerStats.GetCurrentValue(AssetStorage.RangeStats["Fervour"]);
         int maxFervour = AssetStorage.PlayerStats.GetMaxValue(AssetStorage.RangeStats["Fervour"]);
         sb.AppendLine($"Fervour: {currentFervour}/{maxFervour}");
+
+        // Iframes
+        var comp = CoreCache.PlayerSpawn.PlayerInstance.GetComponentInChildren<AttackReceiverComponent>();
+        if (comp != null)
+        {
+            bool inv = comp.IsInvincible();
+            float time = comp.currentInvincibilityTimeleft;
+            sb.AppendLine($"Invincible: {(inv ? $"Yes for {RoundToPrecision(time)}s" : "No")}");
+        }
 
         if (CoreCache.PlayerFamiliarsManager.currentID != -1)
         {
