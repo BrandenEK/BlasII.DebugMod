@@ -19,10 +19,16 @@ internal class InfoModule(InfoDisplaySettings settings)
     private bool _showInfo = false;
     private UIPixelTextWithShadow _infoText;
 
+    private AttackData _lastOffense = null;
+    private AttackData _lastDefense = null;
+
     public void SceneLoaded()
     {
         if (_showInfo && SceneHelper.GameSceneLoaded)
             SetTextVisibility(true);
+
+        _lastOffense = null;
+        _lastDefense = null;
 
         _fpsTracker.Reset();
     }
@@ -31,6 +37,9 @@ internal class InfoModule(InfoDisplaySettings settings)
     {
         if (_showInfo && SceneHelper.GameSceneLoaded)
             SetTextVisibility(false);
+
+        _lastOffense = null;
+        _lastDefense = null;
     }
 
     public void Update()
@@ -110,11 +119,51 @@ internal class InfoModule(InfoDisplaySettings settings)
             sb.AppendLine($"EXP: {xp}{level switch { 0 => "/100", 1 => "/400", 2 => "/900", _ => string.Empty }}");
         }
 
+        if (_lastOffense != null)
+        {
+            // Offense data
+            sb.AppendLine();
+            sb.AppendLine("<color=#FFE741>Last offense</color>");
+
+            if (_lastOffense.ID != null)
+                sb.AppendLine($"ID: {_lastOffense.ID}");
+            sb.AppendLine($"Damage: {_lastOffense.Damage}");
+            if (!string.IsNullOrEmpty(_lastOffense.PhysicalAttacks))
+                sb.AppendLine($"Physical: {_lastOffense.PhysicalAttacks}");
+            if (!string.IsNullOrEmpty(_lastOffense.ElementalAttacks))
+                sb.AppendLine($"Elemental: {_lastOffense.ElementalAttacks}");
+        }
+
+        if (_lastDefense != null)
+        {
+            // Defense data
+            sb.AppendLine();
+            sb.AppendLine("<color=#FFE741>Last defense</color>");
+
+            if (_lastDefense.ID != null)
+                sb.AppendLine($"ID: {_lastDefense.ID}");
+            sb.AppendLine($"Damage: {_lastDefense.Damage}");
+            if (!string.IsNullOrEmpty(_lastDefense.PhysicalAttacks))
+                sb.AppendLine($"Physical: {_lastDefense.PhysicalAttacks}");
+            if (!string.IsNullOrEmpty(_lastDefense.ElementalAttacks))
+                sb.AppendLine($"Elemental: {_lastDefense.ElementalAttacks}");
+        }
+
         try
         {
             _infoText.SetText(sb.ToString());
         }
         catch (Exception) { } // Quitting the game throws an error inside SetText()
+    }
+
+    public void OnOffense(AttackData attack)
+    {
+        _lastOffense = attack;
+    }
+
+    public void OnDefense(AttackData attack)
+    {
+        _lastDefense = attack;
     }
 
     private void SetTextVisibility(bool visible)
