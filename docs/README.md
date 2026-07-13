@@ -6,7 +6,12 @@
 
 ## Info Display
 - Press F1 to toggle info display
-- Displays scene, position, health, and fervour
+- Displays debug information in sections
+  - General info, such as scene and fps
+  - Player info, such as position and health
+  - Servant info, such as level and xp
+  - Attack info, such as damage and element
+  - Defense info, such as damage and element
 
 ## Hitbox Viewer
 - Press F2 to toggle hitbox viewer
