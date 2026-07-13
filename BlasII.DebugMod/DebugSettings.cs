@@ -29,6 +29,21 @@ public class InfoDisplaySettings
 {
     /// <summary> How many decimal digits to display </summary>
     public int Precision { get; set; } = 2;
+
+    /// <summary> Whether to display the general info section </summary>
+    public bool ShowGeneral = true;
+
+    /// <summary> Whether to display the player info section </summary>
+    public bool ShowPlayer = true;
+
+    /// <summary> Whether to display the familiar info section </summary>
+    public bool ShowFamiliar = true;
+
+    /// <summary> Whether to display the offense info section </summary>
+    public bool ShowOffense = true;
+
+    /// <summary> Whether to display the defense info section </summary>
+    public bool ShowDefense = true;
 }
 
 /// <summary>
