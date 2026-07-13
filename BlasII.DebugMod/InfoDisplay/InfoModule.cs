@@ -92,13 +92,13 @@ internal class InfoModule(InfoDisplaySettings settings)
         sb.AppendLine($"Fervour: {currentFervour}/{maxFervour}");
 
         // Iframes
-        var comp = CoreCache.PlayerSpawn.PlayerInstance.GetComponentInChildren<AttackReceiverComponent>();
-        if (comp != null)
-        {
-            bool inv = comp.IsInvincible();
-            float time = comp.currentInvincibilityTimeleft;
-            sb.AppendLine($"Invincible: {(inv ? $"Yes for {RoundToPrecision(time)}s" : "No")}");
-        }
+        //var comp = CoreCache.PlayerSpawn.PlayerInstance.GetComponentInChildren<AttackReceiverComponent>();
+        //if (comp != null)
+        //{
+        //    bool inv = comp.IsInvincible();
+        //    float time = comp.currentInvincibilityTimeleft;
+        //    sb.AppendLine($"Invincible: {(inv ? $"Yes for {RoundToPrecision(time)}s" : "No")}");
+        //}
 
         if (CoreCache.PlayerFamiliarsManager.currentID != -1)
         {
