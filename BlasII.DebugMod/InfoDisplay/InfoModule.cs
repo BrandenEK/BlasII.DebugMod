@@ -189,7 +189,7 @@ internal class InfoModule(InfoDisplaySettings settings)
         {
             Alignment = TextAlignmentOptions.TopLeft,
             Color = new Color32(222, 222, 222, 255),
-            FontSize = 40,
+            FontSize = 32,
             UseRichText = true,
             WordWrap = false,
         }).AddShadow();
