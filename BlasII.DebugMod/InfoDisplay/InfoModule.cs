@@ -61,46 +61,52 @@ internal class InfoModule(InfoDisplaySettings settings)
     private void UpdateText()
     {
         var sb = new StringBuilder();
+        
+        if (_settings.ShowGeneral)
+        {
+            // General
+            sb.AppendLine("<color=#FFE741>General</color>");
 
-        // General
-        sb.AppendLine("<color=#FFE741>General</color>");
+            // Scene
+            string currentScene = SceneHelper.CurrentScene;
+            sb.AppendLine($"Scene: {currentScene}");
 
-        // Scene
-        string currentScene = SceneHelper.CurrentScene;
-        sb.AppendLine($"Scene: {currentScene}");
+            // FPS
+            float fps = _fpsTracker.CurrentFps;
+            sb.AppendLine($"FPS: {fps:F0}");
+        }
 
-        // FPS
-        float fps = _fpsTracker.CurrentFps;
-        sb.AppendLine($"FPS: {fps:F0}");
+        if (_settings.ShowPlayer)
+        {
+            // Player
+            sb.AppendLine();
+            sb.AppendLine("<color=#FFE741>Player</color>");
 
-        // Player
-        sb.AppendLine();
-        sb.AppendLine("<color=#FFE741>Player</color>");
+            // Position
+            Vector2 playerPosition = CoreCache.PlayerSpawn.PlayerInstance.transform.position;
+            sb.AppendLine($"Position: {RoundToPrecision(playerPosition.x)}, {RoundToPrecision(playerPosition.y)}");
 
-        // Position
-        Vector2 playerPosition = CoreCache.PlayerSpawn.PlayerInstance.transform.position;
-        sb.AppendLine($"Position: {RoundToPrecision(playerPosition.x)}, {RoundToPrecision(playerPosition.y)}");
+            // Health
+            int currentHealth = AssetStorage.PlayerStats.GetCurrentValue(AssetStorage.RangeStats["Health"]);
+            int maxHealth = AssetStorage.PlayerStats.GetMaxValue(AssetStorage.RangeStats["Health"]);
+            sb.AppendLine($"Health: {currentHealth}/{maxHealth}");
 
-        // Health
-        int currentHealth = AssetStorage.PlayerStats.GetCurrentValue(AssetStorage.RangeStats["Health"]);
-        int maxHealth = AssetStorage.PlayerStats.GetMaxValue(AssetStorage.RangeStats["Health"]);
-        sb.AppendLine($"Health: {currentHealth}/{maxHealth}");
+            // Fervour
+            int currentFervour = AssetStorage.PlayerStats.GetCurrentValue(AssetStorage.RangeStats["Fervour"]);
+            int maxFervour = AssetStorage.PlayerStats.GetMaxValue(AssetStorage.RangeStats["Fervour"]);
+            sb.AppendLine($"Fervour: {currentFervour}/{maxFervour}");
 
-        // Fervour
-        int currentFervour = AssetStorage.PlayerStats.GetCurrentValue(AssetStorage.RangeStats["Fervour"]);
-        int maxFervour = AssetStorage.PlayerStats.GetMaxValue(AssetStorage.RangeStats["Fervour"]);
-        sb.AppendLine($"Fervour: {currentFervour}/{maxFervour}");
+            // Iframes
+            //var comp = CoreCache.PlayerSpawn.PlayerInstance.GetComponentInChildren<AttackReceiverComponent>();
+            //if (comp != null)
+            //{
+            //    bool inv = comp.IsInvincible();
+            //    float time = comp.currentInvincibilityTimeleft;
+            //    sb.AppendLine($"Invincible: {(inv ? $"Yes for {RoundToPrecision(time)}s" : "No")}");
+            //}
+        }
 
-        // Iframes
-        //var comp = CoreCache.PlayerSpawn.PlayerInstance.GetComponentInChildren<AttackReceiverComponent>();
-        //if (comp != null)
-        //{
-        //    bool inv = comp.IsInvincible();
-        //    float time = comp.currentInvincibilityTimeleft;
-        //    sb.AppendLine($"Invincible: {(inv ? $"Yes for {RoundToPrecision(time)}s" : "No")}");
-        //}
-
-        if (CoreCache.PlayerFamiliarsManager.currentID != -1)
+        if (_settings.ShowFamiliar && CoreCache.PlayerFamiliarsManager.currentID != -1)
         {
             // Familiar
             sb.AppendLine();
@@ -119,13 +125,13 @@ internal class InfoModule(InfoDisplaySettings settings)
             sb.AppendLine($"EXP: {xp}{level switch { 0 => "/100", 1 => "/400", 2 => "/900", _ => string.Empty }}");
         }
 
-        if (_lastOffense != null)
+        if (_settings.ShowOffense && _lastOffense != null)
         {
             // Offense data
             sb.AppendLine();
             sb.AppendLine("<color=#FFE741>Last offense</color>");
 
-            if (_lastOffense.ID != null)
+            if (!string.IsNullOrEmpty(_lastOffense.ID))
                 sb.AppendLine($"ID: {_lastOffense.ID}");
             sb.AppendLine($"Damage: {_lastOffense.Damage}");
             if (!string.IsNullOrEmpty(_lastOffense.PhysicalAttacks))
@@ -134,13 +140,13 @@ internal class InfoModule(InfoDisplaySettings settings)
                 sb.AppendLine($"Elemental: {_lastOffense.ElementalAttacks}");
         }
 
-        if (_lastDefense != null)
+        if (_settings.ShowDefense && _lastDefense != null)
         {
             // Defense data
             sb.AppendLine();
             sb.AppendLine("<color=#FFE741>Last defense</color>");
 
-            if (_lastDefense.ID != null)
+            if (!string.IsNullOrEmpty(_lastDefense.ID))
                 sb.AppendLine($"ID: {_lastDefense.ID}");
             sb.AppendLine($"Damage: {_lastDefense.Damage}");
             if (!string.IsNullOrEmpty(_lastDefense.PhysicalAttacks))
